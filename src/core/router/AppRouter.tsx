@@ -15,7 +15,7 @@ export const AppRouter = () => {
     <BrowserRouter>
       <Routes>
         <Route element={<AuthLayout />}>
-          <Route path="/login" element={<LoginScreen />} />
+          <Route path="/admin-login" element={<LoginScreen />} />
         </Route>
         <Route path="/" element={<MainLayout />}>
           <Route index element={<HomeScreen />} />
