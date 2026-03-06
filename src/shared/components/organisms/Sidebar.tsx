@@ -7,6 +7,7 @@ import {
   LogOut,
   Users,
   ChevronDown,
+  Bell
 } from "lucide-react";
 import NavItem from "@molecules/NavItem";
 
@@ -45,7 +46,7 @@ const Sidebar = () => {
             Acciones
           </p>
         </div>
-
+        <NavItem icon={<Bell size={20} />} label="Notificaciones" badge={5}/>
         <NavItem icon={<LogOut size={20} />} label="Cerrar sesión" />
       </nav>
       <div className="flex items-center justify-between pt-4 border-t border-white/10">
