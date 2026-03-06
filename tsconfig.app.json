@@ -7,6 +7,21 @@
     "module": "ESNext",
     "types": ["vite/client"],
     "skipLibCheck": true,
+    
+    "baseUrl": ".",
+    "paths": {
+      "@assets/*": ["src/assets/*"],
+      "@features/*": ["src/features/*"],
+      "@atoms/*": ["src/shared/components/atoms/*"],
+      "@molecules/*": ["src/shared/components/molecules/*"],
+      "@organisms/*": ["src/shared/components/organisms/*"],
+      "@templates/*": ["src/shared/components/layouts/*"],
+      "@hooks/*": ["src/shared/hooks/*"],
+      "@utils/*": ["src/shared/utils/*"],
+      "@routes/*": ["src/core/router/*"],
+      "@store/*": ["src/core/store/*"],
+      "@api/*": ["src/core/api/*"]
+    },
 
     /* Bundler mode */
     "moduleResolution": "bundler",
