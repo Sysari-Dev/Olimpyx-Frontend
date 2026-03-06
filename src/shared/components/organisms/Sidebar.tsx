@@ -20,7 +20,7 @@ const Sidebar = () => {
       </div>
       <div className="bg-white/10 rounded-2xl p-4 flex items-center justify-between mb-8 cursor-pointer hover:bg-white/20 transition-colors">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-[#3b59f6]">
+          <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-primary">
             <Users size={20} />
           </div>
           <div>
