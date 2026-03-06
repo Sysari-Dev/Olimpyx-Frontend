@@ -3,5 +3,21 @@
   "references": [
     { "path": "./tsconfig.app.json" },
     { "path": "./tsconfig.node.json" }
-  ]
+  ],
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@assets/*": ["src/assets/*"],
+      "@features/*": ["src/features/*"],
+      "@atoms/*": ["src/shared/components/atoms/*"],
+      "@molecules/*": ["src/shared/components/molecules/*"],
+      "@organisms/*": ["src/shared/components/organisms/*"],
+      "@templates/*": ["src/shared/components/templates/*"],
+      "@hooks/*": ["src/shared/hooks/*"],
+      "@utils/*": ["src/shared/utils/*"],
+      "@routes/*": ["src/core/router/*"],
+      "@store/*": ["src/core/store/*"],
+      "@api/*": ["src/core/api/*"],
+    }
+  }
 }
