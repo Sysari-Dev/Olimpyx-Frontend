@@ -7,7 +7,7 @@ import {
   LogOut,
   Users,
   ChevronDown,
-  Bell
+  Bell,
 } from "lucide-react";
 import NavItem from "@molecules/NavItem";
 
@@ -34,20 +34,45 @@ const Sidebar = () => {
         <NavItem
           icon={<LayoutDashboard size={20} />}
           label="Dashboard"
-          active
+          to="/admin"
+          end
         />
-        <NavItem icon={<Building2 size={20} />} label="Organización" />
-        <NavItem icon={<CalendarDays size={20} />} label="Eventos" />
-        <NavItem icon={<Trophy size={20} />} label="Torneos" />
-        <NavItem icon={<Swords size={20} />} label="Partidos" />
-
+        <NavItem
+          icon={<Building2 size={20} />}
+          label="Organización"
+          to="/admin/organizacion"
+        />
+        <NavItem
+          icon={<CalendarDays size={20} />}
+          label="Eventos"
+          to="/admin/eventos"
+        />
+        <NavItem
+          icon={<Trophy size={20} />}
+          label="Torneos"
+          to="/admin/torneos"
+        />
+        <NavItem
+          icon={<Swords size={20} />}
+          label="Partidos"
+          to="/admin/partidos"
+        />
         <div className="pt-6 pb-2">
           <p className="text-[10px] uppercase tracking-widest text-white/50 font-bold px-4">
             Acciones
           </p>
         </div>
-        <NavItem icon={<Bell size={20} />} label="Notificaciones" badge={5}/>
-        <NavItem icon={<LogOut size={20} />} label="Cerrar sesión" />
+        <NavItem
+          icon={<Bell size={20} />}
+          label="Notificaciones"
+          to="/admin/notificaciones"
+          badge={5}
+        />
+        <NavItem
+          icon={<LogOut size={20} />}
+          label="Cerrar sesión"
+          to="/login"
+        />
       </nav>
       <div className="flex items-center justify-between pt-4 border-t border-white/10">
         <div className="flex items-center gap-3">
