@@ -4,9 +4,9 @@ import Footer from "@organisms/Footer";
 
 const MainLayout = () => {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-white">
       <Navbar />
-      <main className="grow container mx-auto px-4 py-8">
+      <main className="grow">
         <Outlet />
       </main>
       <Footer />
