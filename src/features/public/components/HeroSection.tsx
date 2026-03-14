@@ -15,42 +15,49 @@ const HeroSection = () => {
               <span className="relative inline-flex rounded-full h-2 w-2 bg-tertiary"></span>
             </span>
             <span className="text-xs font-bold text-dark/70 uppercase tracking-wider">
-              Disponible para Municipalidades y Gobiernos
+              Disponible para organizaciones
             </span>
           </div>
           <h1 className="text-5xl md:text-7xl font-black text-dark tracking-tighter mb-6 max-w-4xl leading-[0.9]">
-            El deporte local, <br />
-            <span className="text-accent">ahora en tiempo real.</span>
+            Sistema de gestión, <br />
+            <span className="text-accent">de eventos deportivos.</span>
           </h1>
           <p className="text-lg md:text-xl text-dark/60 max-w-2xl mb-8 leading-relaxed">
-            La plataforma integral para gestionar torneos y transmitir
+            Una plataforma integral para gestionar torneos y transmitir
             resultados en vivo. Conecta a tu comunidad con la pasión de cada
             partido.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 items-center">
-            <button className="bg-accent text-white px-10 py-4 rounded-2xl font-bold text-lg flex items-center gap-3 transition-all shadow-xl shadow-accent/30 group">
-              Explorar Partidos
-              <ArrowRight className="group-hover:translate-x-1 transition-transform" />
+            <button className="bg-accent text-white px-10 py-4 rounded-2xl font-bold text-lg flex items-center gap-3 
+                cursor-pointer transition-all duration-300 ease-out
+                hover:scale-105 hover:shadow-2xl hover:shadow-accent/40 
+                active:scale-95 group">
+                Explorar partidos
+                <ArrowRight className="group-hover:translate-x-1 transition-transform duration-300" />
             </button>
-            <button className="flex items-center gap-3 px-8 py-4 text-dark font-bold hover:bg-white/50 rounded-2xl transition-colors border border-transparent hover:border-light">
-              <div className="w-10 h-10 bg-white border border-light rounded-full flex items-center justify-center shadow-sm">
+            <button className="flex items-center gap-3 px-8 py-4 text-dark font-bold 
+                cursor-pointer transition-all duration-300 ease-in-out
+                border border-transparent hover:border-light hover:bg-white/60 
+                rounded-2xl group active:scale-95">
+                <div className="w-10 h-10 bg-white border border-light rounded-full flex items-center justify-center shadow-sm 
+                transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3">
                 <Play size={16} className="text-accent fill-accent" />
-              </div>
-              Ver Demo
+                </div>
+                Ver en vivo
             </button>
-          </div>
+            </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 mt-16 border-t border-dark/5 pt-10 w-full max-w-5xl">
             <BenefitItem
               icon={<CheckCircle2 className="text-tertiary" size={22} />}
-              text="Actualización Instantánea"
+              text="Actualización instantánea"
             />
             <BenefitItem
               icon={<CheckCircle2 className="text-tertiary" size={22} />}
-              text="Gestión Multideporte"
+              text="Gestión multideporte"
             />
             <BenefitItem
               icon={<CheckCircle2 className="text-tertiary" size={22} />}
-              text="Acceso Institucional"
+              text="Acceso institucional"
             />
           </div>
         </div>
