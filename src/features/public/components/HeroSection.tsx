@@ -24,8 +24,7 @@ const HeroSection = () => {
           </h1>
           <p className="text-lg md:text-xl text-dark/60 max-w-2xl mb-8 leading-relaxed">
             Una plataforma integral para gestionar torneos y transmitir
-            resultados en vivo. Conecta a tu comunidad con la pasión de cada
-            partido.
+            resultados en vivo. Conecta a tu comunidad con la pasión del deporte.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 items-center">
             <button className="bg-accent text-white px-10 py-4 rounded-2xl font-bold text-lg flex items-center gap-3 
