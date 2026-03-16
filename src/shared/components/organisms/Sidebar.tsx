@@ -13,14 +13,14 @@ import NavItem from "@molecules/NavItem";
 
 const Sidebar = () => {
   return (
-    <aside className="w-64 h-[95vh] m-4 bg-primary text-white rounded-3xl flex flex-col p-6 shadow-xl">
+    <aside className="w-64 h-[95vh] m-4 bg-dark text-white rounded-3xl flex flex-col p-6 shadow-xl">
       <div className="flex items-center gap-3 mb-10">
         <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center"></div>
         <h1 className="text-xl font-semibold tracking-wide">OLIMPYX</h1>
       </div>
       <div className="bg-white/10 rounded-2xl p-4 flex items-center justify-between mb-8 cursor-pointer hover:bg-white/20 transition-colors">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-[#3b59f6]">
+          <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-dark">
             <Users size={20} />
           </div>
           <div>
