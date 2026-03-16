@@ -2,7 +2,6 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import MainLayout from '@templates/MainLayout';
 import AdminLayout from '@templates/AdminLayout';
-import AuthLayout from '@templates/AuthLayout';
 import HomeScreen from '@features/public/screens/HomeScreen';
 import EventDetailScreen from '@features/public/screens/EventDetailScreen';
 import MatchLiveScreen from '@features/public/screens/MatchLiveScreen';
@@ -18,9 +17,7 @@ export const AppRouter = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route element={<AuthLayout />}>
-          <Route path="/admin-login" element={<LoginScreen />} />
-        </Route>
+        <Route path="/login" element={<LoginScreen />} />
         <Route path="/" element={<MainLayout />}>
           <Route index element={<HomeScreen />} />
           <Route path="evento/:id" element={<EventDetailScreen />} />
