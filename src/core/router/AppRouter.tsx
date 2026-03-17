@@ -6,6 +6,7 @@ import AuthLayout from '@templates/AuthLayout';
 import HomeScreen from '@features/public/screens/HomeScreen';
 import EventDetailScreen from '@features/public/screens/EventDetailScreen';
 import MatchLiveScreen from '@features/public/screens/MatchLiveScreen';
+import MatchDetailScreen from '@features/public/screens/MatchDetailScreen';
 import DashboardScreen from '@features/admin/screens/DashboardScreen';
 import EventManagementScreen from '@features/admin/screens/EventManagementScreen';
 import LoginScreen from '@features/auth/screens/LoginScreen';
@@ -13,6 +14,8 @@ import OrganizationManagementScreen from '@features/admin/screens/OrganizationMa
 import TeamManagementScreen from '@features/admin/screens/TeamManagementScreen';
 import MatchSchedulerScreen from '@features/admin/screens/MatchSchedulerScreen';
 import TournamentManagementScreen from '@features/admin/screens/TournamentManagementScreen';
+import EventsScreen from '@features/public/screens/EventsScreen';
+import TournamentDetailScreen from '@features/public/screens/TournamentDetailScreen';
 
 export const AppRouter = () => {
   return (
@@ -24,7 +27,10 @@ export const AppRouter = () => {
         <Route path="/" element={<MainLayout />}>
           <Route index element={<HomeScreen />} />
           <Route path="evento/:id" element={<EventDetailScreen />} />
-          <Route path="partido/:id" element={<MatchLiveScreen />} />
+          <Route path="torneo/:id" element={<TournamentDetailScreen />} />
+          <Route path="en-vivo" element={<MatchLiveScreen />} />
+          <Route path="explorar" element={<EventsScreen/>}/>
+          <Route path="partido/:id" element={<MatchDetailScreen />} />
         </Route>
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<DashboardScreen />} />

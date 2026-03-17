@@ -1,5 +1,5 @@
 import { ArrowRight, Play, CheckCircle2 } from "lucide-react";
-
+import { Link } from "react-router-dom";
 const HeroSection = () => {
   return (
     <section className="relative overflow-hidden bg-linear-to-b from-light to-white/0 flex items-center min-h-[80vh]">
@@ -27,23 +27,29 @@ const HeroSection = () => {
             resultados en vivo. Conecta a tu comunidad con la pasión del deporte.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 items-center">
-            <button className="bg-accent text-white px-10 py-4 rounded-2xl font-bold text-lg flex items-center gap-3 
+            <Link 
+              to="/explorar" 
+              className="bg-accent text-white px-10 py-4 rounded-2xl font-bold text-lg flex items-center gap-3 
                 cursor-pointer transition-all duration-300 ease-out
                 hover:scale-105 hover:shadow-2xl hover:shadow-accent/40 
-                active:scale-95 group">
-                Explorar partidos
-                <ArrowRight className="group-hover:translate-x-1 transition-transform duration-300" />
-            </button>
-            <button className="flex items-center gap-3 px-8 py-4 text-dark font-bold 
+                active:scale-95 group"
+            >
+              Explorar eventos
+              <ArrowRight className="group-hover:translate-x-1 transition-transform duration-300" />
+            </Link>
+            <Link 
+              to="/en-vivo"
+              className="flex items-center gap-3 px-8 py-4 text-dark font-bold 
                 cursor-pointer transition-all duration-300 ease-in-out
                 border border-transparent hover:border-light hover:bg-white/60 
-                rounded-2xl group active:scale-95">
-                <div className="w-10 h-10 bg-white border border-light rounded-full flex items-center justify-center shadow-sm 
+                rounded-2xl group active:scale-95"
+            >
+              <div className="w-10 h-10 bg-white border border-light rounded-full flex items-center justify-center shadow-sm 
                 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3">
                 <Play size={16} className="text-accent fill-accent" />
-                </div>
-                Ver en vivo
-            </button>
+              </div>
+              Ver en vivo
+            </Link>
             </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 mt-16 border-t border-dark/5 pt-10 w-full max-w-5xl">
             <BenefitItem
