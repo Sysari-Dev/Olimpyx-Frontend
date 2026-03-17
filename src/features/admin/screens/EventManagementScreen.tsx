@@ -35,9 +35,9 @@ const EventManagementScreen = () => {
     <div className="h-full flex flex-col gap-6 animate-fade-in">
       <div className="shrink-0">
         <PageHeader
-          title="Gestión de Eventos"
+          title="Gestión de eventos"
           subtitle="Panel principal para la creación y control de macro-eventos deportivos."
-          buttonLabel="Nuevo Evento"
+          buttonLabel="Nuevo evento"
           buttonIcon={<Plus size={20} />}
           onButtonClick={() => console.log("Nuevo Evento")}
         />
