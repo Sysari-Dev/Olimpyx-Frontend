@@ -45,20 +45,25 @@ const MatchManagementScreen = () => {
     { id: 3, label: "Liga Distrital Abancay" },
   ];
 
-  const handleCreateMatch = () => {
-    console.log("Abriendo modal de nuevo partido...");
-  };
+  const handleCreateMatch = () => console.log("Abriendo modal...");
 
   const handleTournament = (id: string | number) => {
     setSelectedTournamentId(id);
-    console.log("Filtrando por torneo ID:", id);
+  };
+
+  const handleExecuteSearch = () => {
+    console.log({
+      texto: searchTerm,
+      fecha: selectedDate.toLocaleDateString(),
+      torneoId: selectedTournamentId,
+      torneoNombre: currentTournamentName
+    });
   };
 
   const resetAll = () => {
     setSearchTerm("");
     setSelectedDate(new Date());
     setSelectedTournamentId(1);
-    console.log("Filtros limpiados");
   };
 
   const currentTournamentName = tournamentOptions.find(
@@ -79,9 +84,10 @@ const MatchManagementScreen = () => {
         currentTournament={currentTournamentName}
         currentDate={selectedDate}
         searchValue={searchTerm}
-        onSearch={(val) => setSearchTerm(val)}
+        onSearchChange={(val) => setSearchTerm(val)}
         onDateChange={(date) => setSelectedDate(date)}
         onTournamentChange={handleTournament}
+        onExecuteSearch={handleExecuteSearch}
         onClearFilters={resetAll}
       />
 

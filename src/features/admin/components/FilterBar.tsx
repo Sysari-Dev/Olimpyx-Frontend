@@ -1,12 +1,13 @@
 import DatePicker from "@atoms/DatePicker";
 import Select from "@atoms/Select";
 import SearchInput from "@molecules/SearchInput";
-import { Trophy, RotateCcw } from "lucide-react";
+import { Trophy, RotateCcw, Search } from "lucide-react";
 
 interface FilterBarProps {
-  onSearch: (val: string) => void;
+  onSearchChange: (val: string) => void;
   onDateChange: (date: Date) => void;
   onTournamentChange: (id: string | number) => void;
+  onExecuteSearch: () => void;
   onClearFilters: () => void;
   currentTournament: string;
   currentDate: Date;
@@ -14,9 +15,10 @@ interface FilterBarProps {
 }
 
 const FilterBar = ({
-  onSearch,
+  onSearchChange,
   onDateChange,
   onTournamentChange,
+  onExecuteSearch,
   onClearFilters,
   currentTournament,
   currentDate,
@@ -30,42 +32,49 @@ const FilterBar = ({
   ];
 
   return (
-    <div className="bg-white p-4 rounded-[2rem] border border-light shadow-sm flex flex-col lg:flex-row items-center gap-4 animate-fade-in">
-      <div className="w-full lg:w-auto">
-        <Select
-          icon={Trophy}
-          title="Torneo Actual"
-          value={currentTournament}
-          options={tournamentOptions}
-          onChange={onTournamentChange}
-        />
+    <div className="bg-white p-3 md:p-4 rounded-xl md:rounded-2xl border border-light flex flex-col gap-3 md:gap-4 animate-fade-in">
+      <div className="flex items-center gap-2 w-full">
+        <div className="grow">
+          <SearchInput
+            placeholder="Buscar equipos..."
+            value={searchValue}
+            onChange={onSearchChange}
+            showButton={false}
+          />
+        </div>
+        <button 
+          onClick={onExecuteSearch}
+          className="h-12 w-12 shrink-0 bg-accent text-white rounded-xl flex items-center justify-center shadow-lg shadow-accent/20 hover:scale-105 active:scale-95 transition-all cursor-pointer"
+        >
+          <Search size={20} />
+        </button>
       </div>
-
-      <div className="w-full lg:flex-grow">
-        <SearchInput
-          placeholder="Buscar por equipo o partido..."
-          value={searchValue}
-          onChange={onSearch}
-          onSearch={(val: string) => console.log("Buscando:", val)}
-          showButton={true}
-        />
-      </div>
-
-      <div className="w-full lg:w-auto flex items-center gap-2">
-        <DatePicker 
-          date={currentDate}
-          onChange={onDateChange}
-        />
-
+      <div className="flex flex-wrap items-center gap-2 md:gap-4">
+        <div className="grow md:grow-0">
+          <Select
+            icon={Trophy}
+            title="Torneo"
+            value={currentTournament}
+            options={tournamentOptions}
+            onChange={onTournamentChange}
+          />
+        </div>
+        <div className="grow md:grow-0">
+          <DatePicker 
+            date={currentDate}
+            onChange={onDateChange}
+          />
+        </div>
         <button 
           onClick={onClearFilters}
           type="button"
-          className="p-3 bg-light/50 text-dark/40 hover:text-accent hover:bg-accent/10 border border-transparent hover:border-accent/20 rounded-2xl transition-all cursor-pointer active:scale-95 flex items-center gap-2 group"
+          className="h-12 px-4 bg-light/30 text-dark/40 hover:text-accent hover:bg-accent/10 border border-transparent hover:border-accent/20 rounded-xl transition-all cursor-pointer active:scale-95 flex items-center gap-2 group"
         >
-          <RotateCcw size={18} className="group-hover:rotate-[-45deg] transition-transform" />
-          <span className="lg:hidden text-sm font-bold">Limpiar</span>
+          <RotateCcw size={18} className="group-hover:-rotate-45 transition-transform" />
+          <span className="hidden sm:inline-block text-xs font-bold uppercase tracking-wider">Limpiar</span>
         </button>
       </div>
+      
     </div>
   );
 };
