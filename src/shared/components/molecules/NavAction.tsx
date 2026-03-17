@@ -1,11 +1,10 @@
 interface NavActionProps {
   icon: React.ReactNode;
   label: string;
-  onClick: () => void;
+  onClick: (e: React.MouseEvent<HTMLButtonElement>) => void; 
   badge?: number;
   variant?: 'default' | 'danger';
 }
-
 const NavAction = ({ icon, label, onClick, badge, variant = 'default' }: NavActionProps) => {
   return (
     <button
