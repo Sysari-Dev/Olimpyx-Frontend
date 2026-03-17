@@ -48,7 +48,7 @@ const Navbar = () => {
               </NavLink>
             ))}
             <NavLink
-              to="/unete"
+              to="/login"
               className="bg-accent text-white px-5 py-2 rounded-full text-sm font-bold flex items-center gap-2 hover:bg-primary transition-all shadow-lg shadow-accent/20"
             >
               <Rocket size={16} />
@@ -85,7 +85,7 @@ const Navbar = () => {
           ))}
           <div className="pt-4">
             <NavLink
-              to="/unete"
+              to="/login"
               onClick={() => setIsOpen(false)}
               className="w-full bg-accent text-white p-4 rounded-xl font-bold flex items-center justify-center gap-2"
             >
