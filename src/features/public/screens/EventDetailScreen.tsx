@@ -1,8 +1,10 @@
 import React from 'react'
-
+import { EventDetailSection } from '../components/EventDetailSection'
 function EventDetailScreen() {
   return (
-    <div>EventDetailScreen</div>
+    <div className="animate-fade-in">
+      <EventDetailSection/>
+    </div>
   )
 }
 
