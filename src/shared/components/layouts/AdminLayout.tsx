@@ -3,14 +3,15 @@ import Sidebar from "@organisms/Sidebar";
 
 const AdminLayout = () => {
   return (
-    <div className="flex min-h-screen bg-[#f4f7ff]"> 
+    <div className="flex h-screen bg-[#f4f7ff] overflow-hidden"> 
       <Sidebar />
-      <main className="grow p-8 overflow-y-auto">
-        <div className="max-w-7xl mx-auto">
-          <Outlet />
+      <main className="grow flex flex-col min-w-0">
+        <div className="flex-1 p-4 md:p-8 overflow-hidden">
+          <div className="max-w-7xl mx-auto h-full">
+            <Outlet />
+          </div>
         </div>
       </main>
-      
     </div>
   );
 };

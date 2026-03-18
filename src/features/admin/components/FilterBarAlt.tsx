@@ -1,34 +1,36 @@
-import DatePicker from "@atoms/DatePicker";
 import Select from "@atoms/Select";
 import SearchInput from "@molecules/SearchInput";
-import { Trophy, RotateCcw, Search } from "lucide-react";
+import { Trophy, RotateCcw, Search, LayoutGrid } from "lucide-react";
 
-interface FilterBarProps {
+interface FilterBarAltProps {
   onSearchChange: (val: string) => void;
-  onDateChange: (date: Date) => void;
-  onTournamentChange: (id: string | number) => void;
+  onEventChange: (id: string | number) => void;
+  onSportChange: (sport: string | number) => void;
   onExecuteSearch: () => void;
   onClearFilters: () => void;
-  currentTournament: string;
-  currentDate: Date;
+  currentEvent: string;
+  currentSport: string;
   searchValue: string;
+  eventOptions: { id: string | number; label: string }[];
 }
 
-const FilterBar = ({
+const FilterBarAlt = ({
   onSearchChange,
-  onDateChange,
-  onTournamentChange,
+  onEventChange,
+  onSportChange,
   onExecuteSearch,
   onClearFilters,
-  currentTournament,
-  currentDate,
-  searchValue
-}: FilterBarProps) => {
-  
-  const tournamentOptions = [
-    { id: 1, label: "Copa Inter-Comunidades" },
-    { id: 2, label: "Torneo Femenino Vóley" },
-    { id: 3, label: "Liga Distrital Abancay" },
+  currentEvent,
+  currentSport,
+  searchValue,
+  eventOptions
+}: FilterBarAltProps) => {
+
+  const sportOptions = [
+    { id: "Todos", label: "Todos los Deportes" },
+    { id: "Fútbol", label: "Fútbol" },
+    { id: "Vóley", label: "Vóley" },
+    { id: "Básquet", label: "Básquet" },
   ];
 
   return (
@@ -36,7 +38,7 @@ const FilterBar = ({
       <div className="flex items-center gap-2 w-full">
         <div className="grow">
           <SearchInput
-            placeholder="Buscar equipos..."
+            placeholder="Buscar por nombre de torneo..."
             value={searchValue}
             onChange={onSearchChange}
             showButton={false}
@@ -53,16 +55,19 @@ const FilterBar = ({
         <div className="grow md:grow-0">
           <Select
             icon={Trophy}
-            title="Torneo"
-            value={currentTournament}
-            options={tournamentOptions}
-            onChange={onTournamentChange}
+            title="Evento Principal"
+            value={currentEvent}
+            options={eventOptions}
+            onChange={onEventChange}
           />
         </div>
         <div className="grow md:grow-0">
-          <DatePicker 
-            date={currentDate}
-            onChange={onDateChange}
+          <Select
+            icon={LayoutGrid}
+            title="Deporte"
+            value={currentSport}
+            options={sportOptions}
+            onChange={onSportChange}
           />
         </div>
         <button 
@@ -74,9 +79,8 @@ const FilterBar = ({
           <span className="hidden sm:inline-block text-xs font-bold uppercase tracking-wider">Limpiar</span>
         </button>
       </div>
-      
     </div>
   );
 };
 
-export default FilterBar;
+export default FilterBarAlt;
