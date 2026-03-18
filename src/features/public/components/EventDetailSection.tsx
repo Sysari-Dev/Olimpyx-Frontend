@@ -1,6 +1,5 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { ArrowLeft, Calendar } from "lucide-react";
-import { TournamentCard } from "@molecules/TournamentCard";
 
 const EVENTS_MOCK = [
   { id: "evt-1", name: "Intercarreras UNAMBA", description: "Olimpiadas generales de la Universidad. Todas las facultades compiten por la copa general.", startDate: "15 Mar", endDate: "30 Mar", status: "ACTIVE" },
@@ -61,7 +60,7 @@ export const EventDetailSection = () => {
         {tournaments.length > 0 ? (
           <div className="flex flex-col gap-4">
             {tournaments.map((tournament) => (
-              <TournamentCard key={tournament.id} {...tournament} />
+              <div>{tournament}</div>
             ))}
           </div>
         ) : (

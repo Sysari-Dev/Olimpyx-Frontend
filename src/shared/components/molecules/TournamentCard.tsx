@@ -21,7 +21,6 @@ const TournamentCard = ({ tournament, onClick }: TournamentCardProps) => {
       onClick={() => onClick(tournament.id)}
       className="bg-white border border-light rounded-xl p-5 flex flex-col justify-between aspect-square hover:shadow-xl hover:border-accent/20 transition-all cursor-pointer group active:scale-95"
     >
-      {/* Header: Icono y Status */}
       <div className="flex justify-between items-start">
         <div
           className={`p-3 rounded-xl ${isVoley ? "bg-primary/10 text-primary" : "bg-accent/10 text-accent"}`}

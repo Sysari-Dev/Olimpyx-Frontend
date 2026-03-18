@@ -60,3 +60,5 @@ export const EventCard = ({ id, name, description, status, startDate, endDate, t
     </Link>
   );
 };
+
+export default EventCard
