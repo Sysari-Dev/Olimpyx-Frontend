@@ -1,24 +1,16 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Calendar } from "lucide-react";
+import TournamentCard from "src/shared/components/molecules/TournamentCard";
+import type { Event } from "src/shared/models/event.model";
+import type { Tournament } from "src/shared/models/tournament.model";
 
-const EVENTS_MOCK = [
-  { id: "evt-1", name: "Intercarreras UNAMBA", description: "Olimpiadas generales de la Universidad. Todas las facultades compiten por la copa general.", startDate: "15 Mar", endDate: "30 Mar", status: "ACTIVE" },
-  { id: "evt-2", name: "Intercódigos Ing Sistemas 26-1", description: "Campeonato interno de confraternidad.", startDate: "10 Abr", endDate: "15 Abr", status: "UPCOMING" }
-];
+interface EventDetailSectionProps {
+  event?: Event; 
+  tournaments: Tournament[];
+}
 
-const TOURNAMENTS_MOCK = [
-  { id: "t1", idEvent: "evt-1", sport: "Vóley", name: "Vóley Femenino", format: "Fase de Grupos", teamsCount: 8 },
-  { id: "t2", idEvent: "evt-1", sport: "Futsal", name: "Futsal Varones", format: "Eliminación Directa", teamsCount: 16 },
-  { id: "t3", idEvent: "evt-1", sport: "Básquet", name: "Básquet Mixto", format: "Todos contra Todos", teamsCount: 6 },
-  { id: "t4", idEvent: "evt-2", sport: "Futsal", name: "Futsal Libre", format: "Fase de Grupos", teamsCount: 12 },
-];
-
-export const EventDetailSection = () => {
-  const { id } = useParams();
+export const EventDetailSection = ({ event, tournaments }: EventDetailSectionProps) => {
   const navigate = useNavigate();
-  
-  const event = EVENTS_MOCK.find(e => e.id === id);
-  const tournaments = TOURNAMENTS_MOCK.filter(t => t.idEvent === id);
 
   if (!event) {
     return (
@@ -36,6 +28,7 @@ export const EventDetailSection = () => {
           <ArrowLeft size={18} /> Volver a eventos
         </button>
       </div>
+      
       <div className="bg-dark rounded-3xl p-8 md:p-10 text-white shadow-2xl mb-10 relative overflow-hidden">
         <div className="absolute -top-20 -right-20 w-64 h-64 bg-accent/20 rounded-full blur-3xl" />
         <div className="relative z-10">
@@ -53,14 +46,19 @@ export const EventDetailSection = () => {
           </p>
         </div>
       </div>
+
       <div>
         <h3 className="text-2xl font-black text-dark mb-6 tracking-tight">
           Torneos del Evento <span className="text-dark/40 font-medium text-lg ml-2">({tournaments.length})</span>
         </h3>
         {tournaments.length > 0 ? (
-          <div className="flex flex-col gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             {tournaments.map((tournament) => (
-              <div>{tournament}</div>
+              <TournamentCard 
+                key={tournament.id} 
+                tournament={tournament} 
+                onClick={(tId) => navigate(`/torneo/${tId}`)} 
+              />
             ))}
           </div>
         ) : (

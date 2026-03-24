@@ -13,6 +13,7 @@ export interface Tournament {
   pointsPerDraw: number;
   pointsPerLoss: number;
   createdAt?: string;
+  teamsCount?: number;
 }
 
 export interface TournamentTeam {
