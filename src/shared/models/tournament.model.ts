@@ -1,12 +1,22 @@
-export type TournamentStatus = 'REGISTRATION' | 'IN_PROGRESS' | 'FINISHED';
+import type { Event } from "./event.model";
+import type { Team } from "./organization.model";
+import type { Sport } from "./sport.model";
+
 
 export interface Tournament {
   id: string;
-  name: string;        
-  eventId: string | number;
-  sport: string;    
-  category: string;   
-  teamsCount: number; 
-  status: TournamentStatus;
-  startDate: string;
+  name: string;
+  format: string; 
+  event: Event;
+  sport: Sport;    
+  pointsPerWin: number;
+  pointsPerDraw: number;
+  pointsPerLoss: number;
+  createdAt?: string;
+}
+
+export interface TournamentTeam {
+  id: string;
+  tournamentId: Tournament; 
+  teamId: Team;
 }

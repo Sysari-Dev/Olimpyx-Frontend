@@ -1,11 +1,15 @@
-export type EventStatus = 'PLANNING' | 'ACTIVE' | 'COMPLETED';
+import type { Organization } from "./organization.model";
 
-export interface SportEvent {
+
+export type EventStatus = 'PLANNED' | 'ACTIVE' | 'FINISHED';
+
+export interface Event {
   id: string;
-  title: string;
-  location: string;
-  dateRange: string;
+  name: string;
+  description?: string;
+  location?: string;
+  startDate?: string;
+  endDate?: string;
   status: EventStatus;
-  tournamentCount: number;
-  image?: string;
+  organization?: Organization;
 }
