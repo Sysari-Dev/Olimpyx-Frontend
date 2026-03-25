@@ -1,10 +1,10 @@
 import React from 'react';
 import { EventDetailSection } from '../components/EventDetailSection';
-import type { Event } from 'src/shared/models/event.model';
+import type { SportEvent } from 'src/shared/models/event.model';
 import type { Tournament } from 'src/shared/models/tournament.model';
 import { useParams } from 'react-router-dom';
 
-const EVENTS_MOCK: Event[] = [
+const EVENTS_MOCK: SportEvent[] = [
   { id: "evt-1", name: "Intercarreras UNAMBA", description: "Olimpiadas generales de la Universidad. Todas las facultades compiten por la copa general.", startDate: "15 Mar", endDate: "30 Mar", status: "ACTIVE" },
   { id: "evt-2", name: "Intercódigos Ing Sistemas 26-1", description: "Campeonato interno de confraternidad.", startDate: "10 Abr", endDate: "15 Abr", status: "PLANNED" }
 ];

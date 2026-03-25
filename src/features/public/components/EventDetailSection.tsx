@@ -1,11 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Calendar } from "lucide-react";
 import TournamentCard from "src/shared/components/molecules/TournamentCard";
-import type { Event } from "src/shared/models/event.model";
+import type { SportEvent } from "src/shared/models/event.model";
 import type { Tournament } from "src/shared/models/tournament.model";
 
 interface EventDetailSectionProps {
-  event?: Event; 
+  event?: SportEvent; 
   tournaments: Tournament[];
 }
 

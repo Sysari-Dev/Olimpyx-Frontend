@@ -3,7 +3,7 @@ import type { Organization } from "./organization.model";
 
 export type EventStatus = 'PLANNED' | 'ACTIVE' | 'FINISHED';
 
-export interface Event {
+export interface SportEvent {
   id: string;
   name: string;
   description?: string;
@@ -12,4 +12,5 @@ export interface Event {
   endDate?: string;
   status: EventStatus;
   organization?: Organization;
+  tournamentCount?: number;
 }

@@ -1,11 +1,12 @@
 import { Link } from "react-router-dom";
 import { Calendar, Trophy, ChevronRight } from "lucide-react";
+import type { EventStatus } from "src/shared/models/event.model";
 
 interface EventCardProps {
   id: string;
   name: string;
   description: string;
-  status: "ACTIVE" | "UPCOMING" | "FINISHED";
+  status: EventStatus;
   startDate: string;
   endDate: string;
   tournamentCount: number;
@@ -13,13 +14,13 @@ interface EventCardProps {
 
 const statusStyles = {
   ACTIVE: "bg-tertiary/10 text-tertiary border-tertiary/20",
-  UPCOMING: "bg-accent/10 text-accent border-accent/20",
+  PLANNED: "bg-accent/10 text-accent border-accent/20",
   FINISHED: "bg-dark/5 text-dark/40 border-dark/10",
 };
 
 const statusLabels = {
   ACTIVE: "En Curso",
-  UPCOMING: "Próximamente",
+  PLANNED: "Próximamente",
   FINISHED: "Finalizado",
 };
 
