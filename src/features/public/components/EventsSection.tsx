@@ -1,11 +1,12 @@
-import { EventCard } from "@molecules/EventCard";
+import EventCard from "src/shared/components/molecules/EventCard"; 
+import type { SportEvent } from "src/shared/models/event.model";
 
-const EVENTS_MOCK = [
+const EVENTS_MOCK: SportEvent[] = [
   { 
     id: "evt-1", 
     name: "Intercarreras UNAMBA", 
     description: "Las olimpiadas generales de la Universidad Nacional Micaela Bastidas. Todas las facultades compiten por la copa general.", 
-    status: "ACTIVE" as const, 
+    status: "ACTIVE",
     startDate: "15 Mar", 
     endDate: "30 Mar",
     tournamentCount: 8
@@ -14,7 +15,7 @@ const EVENTS_MOCK = [
     id: "evt-2", 
     name: "Intercódigos Ing Sistemas 26-1", 
     description: "Campeonato interno de confraternidad para los estudiantes de la carrera de Ingeniería de Sistemas.", 
-    status: "UPCOMING" as const, 
+    status: "PLANNED", 
     startDate: "10 Abr", 
     endDate: "15 Abr",
     tournamentCount: 3
@@ -23,7 +24,7 @@ const EVENTS_MOCK = [
     id: "evt-3", 
     name: "Intercarreras UTEA", 
     description: "Juegos deportivos interfacultades de la Universidad Tecnológica de los Andes sede central.", 
-    status: "FINISHED" as const, 
+    status: "FINISHED", 
     startDate: "01 Feb", 
     endDate: "28 Feb",
     tournamentCount: 6
@@ -32,7 +33,7 @@ const EVENTS_MOCK = [
 
 export const EventsSection = () => {
   return (
-    <section className="max-w-7xl mx-auto px-6 py-12">
+    <section className="max-w-7xl mx-auto px-6 py-12 animate-fade-in">
       <header className="mb-10 text-center md:text-left">
         <h1 className="text-4xl font-black text-dark tracking-tighter">
           Explora los <span className="text-accent">Eventos</span>
@@ -47,6 +48,10 @@ export const EventsSection = () => {
           <EventCard 
             key={evento.id}
             {...evento}
+            tournamentCount={evento.tournamentCount || 0}
+            description={evento.description || ""}
+            startDate={evento.startDate || ""}
+            endDate={evento.endDate || ""}
           />
         ))}
       </div>
