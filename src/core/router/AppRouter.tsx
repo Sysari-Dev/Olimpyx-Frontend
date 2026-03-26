@@ -17,6 +17,7 @@
   import TournamentDetailScreen from '@features/public/screens/TournamentDetailScreen';
   import CreateEventScreen from '@features/admin/screens/CreateEventScreen';
 import AdminEventDetailScreen from '@features/admin/screens/AdminEventDetailScreen';
+import AdminCreateTournamentScreen from '@features/admin/screens/AdminCreateTournamentScreen';
 
   export const AppRouter = () => {
     return (
@@ -37,6 +38,7 @@ import AdminEventDetailScreen from '@features/admin/screens/AdminEventDetailScre
             <Route path="organizacion" element={<OrganizationManagementScreen />} />
             <Route path="evento/nuevo" element={<CreateEventScreen/>}/>
             <Route path="evento/:id" element={<AdminEventDetailScreen/>}/>
+            <Route path="evento/:eventId/torneo/nuevo" element={<AdminCreateTournamentScreen />} />
             <Route path="equipos" element={<TeamManagementScreen />} />
             <Route path="partidos" element={<MatchSchedulerScreen />} />
             <Route path="torneos" element={<TournamentManagementScreen />} />
