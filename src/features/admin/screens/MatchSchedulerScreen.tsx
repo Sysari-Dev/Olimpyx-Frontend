@@ -3,120 +3,70 @@ import { Plus, Clock } from "lucide-react";
 import PageHeader from "../components/PageHeader";
 import FilterBar from "../components/FilterBar";
 import MatchList from "../components/MatchList";
-import type { Match } from "src/shared/models/match.model"; // Importamos el modelo
+import type { Match } from "src/shared/models/match.model"; 
 
-const MATCHES: Match[] = [
+const MATCHES = [
   {
     id: "1",
-    tournament: "Liga Distrital Abancay",
-    sport: "Fútbol",
-    team1: "Miguel Grau",
-    team2: "DEA Abancay",
-    time: "13:00",
-    date: "17 Mar, 2026",
+    tournament: { name: "Liga Distrital Abancay" },
+    team1: { name: "Miguel Grau" },
+    team2: { name: "DEA Abancay" },
+    matchDate: "17 Mar, 2026",
     status: "LIVE",
-    score: "1 - 1",
+    scoreTeam1: 1,
+    scoreTeam2: 1,
   },
   {
     id: "2",
-    tournament: "Copa Inter-Comunidades",
-    sport: "Fútbol",
-    team1: "Santos FC",
-    team2: "Curibamba City",
-    time: "09:00",
-    date: "17 Mar, 2026", 
+    tournament: { name: "Copa Inter-Comunidades" },
+    team1: { name: "Santos FC" },
+    team2: { name: "Curibamba City" },
+    matchDate: "17 Mar, 2026", 
     status: "FINISHED",
-    score: "3 - 0",
+    scoreTeam1: 3,
+    scoreTeam2: 0,
   },
   {
     id: "3",
-    tournament: "Torneo Femenino Vóley",
-    sport: "Vóley",
-    team1: "Las Poderosas",
-    team2: "Sport Girls Abancay",
-    time: "15:00",
-    date: "16 Mar, 2026", 
+    tournament: { name: "Torneo Femenino Vóley" },
+    team1: { name: "Las Poderosas" },
+    team2: { name: "Sport Girls Abancay" },
+    matchDate: "16 Mar, 2026", 
     status: "FINISHED",
-    score: "3 - 1",
+    scoreTeam1: 3,
+    scoreTeam2: 1,
   },
   {
     id: "4",
-    tournament: "Liga Distrital Abancay",
-    sport: "Fútbol",
-    team1: "Social Olivo",
-    team2: "CD Educación",
-    time: "16:00",
-    date: "15 Mar, 2026",
+    tournament: { name: "Liga Distrital Abancay" },
+    team1: { name: "Social Olivo" },
+    team2: { name: "CD Educación" },
+    matchDate: "15 Mar, 2026",
     status: "FINISHED",
-    score: "2 - 2",
+    scoreTeam1: 2,
+    scoreTeam2: 2,
   },
   {
     id: "5",
-    tournament: "Liga Distrital Abancay",
-    sport: "Fútbol",
-    team1: "Imperial Abancay",
-    team2: "Apurímac United",
-    time: "15:30",
-    date: "17 Mar, 2026",
+    tournament: { name: "Liga Distrital Abancay" },
+    team1: { name: "Imperial Abancay" },
+    team2: { name: "Apurímac United" },
+    matchDate: "17 Mar, 2026",
     status: "LIVE",
-    score: "0 - 0",
+    scoreTeam1: 0,
+    scoreTeam2: 0,
   },
   {
     id: "6",
-    tournament: "Torneo Femenino Vóley",
-    sport: "Vóley",
-    team1: "Club Victoria",
-    team2: "Amazonas Vóley",
-    time: "17:00",
-    date: "17 Mar, 2026",
-    status: "UPCOMING",
-    score: "0 - 0",
-  },
-  {
-    id: "7",
-    tournament: "Copa Inter-Comunidades",
-    sport: "Fútbol",
-    team1: "San Antonio",
-    team2: "Los Chankas Jr",
-    time: "10:00",
-    date: "18 Mar, 2026",
-    status: "UPCOMING",
-    score: "0 - 0",
-  },
-  {
-    id: "8",
-    tournament: "Liga Distrital Abancay",
-    sport: "Fútbol",
-    team1: "Santiago Pata",
-    team2: "Micaela Bastidas",
-    time: "14:00",
-    date: "18 Mar, 2026",
-    status: "UPCOMING",
-    score: "0 - 0",
-  },
-  {
-    id: "9",
-    tournament: "Torneo Femenino Vóley",
-    sport: "Vóley",
-    team1: "Águilas Doradas",
-    team2: "Santuario Vóley",
-    time: "16:00",
-    date: "19 Mar, 2026",
-    status: "UPCOMING",
-    score: "0 - 0",
-  },
-  {
-    id: "10",
-    tournament: "Copa Inter-Comunidades",
-    sport: "Fútbol",
-    team1: "Bellavista FC",
-    team2: "Tamburco Rayo",
-    time: "08:30",
-    date: "20 Mar, 2026",
-    status: "UPCOMING",
-    score: "0 - 0",
-  },
-];
+    tournament: { name: "Torneo Femenino Vóley" },
+    team1: { name: "Club Victoria" },
+    team2: { name: "Amazonas Vóley" },
+    matchDate: "17 Mar, 2026",
+    status: "PENDING", 
+    scoreTeam1: 0,
+    scoreTeam2: 0,
+  }
+] as unknown as Match[];
 
 const MatchSchedulerScreen = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -130,15 +80,21 @@ const MatchSchedulerScreen = () => {
   ];
 
   const currentTournamentName = useMemo(() => {
-    return tournamentOptions.find((t) => t.id === selectedTournamentId)?.label || "Seleccionar Torneo";
+    return tournamentOptions.find((t) => t.id === Number(selectedTournamentId))?.label || "Seleccionar Torneo";
   }, [selectedTournamentId]);
 
   const filteredMatches = useMemo(() => {
-    return MATCHES.filter((match) => {
+    return MATCHES.filter((match: Match) => {
+      // Extraemos los nombres forzando el tipo para evitar el 'any'
+      const t1Name = (match.team1 as unknown as { name: string })?.name || "";
+      const t2Name = (match.team2 as unknown as { name: string })?.name || "";
+      const tourneyName = (match.tournament as unknown as { name: string })?.name || "";
+
       const matchesSearch = 
-        match.team1.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        match.team2.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesTournament = match.tournament === currentTournamentName;
+        t1Name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        t2Name.toLowerCase().includes(searchTerm.toLowerCase());
+        
+      const matchesTournament = tourneyName === currentTournamentName;
 
       return matchesSearch && matchesTournament;
     });
