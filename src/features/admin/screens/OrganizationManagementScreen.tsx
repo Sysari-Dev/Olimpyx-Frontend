@@ -1,8 +1,9 @@
 import { useState, useMemo } from "react";
 import { Plus, Building2, Users, Settings, Mail, ShieldCheck, Globe } from "lucide-react";
 import Select from "@atoms/Select";
-import type { Member } from "src/shared/models/organization.model";
+import type { UserOrganization } from "src/shared/models/organization.model";
 import PageHeader from "../components/PageHeader";
+import { useNavigate } from "react-router-dom"; // <--- Importamos la navegación
 
 const ORG_OPTIONS = [
   { id: 1, label: "Municipalidad de Abancay" },
@@ -10,7 +11,7 @@ const ORG_OPTIONS = [
   { id: 3, label: "Club Deportivo UNAMBA" },
 ];
 
-const MEMBERS_MOCK: Member[] = [
+const MEMBERS_MOCK: UserOrganization[] = [
   { id: "m1", name: "Luis Fernando", email: "luis@sysari.com", role: "ADMIN" },
   { id: "m2", name: "Cristopher", email: "Cristopher@olimpyx.com", role: "ADMIN" },
   { id: "m3", name: "Kaled", email: "kaled@institucion.gob.pe", role: "VIEWER" },
@@ -18,6 +19,7 @@ const MEMBERS_MOCK: Member[] = [
 
 const OrganizationManagementScreen = () => {
   const [selectedOrgId, setSelectedOrgId] = useState<string | number>(1);
+  const navigate = useNavigate(); // <--- Instanciamos la navegación
 
   const currentOrg = useMemo(() => 
     ORG_OPTIONS.find(org => org.id === selectedOrgId), 
@@ -31,7 +33,8 @@ const OrganizationManagementScreen = () => {
           subtitle="Configura los detalles de la institución y gestiona los accesos."
           buttonLabel="Crear"
           buttonIcon={<Plus size={20} />}
-          onButtonClick={() => console.log("Invitar...")}
+          // <--- Aquí conectamos el botón con la nueva ruta
+          onButtonClick={() => navigate("/admin/organizacion/crear")} 
         />
         <div className="w-full md:w-auto">
           <Select
@@ -43,7 +46,10 @@ const OrganizationManagementScreen = () => {
           />
         </div>
       </div>
+      
       <div className="flex-1 min-h-0 overflow-y-auto pr-2 custom-scrollbar space-y-8 pb-10">
+        
+        {/* SECCIÓN: Detalles de la Institución */}
         <section className="space-y-4">
           <h2 className="text-sm font-black text-dark/40 uppercase tracking-widest px-1">Detalles de la Institución</h2>
           <div className="bg-white border border-light rounded-xl p-6 flex flex-col md:flex-row items-center gap-8">
@@ -69,6 +75,8 @@ const OrganizationManagementScreen = () => {
             </button>
           </div>
         </section>
+
+        {/* SECCIÓN: Equipo de Trabajo */}
         <section className="space-y-4">
           <div className="flex items-center justify-between px-1">
             <h2 className="text-sm font-black text-dark/40 uppercase tracking-widest">Equipo de Trabajo</h2>
@@ -104,6 +112,8 @@ const OrganizationManagementScreen = () => {
           </div>
         </section>
       </div>
+
+      {/* FOOTER INFORMATIVO */}
       <div className="shrink-0 bg-white border border-light p-3 rounded-xl flex items-center gap-3">
         <div className="w-8 h-8 bg-tertiary/10 rounded-lg flex items-center justify-center text-tertiary">
           <ShieldCheck size={16} />
