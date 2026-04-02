@@ -19,6 +19,7 @@
 import AdminEventDetailScreen from '@features/admin/screens/AdminEventDetailScreen';
 import AdminCreateTournamentScreen from '@features/admin/screens/AdminCreateTournamentScreen';
 import { MatchScoringScreen } from '@features/admin/screens/MatchScoringScreen';
+import { ProtectedRoute } from '../auth/ProtectedRoute';
 
   export const AppRouter = () => {
     return (
@@ -33,7 +34,7 @@ import { MatchScoringScreen } from '@features/admin/screens/MatchScoringScreen';
             <Route path="explorar" element={<EventsScreen/>}/>
             <Route path="partido/:id" element={<MatchDetailScreen />} />
           </Route>
-          <Route path="/admin" element={<AdminLayout />}>
+          <Route path="/admin" element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>
             <Route index element={<DashboardScreen />} />
             <Route path="eventos" element={<EventManagementScreen />} />
             <Route path="organizacion" element={<OrganizationManagementScreen />} />
