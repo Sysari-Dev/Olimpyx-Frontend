@@ -2,7 +2,7 @@ import { useState } from "react";
 import { ArrowLeft, RotateCcw, ArrowRightLeft, CheckCircle, Trophy } from "lucide-react";
 
 const MATCH_DATA = {
-  sport: "Basket", 
+  sport: "Voley", 
   teamA: "Ing. Sistemas",
   teamB: "Administración",
 };

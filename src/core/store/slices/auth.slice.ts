@@ -1,18 +1,24 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-// IMPORTAMOS TU MODELO OFICIAL (Ajusta la ruta si es necesario)
 import type { UserAccount } from '../../../shared/models/auth.model';
+import type { Organization } from '../../../shared/models/organization.model';
 
 interface AuthState {
-  user: UserAccount | null; // <--- USAMOS TU MODELO AQUÍ
+  user: UserAccount | null; 
   accessToken: string | null;
   refreshToken: string | null;
   isAuthenticated: boolean;
+  organizations: Organization[];
+  activeOrg: Organization | null;
   
   // Acciones
   setAuth: (user: UserAccount, accessToken: string, refreshToken: string) => void;
   updateAccessToken: (newAccessToken: string) => void;
   logout: () => void;
+  
+  // 3. NUEVAS ACCIONES
+  setOrganizations: (orgs: Organization[]) => void;
+  setActiveOrg: (org: Organization) => void;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -22,6 +28,9 @@ export const useAuthStore = create<AuthState>()(
       accessToken: null,
       refreshToken: null,
       isAuthenticated: false,
+      
+      organizations: [],
+      activeOrg: null,
 
       setAuth: (user, accessToken, refreshToken) => 
         set({ user, accessToken, refreshToken, isAuthenticated: true }),
@@ -30,7 +39,16 @@ export const useAuthStore = create<AuthState>()(
         set({ accessToken: newAccessToken }),
         
       logout: () => 
-        set({ user: null, accessToken: null, refreshToken: null, isAuthenticated: false }),
+        set({ 
+          user: null, 
+          accessToken: null, 
+          refreshToken: null, 
+          isAuthenticated: false,
+          organizations: [], 
+          activeOrg: null   
+        }),
+      setOrganizations: (orgs) => set({ organizations: orgs }),
+      setActiveOrg: (org) => set({ activeOrg: org }),
     }),
     {
       name: 'olimpyx-auth-storage',

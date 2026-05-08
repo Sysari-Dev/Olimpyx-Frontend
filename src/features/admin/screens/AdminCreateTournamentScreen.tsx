@@ -6,6 +6,8 @@ import { Step1BasicData } from "../components/wizard/Step1BasicData";
 import { Step2Format } from "../components/wizard/Step2Format";
 import { Step3Teams } from "../components/wizard/Step3Teams";
 import { Step4Preview } from "../components/wizard/Step4Preview";
+import { TeamService } from "src/core/services/team.service";
+import { useAuthStore } from "src/core/store/slices/auth.slice";
 const shuffleArray = <T,>(array: T[]): T[] => [...array].sort(() => Math.random() - 0.5);
 
 const AdminCreateTournamentScreen = () => {
@@ -18,23 +20,45 @@ const AdminCreateTournamentScreen = () => {
   
   const [dbTeams, setDbTeams] = useState<PreviewTeam[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const activeOrg = useAuthStore(state => state.activeOrg); 
 
   useEffect(() => {
     const fetchTeamsFromApi = async () => {
-      setTimeout(() => {
-        setDbTeams([
-          { id: "eq-1", name: "Ing. Sistemas" }, { id: "eq-2", name: "Administración" },
-          { id: "eq-3", name: "Contabilidad" }, { id: "eq-4", name: "Ing. Civil" },
-          { id: "eq-5", name: "Ing. Minas" }, { id: "eq-6", name: "Educación" },
-          { id: "eq-7", name: "Derecho" }, { id: "eq-8", name: "Medicina" },
-          { id: "eq-9", name: "Enfermería" }, { id: "eq-10", name: "Veterinaria" },
-          { id: "eq-11", name: "Odontología" } 
-        ]);
+      if (!activeOrg?.id) return;
+      
+      try {
+        setIsLoading(true);
+        const response = await TeamService.getAll(activeOrg.id);
+        
+        // Escudo antimuñeca rusa
+        let teamsArray = [];
+        if (Array.isArray(response.data)) {
+          teamsArray = response.data;
+        } else if (Array.isArray(response.data?.data)) {
+          teamsArray = response.data.data;
+        } else if (Array.isArray(response.data?.data?.data)) {
+          teamsArray = response.data.data.data;
+        } else if (Array.isArray(response.data?.data?.items)) {
+          teamsArray = response.data.data.items;
+        }
+
+        // Mapeamos los equipos al formato que espera tu Wizard (PreviewTeam)
+        const mappedTeams: PreviewTeam[] = teamsArray.map((team: { id: string; name: string }) => ({
+          id: team.id,
+          name: team.name
+        }));
+
+        setDbTeams(mappedTeams);
+
+      } catch (error) {
+        console.error("Error al cargar equipos para el torneo:", error);
+      } finally {
         setIsLoading(false);
-      }, 1000); 
+      }
     };
+
     fetchTeamsFromApi();
-  }, [eventId]);
+  }, [activeOrg]);
 
   const [formData, setFormData] = useState<WizardFormData>({
     name: "", sport: "", format: "",

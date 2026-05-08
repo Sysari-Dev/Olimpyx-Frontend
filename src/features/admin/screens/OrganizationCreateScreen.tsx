@@ -1,9 +1,10 @@
 import { useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
-import { Building2, AlignLeft, Globe, ArrowLeft, Save } from "lucide-react";
-import Select from "@atoms/Select"; // Asumo que tienes este componente
+import { Building2, AlignLeft, Globe, ArrowLeft, Save, AlertCircle } from "lucide-react";
+import { isAxiosError } from "axios";
+import Select from "@atoms/Select"; 
+import { OrganizationService } from "src/core/services/organization.service";
 
-// Usaremos el mismo mock temporal para el "Parent Organization"
 const ORG_OPTIONS = [
   { id: "none", label: "Ninguna (Organización Principal)" },
   { id: "1", label: "Municipalidad de Abancay" },
@@ -13,6 +14,7 @@ const ORG_OPTIONS = [
 const OrganizationCreateScreen = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   // Estados del formulario basados en tu modelo
   const [name, setName] = useState("");
@@ -21,22 +23,42 @@ const OrganizationCreateScreen = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    setError(null);
     setIsLoading(true);
 
     try {
-      // Aquí irá la llamada a tu nuevo OrganizationService
+      // Armamos el paquete exactamente como lo pide Postman
       const payload = {
         name,
         description: description || undefined,
-        parent_id: parentId === "none" ? null : parentId
+        parentId: parentId === "none" ? null : String(parentId)
       };
       
       console.log("Enviando a BD:", payload);
       
-      // Simulamos carga y volvemos a la lista
-      setTimeout(() => navigate("/admin/organizacion"), 1000);
-    } catch (error) {
-      console.error(error);
+      // Llamada real al backend
+      await OrganizationService.create(payload);
+      
+      // Volvemos a la lista si todo fue exitoso
+      navigate("/admin/organizacion");
+
+    } catch (err: unknown) {
+      console.error("Error al crear organización:", err);
+      
+      // Manejo de errores seguro para la UI
+      if (isAxiosError(err)) {
+        const backendMessage = err.response?.data?.message;
+        let errorMessage = "Error al crear la organización. Inténtalo de nuevo.";
+        
+        if (backendMessage && typeof backendMessage === 'object' && backendMessage.content) {
+            errorMessage = backendMessage.content;
+        } else if (typeof backendMessage === 'string') {
+            errorMessage = backendMessage;
+        }
+        setError(errorMessage);
+      } else {
+        setError("Ocurrió un error inesperado.");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -49,7 +71,8 @@ const OrganizationCreateScreen = () => {
       <div className="flex items-center gap-4">
         <button 
           onClick={() => navigate("/admin/organizacion")}
-          className="w-10 h-10 bg-white border border-light rounded-xl flex items-center justify-center text-dark/40 hover:text-dark hover:border-dark/20 transition-all cursor-pointer"
+          disabled={isLoading}
+          className="w-10 h-10 bg-white border border-light rounded-xl flex items-center justify-center text-dark/40 hover:text-dark hover:border-dark/20 transition-all cursor-pointer disabled:opacity-50"
         >
           <ArrowLeft size={20} />
         </button>
@@ -58,6 +81,14 @@ const OrganizationCreateScreen = () => {
           <p className="text-sm text-dark/40 font-medium">Registra una nueva institución en el sistema.</p>
         </div>
       </div>
+
+      {/* ALERTA DE ERROR */}
+      {error && (
+        <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl flex items-center gap-3 text-sm font-bold animate-fade-in">
+          <AlertCircle size={18} className="shrink-0" />
+          <p>{error}</p>
+        </div>
+      )}
 
       {/* FORMULARIO */}
       <form onSubmit={handleSubmit} className="flex-1 bg-white border border-light rounded-2xl p-6 md:p-8 space-y-6">
@@ -72,10 +103,11 @@ const OrganizationCreateScreen = () => {
             <input
               type="text"
               required
+              disabled={isLoading}
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Ej. Club Social Deportivo..."
-              className="w-full bg-light/10 border border-light p-4 pl-12 rounded-2xl outline-none focus:border-accent focus:bg-white focus:ring-4 focus:ring-accent/5 transition-all text-sm font-medium text-dark"
+              className="w-full bg-light/10 border border-light p-4 pl-12 rounded-2xl outline-none focus:border-accent focus:bg-white focus:ring-4 focus:ring-accent/5 transition-all text-sm font-medium text-dark disabled:opacity-50"
             />
           </div>
         </div>
@@ -89,10 +121,11 @@ const OrganizationCreateScreen = () => {
             <AlignLeft className="absolute left-4 top-4 text-dark/30 group-focus-within:text-accent transition-colors" size={18} />
             <textarea
               rows={4}
+              disabled={isLoading}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Detalles sobre la institución..."
-              className="w-full bg-light/10 border border-light p-4 pl-12 rounded-2xl outline-none focus:border-accent focus:bg-white focus:ring-4 focus:ring-accent/5 transition-all text-sm font-medium text-dark resize-none custom-scrollbar"
+              className="w-full bg-light/10 border border-light p-4 pl-12 rounded-2xl outline-none focus:border-accent focus:bg-white focus:ring-4 focus:ring-accent/5 transition-all text-sm font-medium text-dark resize-none custom-scrollbar disabled:opacity-50"
             />
           </div>
         </div>
@@ -102,7 +135,6 @@ const OrganizationCreateScreen = () => {
           <label className="text-[11px] font-black text-dark/50 uppercase tracking-[0.15em] ml-1">
             Dependencia (Organización Padre)
           </label>
-          {/* Asumo que tu componente Select funciona así, si no, lo ajustamos */}
           <Select
             icon={Globe}
             title="Seleccionar dependencia"
@@ -115,8 +147,9 @@ const OrganizationCreateScreen = () => {
         <div className="pt-6 border-t border-light flex justify-end gap-3">
           <button
             type="button"
+            disabled={isLoading}
             onClick={() => navigate("/admin/organizacion")}
-            className="px-6 py-3 rounded-xl font-bold text-sm text-dark/60 hover:bg-light transition-all cursor-pointer"
+            className="px-6 py-3 rounded-xl font-bold text-sm text-dark/60 hover:bg-light transition-all cursor-pointer disabled:opacity-50"
           >
             Cancelar
           </button>

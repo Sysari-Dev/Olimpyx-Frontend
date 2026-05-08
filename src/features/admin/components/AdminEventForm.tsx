@@ -1,18 +1,29 @@
 import { useState } from "react";
 import { Save, X, Calendar, MapPin, AlignLeft, Trophy } from "lucide-react";
 import type { SportEvent } from "src/shared/models/event.model";
-interface AdminEventFormProps {
-  initialData?: Partial<SportEvent>; 
-  onSubmit: (data: unknown) => void;
-  onCancel: () => void;
+
+// Mejoramos el tipado para saber qué datos salen del formulario
+export interface EventFormData {
+  name: string;
+  description: string;
+  location: string;
+  startDate: string;
+  endDate: string;
 }
 
-export const AdminEventForm = ({ initialData, onSubmit, onCancel }: AdminEventFormProps) => {
+interface AdminEventFormProps {
+  initialData?: Partial<SportEvent>; 
+  onSubmit: (data: EventFormData) => void; // <-- Usamos el tipo estricto
+  onCancel: () => void;
+  isLoading?: boolean; // <-- Para bloquear el botón mientras se guarda
+}
+
+export const AdminEventForm = ({ initialData, onSubmit, onCancel, isLoading }: AdminEventFormProps) => {
   const [formData, setFormData] = useState({
     name: initialData?.name || "",
     description: initialData?.description || "",
     location: initialData?.location || "",
-    startDate: initialData?.startDate || "",
+    startDate: initialData?.startDate || "", // Asegúrate de que venga en formato YYYY-MM-DD si es initialData
     endDate: initialData?.endDate || "",
   });
 
@@ -25,6 +36,7 @@ export const AdminEventForm = ({ initialData, onSubmit, onCancel }: AdminEventFo
     e.preventDefault();
     onSubmit(formData);
   };
+
   return (
     <div className="bg-white border border-light rounded-2xl p-6 shadow-sm">
       <form onSubmit={handleLocalSubmit} className="flex flex-col gap-6">
@@ -34,9 +46,10 @@ export const AdminEventForm = ({ initialData, onSubmit, onCancel }: AdminEventFo
           </label>
           <input
             type="text" id="name" name="name" required
+            disabled={isLoading}
             placeholder="Ej. Olimpiadas Intercarreras 2026"
             value={formData.name} onChange={handleChange}
-            className="w-full bg-light/30 border border-light rounded-xl px-4 py-3 text-dark focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all font-medium"
+            className="w-full bg-light/30 border border-light rounded-xl px-4 py-3 text-dark focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all font-medium disabled:opacity-50"
           />
         </div>
         <div className="space-y-2">
@@ -45,9 +58,10 @@ export const AdminEventForm = ({ initialData, onSubmit, onCancel }: AdminEventFo
           </label>
           <textarea
             id="description" name="description" rows={3}
+            disabled={isLoading}
             placeholder="Describe el propósito del evento, reglas generales o dedicatorias..."
             value={formData.description} onChange={handleChange}
-            className="w-full bg-light/30 border border-light rounded-xl px-4 py-3 text-dark focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all font-medium resize-none"
+            className="w-full bg-light/30 border border-light rounded-xl px-4 py-3 text-dark focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all font-medium resize-none disabled:opacity-50"
           />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -57,9 +71,10 @@ export const AdminEventForm = ({ initialData, onSubmit, onCancel }: AdminEventFo
             </label>
             <input
               type="text" id="location" name="location"
+              disabled={isLoading}
               placeholder="Ej. Campus Central UNAMBA"
               value={formData.location} onChange={handleChange}
-              className="w-full bg-light/30 border border-light rounded-xl px-4 py-3 text-dark focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all font-medium"
+              className="w-full bg-light/30 border border-light rounded-xl px-4 py-3 text-dark focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all font-medium disabled:opacity-50"
             />
           </div>
 
@@ -69,8 +84,9 @@ export const AdminEventForm = ({ initialData, onSubmit, onCancel }: AdminEventFo
             </label>
             <input
               type="date" id="startDate" name="startDate" required
+              disabled={isLoading}
               value={formData.startDate} onChange={handleChange}
-              className="w-full bg-light/30 border border-light rounded-xl px-4 py-3 text-dark focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all font-medium"
+              className="w-full bg-light/30 border border-light rounded-xl px-4 py-3 text-dark focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all font-medium disabled:opacity-50"
             />
           </div>
 
@@ -80,8 +96,9 @@ export const AdminEventForm = ({ initialData, onSubmit, onCancel }: AdminEventFo
             </label>
             <input
               type="date" id="endDate" name="endDate" required
+              disabled={isLoading}
               value={formData.endDate} onChange={handleChange}
-              className="w-full bg-light/30 border border-light rounded-xl px-4 py-3 text-dark focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all font-medium"
+              className="w-full bg-light/30 border border-light rounded-xl px-4 py-3 text-dark focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all font-medium disabled:opacity-50"
             />
           </div>
         </div>
@@ -90,15 +107,17 @@ export const AdminEventForm = ({ initialData, onSubmit, onCancel }: AdminEventFo
         <div className="flex items-center justify-end gap-4">
           <button
             type="button" onClick={onCancel}
-            className="px-6 py-3 rounded-xl font-bold text-dark/60 hover:bg-light hover:text-dark transition-colors flex items-center gap-2"
+            disabled={isLoading}
+            className="px-6 py-3 rounded-xl font-bold text-dark/60 hover:bg-light hover:text-dark transition-colors flex items-center gap-2 disabled:opacity-50"
           >
             <X size={18} /> Cancelar
           </button>
           <button
             type="submit"
-            className="px-8 py-3 rounded-xl font-black bg-accent text-white hover:bg-accent/90 hover:shadow-lg hover:shadow-accent/20 transition-all flex items-center gap-2 active:scale-95"
+            disabled={isLoading || !formData.name || !formData.startDate || !formData.endDate}
+            className="px-8 py-3 rounded-xl font-black bg-accent text-white hover:bg-accent/90 hover:shadow-lg hover:shadow-accent/20 transition-all flex items-center gap-2 active:scale-95 disabled:opacity-50 disabled:pointer-events-none"
           >
-            <Save size={18} /> Guardar Cambios
+            <Save size={18} /> {isLoading ? "Guardando..." : "Guardar Cambios"}
           </button>
         </div>
       </form>
