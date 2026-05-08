@@ -1,18 +1,30 @@
-export type MatchStatus = 'LIVE' | 'FINISHED' | 'UPCOMING';
+import type { GroupStage, Stage } from "./competition.model";
+import type { Team } from "./organization.model";
+import type { Tournament } from "./tournament.model";
+
+export type MatchStatus = 'PENDING' | 'LIVE' | 'FINISHED';
 
 export interface Match {
   id: string;
-  tournamentId?: string | number;
-  tournament: string;
-  sport: string;
-  team1: string;
-  team2: string;
-  score: string;
-  time: string;
-  date: string;
+  tournament: Tournament;
+  stage?: Stage;            
+  group?: GroupStage;   
+  team1: Team;
+  team2: Team;
+  scoreTeam1: number;
+  scoreTeam2: number;
+  winnerId?: Team;    
+  parentMatch1?: Match; 
+  parentMatch2?: Match;   
+  roundName?: string;
+  matchDate?: string;
   status: MatchStatus;
-  location?: string;
-  currentPeriod?: string;
-} 
+}
 
-export type CreateMatchDTO = Omit<Match, 'id' | 'score'>;
+export interface MatchSet {
+  id:string;
+  match?: Match;
+  setNumber: number;
+  pointsTeam1: number;
+  pointsTeam2: number;
+}

@@ -9,8 +9,10 @@ import {
   ChevronRight,
   ArrowUpRight
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const DashboardScreen = () => {
+  const navigate=useNavigate();
   const stats = [
     { label: "Eventos activos", value: "3", icon: Trophy, color: "text-accent", bg: "bg-accent/10" },
     { label: "Partidos hoy", value: "12", icon: Swords, color: "text-primary", bg: "bg-primary/10" },
@@ -20,7 +22,7 @@ const DashboardScreen = () => {
 
   const shortcuts = [
     { title: "Nuevo partido", desc: "Programa un encuentro", icon: Plus, action: () => {} },
-    { title: "Crear evento", desc: "Inicia una festividad", icon: Calendar, action: () => {} },
+    { title: "Crear evento", desc: "Inicia una festividad", icon: Calendar, action: () => navigate('evento/nuevo')},
     { title: "Ver torneos", desc: "Gestionar categorías", icon: Trophy, action: () => {} },
   ];
 

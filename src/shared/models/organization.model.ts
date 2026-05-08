@@ -1,16 +1,23 @@
+import type { UserAccount } from "./auth.model";
+
 export interface Organization {
-  id: string | number;
+  id: string;
+  parent?: Organization; 
   name: string;
-  slug: string;
-  logo?: string;
-  memberCount: number;
+  description?: string;
   createdAt: string;
 }
 
-export interface Member {
+export interface UserOrganization {
   id: string;
+  organization?: Organization; 
+  user?: UserAccount;          
+  roleInOrg?: string;
+  joinedAt: string;
+}
+
+export interface Team {
+  id: string;
+  organization?: Organization; 
   name: string;
-  email: string;
-  role: 'ADMIN' | 'EDITOR' | 'VIEWER';
-  avatar?: string;
 }
