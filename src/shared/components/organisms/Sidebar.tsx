@@ -18,7 +18,7 @@ interface SidebarProps {
   onClose?: () => void;
 }
 
-const Sidebar = ({ onClose }: SidebarProps) => {
+const Sidebar = ({ onClose, onLogout }: SidebarProps & { onLogout: () => void }) => {
   const [isOrgMenuOpen, setIsOrgMenuOpen] = useState(false);
   const orgMenuRef = useRef<HTMLDivElement>(null);
   const isLoadingOrgs = false;
@@ -111,7 +111,6 @@ const Sidebar = ({ onClose }: SidebarProps) => {
           )}
         </div>
       </div>
-
       <nav className="flex-1 space-y-1">
         <p className="text-[10px] font-black text-gray/40 uppercase tracking-[0.2em] px-4 mb-4">
           Menú principal
@@ -120,22 +119,21 @@ const Sidebar = ({ onClose }: SidebarProps) => {
           <SidebarItem key={item.to} {...item} onClose={onClose} />
         ))}
       </nav>
-
       <div className="mt-auto pt-6 border-t border-white/5 space-y-2">
-        <SidebarItem
-          to="/admin/notificaciones"
-          icon={Bell}
-          label="Notificaciones"
-          onClose={onClose}
+        <SidebarItem 
+          to="/admin/notificaciones" 
+          icon={Bell} 
+          label="Notificaciones" 
+          onClose={onClose} 
         />
-        <button className="flex items-center gap-3 px-4 py-3 w-full text-gray hover:text-red-400 hover:bg-red-400/5 rounded-xl transition-all cursor-pointer group font-sans">
-          <LogOut
-            size={20}
-            className="group-hover:rotate-12 transition-transform"
-          />
+        <button 
+          onClick={onLogout}
+          className="flex items-center gap-3 px-4 py-3 w-full text-gray hover:text-red-400 hover:bg-red-400/5 rounded-xl transition-all cursor-pointer group font-sans"
+        >
+          <LogOut size={20} className="group-hover:rotate-12 transition-transform" />
           <span className="text-sm font-bold">Cerrar sesión</span>
         </button>
-      </div>
+      </div>      
     </div>
   );
 };
