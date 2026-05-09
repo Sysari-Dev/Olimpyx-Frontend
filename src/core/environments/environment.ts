@@ -1,1 +1,1 @@
-export const environment ={apiUrl: "https://olimpyx-backend.onrender.com",};
+export const environment = { apiUrl: "https://olimpyx-backend.onrender.com" };
