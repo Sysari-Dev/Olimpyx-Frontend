@@ -20,7 +20,7 @@
       "@utils/*": ["src/shared/utils/*"],
       "@routes/*": ["src/core/router/*"],
       "@store/*": ["src/core/store/*"],
-      "@models/*": ["src/shared/components/models/*"],
+      "@models/*": ["src/shared/models/*"],
       "@api/*": ["src/core/api/*"]
     },
 

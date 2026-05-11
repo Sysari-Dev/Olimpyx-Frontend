@@ -1,56 +1,53 @@
-import axios from 'axios';
+import axios, { type AxiosInstance, type InternalAxiosRequestConfig } from 'axios';
 import { environment } from '../environments/environment';
-import { useAuthStore } from '../store/slices/auth.slice';
+import { store } from '../store';
+import { updateAccessToken, logout } from '../store/slices/auth.slice';
 
-// Creamos la instancia de Axios
-export const api = axios.create({
+export const api: AxiosInstance = axios.create({
   baseURL: environment.apiUrl,
   headers: { 'Content-Type': 'application/json' },
 });
 
-// INTERCEPTOR DE SALIDA (Pega el Token a las peticiones)
-api.interceptors.request.use((config) => {
-  const token = useAuthStore.getState().accessToken;
-  if (token) {
+api.interceptors.request.use((config: InternalAxiosRequestConfig) => {
+  const token = store.getState().auth.accessToken;
+  
+  if (token && config.headers) {
     config.headers.Authorization = `Bearer ${token}`;
   }
+  
   return config;
 });
 
-// INTERCEPTOR DE ENTRADA (Maneja el Refresh Token si hay error 401)
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
 
-    // Si el error es 401 (No autorizado) y aún no hemos reintentado
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 
       try {
-        const refreshToken = useAuthStore.getState().refreshToken;
+        const refreshToken = store.getState().auth.refreshToken;
         
-        // Pedimos un nuevo token al backend
-        const response = await axios.post(`${environment.apiUrl}/auth/refresh`, {
-          refreshToken: refreshToken
+        const { data } = await axios.post(`${environment.apiUrl}/auth/refresh`, {
+          refreshToken
         });
 
-        const newAccessToken = response.data.data.accessToken; // Ajusta según tu backend
-        
-        // Actualizamos la memoria global
-        useAuthStore.getState().updateAccessToken(newAccessToken);
+        const newAccessToken = data.data.accessToken;
+        store.dispatch(updateAccessToken(newAccessToken));
 
-        // Reintentamos la petición original con el nuevo token
-        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-        return api(originalRequest);
+        if (originalRequest.headers) {
+          originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+        }
         
+        return api(originalRequest);
       } catch (refreshError) {
-        // Si el refresh falla (ej. expiró también), forzamos logout
-        useAuthStore.getState().logout();
-        window.location.href = '/'; 
+        store.dispatch(logout());
+        window.location.href = '/login'; 
         return Promise.reject(refreshError);
       }
     }
+    
     return Promise.reject(error);
   }
 );

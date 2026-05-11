@@ -38,7 +38,7 @@ import { CreateTournamentPage } from '@features/tournament/pages/CreateTournamen
           </Route>
           <Route path="/admin" element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>
             <Route index element={<DashboardScreen />} />
-            <Route path="eventos" element={<EventManagementScreen />} />
+            {/* <Route path="eventos" element={<EventManagementScreen />} /> */}
             <Route path="organizacion" element={<OrganizationManagementScreen />} />
             <Route path="organizacion/crear" element={<OrganizationCreateScreen/>}/>
             <Route path="evento/nuevo" element={<CreateEventScreen/>}/>

@@ -1,57 +1,47 @@
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
-import type { UserAccount } from '../../../shared/models/auth.model';
-import type { Organization } from '../../../shared/models/organization.model';
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
+import { type UserAccount } from '@models/auth.model';
+import { type Organization } from '@models/organization.model';
 
 interface AuthState {
-  user: UserAccount | null; 
+  user: UserAccount | null;
   accessToken: string | null;
   refreshToken: string | null;
   isAuthenticated: boolean;
   organizations: Organization[];
   activeOrg: Organization | null;
-  
-  // Acciones
-  setAuth: (user: UserAccount, accessToken: string, refreshToken: string) => void;
-  updateAccessToken: (newAccessToken: string) => void;
-  logout: () => void;
-  
-  // 3. NUEVAS ACCIONES
-  setOrganizations: (orgs: Organization[]) => void;
-  setActiveOrg: (org: Organization) => void;
 }
 
-export const useAuthStore = create<AuthState>()(
-  persist(
-    (set) => ({
-      user: null,
-      accessToken: null,
-      refreshToken: null,
-      isAuthenticated: false,
-      
-      organizations: [],
-      activeOrg: null,
+const initialState: AuthState = {
+  user: null,
+  accessToken: null,
+  refreshToken: null,
+  isAuthenticated: false,
+  organizations: [],
+  activeOrg: null,
+};
 
-      setAuth: (user, accessToken, refreshToken) => 
-        set({ user, accessToken, refreshToken, isAuthenticated: true }),
-        
-      updateAccessToken: (newAccessToken) => 
-        set({ accessToken: newAccessToken }),
-        
-      logout: () => 
-        set({ 
-          user: null, 
-          accessToken: null, 
-          refreshToken: null, 
-          isAuthenticated: false,
-          organizations: [], 
-          activeOrg: null   
-        }),
-      setOrganizations: (orgs) => set({ organizations: orgs }),
-      setActiveOrg: (org) => set({ activeOrg: org }),
-    }),
-    {
-      name: 'olimpyx-auth-storage',
-    }
-  )
-);
+export const authSlice = createSlice({
+  name: 'auth',
+  initialState,
+  reducers: {
+    setAuth: (state, action: PayloadAction<{ user: UserAccount; accessToken: string; refreshToken: string }>) => {
+      state.user = action.payload.user;
+      state.accessToken = action.payload.accessToken;
+      state.refreshToken = action.payload.refreshToken;
+      state.isAuthenticated = true;
+    },
+    updateAccessToken: (state, action: PayloadAction<string>) => {
+      state.accessToken = action.payload;
+    },
+    setOrganizations: (state, action: PayloadAction<Organization[]>) => {
+      state.organizations = action.payload;
+    },
+    setActiveOrg: (state, action: PayloadAction<Organization>) => {
+      state.activeOrg = action.payload;
+    },
+    logout: () => initialState,
+  },
+});
+
+export const { setAuth, updateAccessToken, setOrganizations, setActiveOrg, logout } = authSlice.actions;
+export default authSlice.reducer;

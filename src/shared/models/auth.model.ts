@@ -1,13 +1,14 @@
-  import type { Organization } from "./organization.model";
+import type { ApiResponse } from '@api/interfaces/api-response.interface';
 
-  export type UserRole = 'SUPER_ADMIN' | 'admin';
+export type UserRole = 'SUPER_ADMIN' | 'ADMIN' | 'USER';
 
-  export interface UserAccount {
-    id: string;
-    email: string;
-    username?: string;
-    role: UserRole; 
-    organization?: Organization
-    status?: string;
-    createdAt?: string;
-  }
+export interface UserAccount {
+  id: string;
+  username: string;
+  email: string;
+  roles: UserRole;
+  accessToken: string;
+  refreshToken: string;
+}
+
+export type AuthResponse = ApiResponse<UserAccount>;
