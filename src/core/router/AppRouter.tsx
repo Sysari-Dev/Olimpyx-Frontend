@@ -8,24 +8,14 @@ import MatchLiveScreen from "@features/public/screens/MatchLiveScreen";
 import MatchDetailScreen from "@features/public/screens/MatchDetailScreen";
 import DashboardScreen from "@features/admin/screens/DashboardScreen";
 import LoginPage from "@features/auth/pages/LoginPage";
-//   import EventManagementScreen from '@features/admin/screens/EventManagementScreen';
-//
-//   import OrganizationManagementScreen from '@features/admin/screens/OrganizationManagementScreen';
-//   // import TeamManagementScreen from '@features/admin/screens/TeamManagementScreen';
-//   import MatchSchedulerScreen from '@features/admin/screens/MatchSchedulerScreen';
-//   // import TournamentManagementScreen from '@features/admin/screens/TournamentManagementScreen';
 import EventsScreen from "@features/public/screens/EventsScreen";
 import TournamentDetailScreen from "@features/public/screens/TournamentDetailScreen";
-//   import CreateEventScreen from '@features/admin/screens/CreateEventScreen';
-// import AdminEventDetailScreen from '@features/admin/screens/AdminEventDetailScreen';
-// import AdminCreateTournamentScreen from '@features/admin/screens/AdminCreateTournamentScreen';
 import { MatchScoringScreen } from "@features/admin/screens/MatchScoringScreen";
 import OrganizationManagementPage from "@features/organizations/pages/OrganizationManagementPage";
 import OrganizationUpdatePage from "@features/organizations/pages/OrganizationUpdatePage";
 import OrganizationCreatePage from "@features/organizations/pages/OrganizationCreatePage";
-// import { ProtectedRoute } from '../auth/ProtectedRoute';
-// import OrganizationCreateScreen from '@features/admin/screens/OrganizationCreateScreen';
-// import { CreateTournamentPage } from '@features/tournament/pages/CreateTournamentPage';
+import TeamsManagementPage from "@features/teams/pages/TeamsManagementPage";
+import TeamCreatePage from "@features/teams/pages/TeamCreatePage";
 
 export const AppRouter = () => {
   return (
@@ -45,6 +35,8 @@ export const AppRouter = () => {
           <Route path="organizacion" element={<OrganizationManagementPage />} />
           <Route path="organizacion/editar" element={<OrganizationUpdatePage />} />
           <Route path="organizacion/crear" element={<OrganizationCreatePage />} />
+          <Route path="equipos" element={<TeamsManagementPage />} />
+          <Route path="equipos/crear" element={<TeamCreatePage />} />
           {/* <Route path="eventos" element={<EventManagementScreen />} />
            <Route path="evento/nuevo" element={<CreateEventScreen/>}/>
             <Route path="evento/:id" element={<AdminEventDetailScreen/>}/>
