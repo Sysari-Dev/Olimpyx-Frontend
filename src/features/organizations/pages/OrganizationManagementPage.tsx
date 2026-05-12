@@ -1,8 +1,9 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Building2, Calendar, Users, ShieldCheck, Loader2, Clock, Pencil } from "lucide-react";
+import { Building2, Calendar, Users, ShieldCheck, Clock, Pencil } from "lucide-react";
 import { useAppSelector } from "@store/hooks";
 import { useOrganization } from "../hooks/useOrganization";
+import { LoadingState } from "@atoms/LoadingState";
 
 const OrganizationManagementPage = () => {
   const navigate = useNavigate();
@@ -16,17 +17,7 @@ const OrganizationManagementPage = () => {
   }, [activeOrg?.id, fetchOrganization]);
 
   if (isLoading) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4 animate-in fade-in duration-500">
-        <div className="relative flex items-center justify-center">
-          <Loader2 className="w-12 h-12 text-primary animate-spin" />
-          <div className="absolute w-2 h-2 bg-primary rounded-full animate-ping" />
-        </div>
-        <p className="text-[10px] font-black text-gray/40 uppercase tracking-[0.3em]">
-          Cargando organización
-        </p>
-      </div>
-    );
+    return <LoadingState text="Cargando organización" variant="primary" />;
   }
 
   return (
@@ -53,7 +44,7 @@ const OrganizationManagementPage = () => {
             {activeOrg?.status === 'ACTIVE' ? 'Operativa' : 'Inactiva'}
           </div>
         </div>
-      </header>
+      </header>      
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
           <section className="bg-[#1A1A1A] border border-white/5 rounded-lg p-8 space-y-6 shadow-2xl shadow-black/20">
@@ -78,7 +69,7 @@ const OrganizationManagementPage = () => {
               </div>
             </div>
           </section>
-        </div>
+        </div>        
         <div className="space-y-4">
           <div className="bg-[#1A1A1A] border border-white/5 rounded-lg p-6 flex items-center justify-between group hover:border-primary/30 transition-all duration-300">
             <div className="space-y-1">
@@ -89,6 +80,7 @@ const OrganizationManagementPage = () => {
               <Calendar size={20} />
             </div>
           </div>
+          
           <div className="bg-[#1A1A1A] border border-white/5 rounded-lg p-6 flex items-center justify-between group hover:border-secondary/30 transition-all duration-300">
             <div className="space-y-1">
               <p className="text-[10px] font-black text-gray/40 uppercase tracking-widest">Clubes Afiliados</p>
