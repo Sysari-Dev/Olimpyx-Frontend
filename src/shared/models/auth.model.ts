@@ -1,4 +1,5 @@
 import type { ApiResponse } from '@api/interfaces/api-response.interface';
+import { type Organization } from "./organization.model";
 
 export type UserRole = 'SUPER_ADMIN' | 'ADMIN' | 'USER';
 
@@ -19,6 +20,7 @@ export interface AuthSession {
   user: UserAccount;
   accessToken: string;
   refreshToken: string;
+  organizations: Organization[];
 }
 
 export type AuthResponse = ApiResponse<UserAccount>;

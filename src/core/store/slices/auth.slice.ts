@@ -24,11 +24,21 @@ export const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setAuth: (state, action: PayloadAction<{ user: UserAccount; accessToken: string; refreshToken: string }>) => {
+    setAuth: (state, action: PayloadAction<{ 
+      user: UserAccount; 
+      accessToken: string; 
+      refreshToken: string;
+      organizations: Organization[];
+    }>) => {
       state.user = action.payload.user;
       state.accessToken = action.payload.accessToken;
       state.refreshToken = action.payload.refreshToken;
+      state.organizations = action.payload.organizations;
       state.isAuthenticated = true;
+      
+      if (action.payload.organizations.length > 0) {
+        state.activeOrg = action.payload.organizations[0];
+      }
     },
     updateAccessToken: (state, action: PayloadAction<string>) => {
       state.accessToken = action.payload;

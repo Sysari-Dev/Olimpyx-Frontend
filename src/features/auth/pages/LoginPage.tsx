@@ -3,7 +3,7 @@ import { User } from "lucide-react";
 import { LoginForm } from "../components/LoginForm";
 import { useAuth } from "../hooks/useAuth";
 
-const LoginScreen = () => {
+const LoginPage = () => {
   const { login, isLoading, error } = useAuth();
 
   return (
@@ -48,4 +48,4 @@ const LoginScreen = () => {
   );
 };
 
-export default LoginScreen;
+export default LoginPage;

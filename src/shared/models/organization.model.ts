@@ -2,9 +2,14 @@ import type { UserAccount } from "./auth.model";
 
 export interface Organization {
   id: string;
-  parent?: Organization; 
   name: string;
-  description?: string;
+  description: string;
+  status: 'ACTIVE' | 'INACTIVE';
+  stats: {
+    eventsCount: number;
+    teamsCount: number;
+  };
+  lastUpdate: string;
   createdAt: string;
 }
 

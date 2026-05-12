@@ -9,10 +9,19 @@ export const AuthMapper = {
         id: dto.id,
         username: dto.username,
         email: dto.email,
-        role: dto.roles as UserRole, 
+        role: dto.roles as UserRole,
       },
       accessToken: dto.accessToken,
       refreshToken: dto.refreshToken,
+      organizations: dto.organizations.map(org => ({
+        id: org.id,
+        name: org.name,
+        description: '', 
+        status: 'ACTIVE',
+        stats: { eventsCount: 0, teamsCount: 0 },
+        lastUpdate: '',
+        createdAt: '',
+      }))
     };
   }
 };
