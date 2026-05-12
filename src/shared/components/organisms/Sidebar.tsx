@@ -57,7 +57,7 @@ const Sidebar = ({ onClose, onLogout }: SidebarProps) => {
   const handleCreateOrg = () => {
     setIsOrgMenuOpen(false);
     if (onClose) onClose();
-    navigate("/admin/organizacion/nueva");
+    navigate("/admin/organizacion/crear");
   };
 
   return (

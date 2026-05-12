@@ -22,6 +22,7 @@ import TournamentDetailScreen from "@features/public/screens/TournamentDetailScr
 import { MatchScoringScreen } from "@features/admin/screens/MatchScoringScreen";
 import OrganizationManagementPage from "@features/organizations/pages/OrganizationManagementPage";
 import OrganizationUpdatePage from "@features/organizations/pages/OrganizationUpdatePage";
+import OrganizationCreatePage from "@features/organizations/pages/OrganizationCreatePage";
 // import { ProtectedRoute } from '../auth/ProtectedRoute';
 // import OrganizationCreateScreen from '@features/admin/screens/OrganizationCreateScreen';
 // import { CreateTournamentPage } from '@features/tournament/pages/CreateTournamentPage';
@@ -42,10 +43,10 @@ export const AppRouter = () => {
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<DashboardScreen />} />
           <Route path="organizacion" element={<OrganizationManagementPage />} />
-          <Route path="organizacion/editar"element={<OrganizationUpdatePage />} />
-          {/* <Route path="eventos" element={<EventManagementScreen />} /> */}
-          {/* <<Route path="organizacion/crear" element={<OrganizationCreateScreen/>}/>
-            <Route path="evento/nuevo" element={<CreateEventScreen/>}/>
+          <Route path="organizacion/editar" element={<OrganizationUpdatePage />} />
+          <Route path="organizacion/crear" element={<OrganizationCreatePage />} />
+          {/* <Route path="eventos" element={<EventManagementScreen />} />
+           <Route path="evento/nuevo" element={<CreateEventScreen/>}/>
             <Route path="evento/:id" element={<AdminEventDetailScreen/>}/>
             <Route path="evento/:eventId/torneo/nuevo" element={<CreateTournamentPage />} /> */}
           {/* <Route path="equipos" element={<TeamManagementScreen />} /> */}
