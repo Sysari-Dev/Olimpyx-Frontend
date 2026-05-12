@@ -19,6 +19,7 @@
       "@hooks/*": ["src/shared/hooks/*"],
       "@utils/*": ["src/shared/utils/*"],
       "@routes/*": ["src/core/router/*"],
+      "@services/*": ["src/core/services/*"],
       "@store/*": ["src/core/store/*"],
       "@models/*": ["src/shared/models/*"],
       "@mappers/*": ["src/shared/mappers/*"],

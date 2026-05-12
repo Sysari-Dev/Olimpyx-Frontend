@@ -1,38 +1,60 @@
-import { TextError } from './TextError';
+import type { LucideIcon } from "lucide-react";
+import { TextError } from "./TextError";
 
 interface InputTextProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   error?: string;
+  icon?: LucideIcon;
+  rightElement?: React.ReactNode;
   fullWidth?: boolean;
 }
 
-export const InputText = ({ 
-  label, 
-  error, 
-  disabled, 
-  fullWidth = true, 
-  className = "", 
-  ...props 
+export const InputText = ({
+  label,
+  error,
+  icon: Icon,
+  rightElement,
+  disabled,
+  fullWidth = true,
+  className = "",
+  ...props
 }: InputTextProps) => {
-  const baseInputStyles = "px-4 py-3 rounded-xl border-2 transition-all duration-200 outline-none text-dark font-medium";
-  const stateStyles = error 
-    ? "border-red-400 bg-red-50 focus:border-red-500" 
-    : "border-light bg-background focus:border-primary focus:ring-1 focus:ring-primary/20";
-  const disabledStyles = disabled ? "opacity-50 cursor-not-allowed bg-gray-100 border-gray-200" : "";
   const widthStyles = fullWidth ? "w-full" : "w-auto";
 
   return (
     <div className={`flex flex-col ${widthStyles} ${className}`}>
       {label && (
-        <label className="text-sm font-bold text-dark mb-1.5 ml-1">
-          {label} {props.required && <span className="text-primary">*</span>}
+        <label className="text-sm font-black text-light ml-1 mb-2">
+          {label} {props.required && <span className="text-secondary">*</span>}
         </label>
-      )}      
-      <input
-        className={`${baseInputStyles} ${stateStyles} ${disabledStyles}`}
-        disabled={disabled}
-        {...props}
-      />
+      )}
+      <div className="relative group">
+        {Icon && (
+          <Icon
+            className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors duration-200 
+              ${error ? "text-red-400" : "text-gray/20 group-focus-within:text-secondary"}`}
+            size={16}
+          />
+        )}
+        <input
+          disabled={disabled}
+          className={`
+            w-full bg-[#292929] p-4 rounded-lg outline-none border transition-all duration-200 text-sm text-light placeholder:text-gray/40
+            ${Icon ? "pl-12" : "pl-4"}
+            ${rightElement ? "pr-12" : "pr-4"}
+            ${error 
+              ? "border-red-500/50 bg-red-500/5 focus:border-red-500" 
+              : "border-[#292929] focus:border-secondary"}
+            ${disabled ? "opacity-50 cursor-not-allowed" : ""}
+          `}
+          {...props}
+        />
+        {rightElement && (
+          <div className="absolute right-4 top-1/2 -translate-y-1/2 text-gray/20 hover:text-light transition-colors">
+            {rightElement}
+          </div>
+        )}
+      </div>
       <TextError>{error}</TextError>
     </div>
   );

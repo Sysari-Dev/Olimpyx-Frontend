@@ -14,4 +14,9 @@ export interface OrganizationResponseDTO {
   };
 }
 
+export interface UpdateOrganizationRequestDTO {
+  name: string;
+  description: string;
+}
+
 export type OrganizationApiResponse = ApiResponse<OrganizationResponseDTO>;
