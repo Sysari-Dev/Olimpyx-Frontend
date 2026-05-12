@@ -1,16 +1,34 @@
 import { useState } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { Menu } from "lucide-react";
 import Sidebar from "@organisms/Sidebar";
 import BaseModal from "@atoms/BaseModal";
+import { useAppSelector, useAppDispatch } from "@store/hooks";
+import { logout } from "@store/slices/auth.slice";
+import { ROLE_LABELS } from "@models/auth.model";
 
 const AdminLayout = () => {
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const { user } = useAppSelector((state) => state.auth);
+  
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
   const handleLogout = () => {
-    console.log("Sesión cerrada satisfactoriamente");
+    dispatch(logout());
+    setIsLogoutModalOpen(false);
+    navigate("/login");
   };
-  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+
+  const getInitials = (name: string) => {
+    return name
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2);
+  };
 
   return (
     <div className="flex h-screen bg-background text-light font-sans overflow-hidden relative">
@@ -44,21 +62,23 @@ const AdminLayout = () => {
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 bg-primary rounded-full" />
               <h1 className="text-sm font-bold tracking-tight text-gray uppercase">
-                Gestión administrativo
+                Gestión administrativa
               </h1>
             </div>
           </div>
           <div className="flex items-center gap-3">
             <div className="text-right hidden sm:block">
               <p className="text-[11px] font-black text-light leading-none">
-                Luis Chumbes
+                {user?.username || "Usuario Olimpyx"}
               </p>
               <p className="text-[9px] text-primary font-bold uppercase tracking-tighter">
-                Systems Engineer
+                {user ? ROLE_LABELS[user.role] : "Sin Rol"}
               </p>
             </div>
             <div className="w-8 h-8 rounded-lg bg-primary/20 border border-primary/30 flex items-center justify-center">
-              <span className="text-[10px] font-black text-primary">LC</span>
+              <span className="text-[10px] font-black text-primary">
+                {user ? getInitials(user.username) : "U"}
+              </span>
             </div>
           </div>
         </header>
