@@ -1,14 +1,20 @@
 import { useState, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { OrganizationService } from '../services/organization.service';
 import { OrganizationMapper } from '@mappers/organization.mapper';
 import { useAppDispatch, useAppSelector } from '@store/hooks';
-import { setActiveOrg } from '@store/slices/auth.slice';
+import { setActiveOrg, setOrganizations } from '@store/slices/auth.slice';
 import { ToastService } from '@services/toast.service';
-import { type UpdateOrganizationRequestDTO } from '../models/organization-api.model';
+import { 
+  type CreateOrganizationRequestDTO, 
+  type UpdateOrganizationRequestDTO 
+} from '../models/organization-api.model';
 
 export const useOrganization = () => {
   const dispatch = useAppDispatch();
-  const { activeOrg } = useAppSelector((state) => state.auth);
+  const navigate = useNavigate();
+
+  const { activeOrg, organizations } = useAppSelector((state) => state.auth);
   const [isLoading, setIsLoading] = useState(false);
 
   const fetchOrganization = useCallback(async (id: string) => {
@@ -43,6 +49,11 @@ export const useOrganization = () => {
         });
         
         dispatch(setActiveOrg(domainOrg));
+        const updatedList = organizations.map(org => 
+          org.id === id ? domainOrg : org
+        );
+        dispatch(setOrganizations(updatedList));
+
         ToastService.success("Organización actualizada correctamente");
         return true;
       }
@@ -57,5 +68,32 @@ export const useOrganization = () => {
     }
   };
 
-  return { fetchOrganization, updateOrganization, isLoading };
+  const createOrganization = async (payload: CreateOrganizationRequestDTO) => {
+    setIsLoading(true);
+    try {
+      const response = await OrganizationService.create(payload);
+      
+      if (response.success && response.data) {
+        const newOrg = OrganizationMapper.toDomain(response.data);
+        dispatch(setOrganizations([...organizations, newOrg]));
+        
+        ToastService.success("Organización creada con éxito");
+        navigate("/admin");
+        return true;
+      }
+      return false;
+    } catch {
+      ToastService.error("No se pudo crear la organización");
+      return false;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return { 
+    fetchOrganization, 
+    updateOrganization, 
+    createOrganization, 
+    isLoading 
+  };
 };

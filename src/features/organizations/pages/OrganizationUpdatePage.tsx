@@ -36,7 +36,6 @@ const OrganizationUpdatePage = () => {
         </div>
         <h2 className="text-3xl font-bold text-light tracking-tighter">Editar Organización</h2>
       </header>
-
       <FormSection
         title="Información básica"
         description="Actualiza los detalles públicos de tu entidad deportiva."

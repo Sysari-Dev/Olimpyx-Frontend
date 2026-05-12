@@ -8,10 +8,16 @@ export interface OrganizationResponseDTO {
   status: 'ACTIVE' | 'INACTIVE';
   updatedAt: string;
   createdAt: string;
-  _count: {
+  _count?: {
     events: number;
     teams: number;
   };
+}
+
+export interface CreateOrganizationRequestDTO {
+  name: string;
+  description: string;
+  parentId: string | null;
 }
 
 export interface UpdateOrganizationRequestDTO {

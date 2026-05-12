@@ -9,8 +9,8 @@ export const OrganizationMapper = {
     description: dto.description,
     status: dto.status,
     stats: {
-      eventsCount: dto._count.events,
-      teamsCount: dto._count.teams
+      eventsCount: dto._count?.events ?? 0,
+      teamsCount: dto._count?.teams ?? 0
     },
     lastUpdate: new Date(dto.updatedAt).toLocaleDateString(),
     createdAt: dto.createdAt
