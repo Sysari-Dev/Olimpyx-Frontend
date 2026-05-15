@@ -1,16 +1,21 @@
-import type { Organization } from "./organization.model";
+import { type EventStatus } from "@features/events/models/event-api.model";
 
+export interface EventStats {
+  totalTournaments: number;
+  totalTeams: number;
+  remainingMatches: number;
+}
 
-export type EventStatus = 'PLANNED' | 'ACTIVE' | 'FINISHED';
-
-export interface SportEvent {
+export interface Event {
   id: string;
+  organizationId: string;
   name: string;
-  description?: string;
-  location?: string;
-  startDate?: string;
-  endDate?: string;
+  description: string;
+  location: string;
+  startDate: string;
+  endDate: string;
   status: EventStatus;
-  organization?: Organization;
-  tournamentCount?: number;
+  createdAt: string;
+  updatedAt: string;
+  stats?: EventStats;
 }

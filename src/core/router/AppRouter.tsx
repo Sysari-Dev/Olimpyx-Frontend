@@ -16,6 +16,10 @@ import OrganizationUpdatePage from "@features/organizations/pages/OrganizationUp
 import OrganizationCreatePage from "@features/organizations/pages/OrganizationCreatePage";
 import TeamsManagementPage from "@features/teams/pages/TeamsManagementPage";
 import TeamCreatePage from "@features/teams/pages/TeamCreatePage";
+import EventsManagementPage from "@features/events/pages/EventsManagementPage";
+import EventCreatePage from "@features/events/pages/EventCreatePage";
+import EventDetailPage from "@features/events/pages/EventDetailPage";
+import EventUpdatePage from "@features/events/pages/EventUpdatePage";
 
 export const AppRouter = () => {
   return (
@@ -37,10 +41,10 @@ export const AppRouter = () => {
           <Route path="organizacion/crear" element={<OrganizationCreatePage />} />
           <Route path="equipos" element={<TeamsManagementPage />} />
           <Route path="equipos/crear" element={<TeamCreatePage />} />
-          {/* <Route path="eventos" element={<EventManagementScreen />} />
-           <Route path="evento/nuevo" element={<CreateEventScreen/>}/>
-            <Route path="evento/:id" element={<AdminEventDetailScreen/>}/>
-            <Route path="evento/:eventId/torneo/nuevo" element={<CreateTournamentPage />} /> */}
+          <Route path="eventos" element={<EventsManagementPage />} />
+          <Route path="eventos/crear" element={<EventCreatePage />} />
+          <Route path="eventos/:id" element={<EventDetailPage />} /> 
+          <Route path="eventos/:id/editar" element={<EventUpdatePage />} /> 
           {/* <Route path="equipos" element={<TeamManagementScreen />} /> */}
           {/* <Route path="partidos" element={<MatchSchedulerScreen />} /> */}
           {/* <Route path="torneos" element={<TournamentManagementScreen />} /> */}
