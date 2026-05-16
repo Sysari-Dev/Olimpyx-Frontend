@@ -1,3 +1,4 @@
+import { APP_CONFIG } from "@constants/app-config.constant";
 import { Facebook, Instagram, Linkedin, Twitter } from "lucide-react";
 
 const Footer = () => {
@@ -21,19 +22,19 @@ const Footer = () => {
             <div className="flex gap-4">
               <SocialIcon
                 icon={<Twitter size={18} />}
-                href="https://x.com/SysariCorp"
+                href={APP_CONFIG.SYSARI_SOCIALS.X}
               />
               <SocialIcon
                 icon={<Linkedin size={18} />}
-                href="https://www.linkedin.com/company/sysari/"
+                href={APP_CONFIG.SYSARI_SOCIALS.LINKEDIN}
               />
               <SocialIcon
                 icon={<Facebook size={18} />}
-                href="https://www.facebook.com/SysariCode/"
+                href={APP_CONFIG.SYSARI_SOCIALS.FACEBOOK}
               />
               <SocialIcon
                 icon={<Instagram size={18} />}
-                href="https://www.instagram.com/sysari__/"
+                href={APP_CONFIG.SYSARI_SOCIALS.INSTAGRAM}
               />
             </div>
           </div>
@@ -68,7 +69,7 @@ const Footer = () => {
           </div>
           <div className="flex gap-1">
             Un producto desarrollado por{" "}
-            <a href="https://www.sysari.net" className="hover:text-tertiary">
+            <a href={APP_CONFIG.SYSARI_URL} className="hover:text-secondary">
               @Sysari
             </a>
           </div>
