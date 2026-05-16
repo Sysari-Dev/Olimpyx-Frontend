@@ -13,7 +13,25 @@ export interface EventResponseDTO {
   status: EventStatus;
   createdAt: string;
   updatedAt: string;
-  tournaments?: any[];
+  tournaments?: TournamentInEventDTO[];
+}
+
+interface TournamentInEventDTO {
+    id: string;
+    eventId: string;
+    sportId: string;
+    name: string;
+    format: string;
+    pointsPerWin: number;
+    pointsPerDraw: number;
+    pointsPerLoss: number;
+    status: string;
+    createdAt: string;
+    sport: {
+        id: string;
+        name: string,
+        description: string
+    }
 }
 
 export interface EventStatsResponseDTO {

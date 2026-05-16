@@ -1,27 +1,31 @@
-import { useState } from 'react';
-import type { Tournament } from '../models/tournament.interface';
+import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
+import { type CreateTournamentRequestDTO } from "../models/tournament-api.model";
 
 export const useTournamentForm = () => {
+  const [searchParams] = useSearchParams();
+  const eventId = searchParams.get("eventId") || "";
+  
   const [currentStep, setCurrentStep] = useState(1);
-  const [formData, setFormData] = useState<Tournament>({
-    name: '',
-    sport: '',
-    system: '',
-    isDoubleMatch: false,
-    groupCount: 2,
+  const [formData, setFormData] = useState<CreateTournamentRequestDTO>({
+    eventId: eventId,
+    sportId: "",
+    name: "",
+    format: "GROUP_STAGE",
+    isHomeAndAway: false,
+    groupsCount: 2,
     qualifiersPerGroup: 2,
-    teams: []
+    pointsPerWin: 3,
+    pointsPerDraw: 1,
+    pointsPerLoss: 0,
+    teamIds: []
   });
 
-  const nextStep = () => setCurrentStep((prev) => prev + 1);
-  const prevStep = () => setCurrentStep((prev) => prev - 1);
+  const nextStep = () => setCurrentStep((prev) => Math.min(prev + 1, 4));
+  const prevStep = () => setCurrentStep((prev) => Math.max(prev - 1, 1));
 
-  const updateData = (newData: Partial<Tournament>) => {
+  const updateData = (newData: Partial<CreateTournamentRequestDTO>) => {
     setFormData((prev) => ({ ...prev, ...newData }));
-  };
-
-  const saveTournament = () => {
-    console.log("Datos del Torneo Recibidos:", formData);
   };
 
   return {
@@ -30,6 +34,6 @@ export const useTournamentForm = () => {
     nextStep,
     prevStep,
     updateData,
-    saveTournament
+    eventId
   };
 };
