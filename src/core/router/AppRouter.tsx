@@ -5,7 +5,6 @@ import HomeScreen from "@features/public/screens/HomeScreen";
 import EventDetailScreen from "@features/public/screens/EventDetailScreen";
 import MatchLiveScreen from "@features/public/screens/MatchLiveScreen";
 import MatchDetailScreen from "@features/public/screens/MatchDetailScreen";
-import DashboardScreen from "@features/admin/screens/DashboardScreen";
 import LoginPage from "@features/auth/pages/LoginPage";
 import EventsScreen from "@features/public/screens/EventsScreen";
 import TournamentDetailScreen from "@features/public/screens/TournamentDetailScreen";
@@ -24,6 +23,7 @@ import TournamentCreatePage from "@features/tournament/pages/TournamentCreatePag
 import TournamentDetailPage from "@features/tournament/pages/TournamentDetailPage";
 import TournamentUpdatePage from "@features/tournament/pages/TournamentUpdatePage";
 import MatchSchedulerPage from "@features/match/pages/MatchSchedulerPage";
+import DashboardPage from "@features/admin/pages/DashboardPage";
 
 export const AppRouter = () => {
   return (
@@ -39,7 +39,7 @@ export const AppRouter = () => {
           <Route path="partido/:id" element={<MatchDetailScreen />} />
         </Route>
         <Route path="/admin" element={<AdminLayout />}>
-          <Route index element={<DashboardScreen />} />
+          <Route index element={<DashboardPage />} />
           <Route path="organizacion" element={<OrganizationManagementPage />} />
           <Route path="organizacion/editar" element={<OrganizationUpdatePage />} />
           <Route path="organizacion/crear" element={<OrganizationCreatePage />} />
