@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
   LayoutDashboard,
   Trophy,
@@ -25,6 +25,7 @@ interface SidebarProps {
 
 const Sidebar = ({ onClose, onLogout }: SidebarProps) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const dispatch = useAppDispatch();
   const orgMenuRef = useRef<HTMLDivElement>(null);
   
@@ -68,7 +69,6 @@ const Sidebar = ({ onClose, onLogout }: SidebarProps) => {
           Olimpyx
         </h1>
       </div>
-
       <div className="px-2 mb-8 relative">
         <p className="text-[10px] font-black text-gray/40 uppercase tracking-[0.2em] px-2 mb-3">
           Organización
@@ -140,15 +140,28 @@ const Sidebar = ({ onClose, onLogout }: SidebarProps) => {
         <p className="text-[10px] font-black text-gray/40 uppercase tracking-[0.2em] px-4 mb-4">
           Menú principal
         </p>
-        {menuItems.map((item) => (
-          <SidebarItem key={item.to} {...item} onClose={onClose} />
-        ))}
+        {menuItems.map((item) => {
+          const isActive = item.to === "/admin" 
+            ? location.pathname === "/admin" 
+            : location.pathname.startsWith(item.to);
+
+          return (
+            <SidebarItem 
+              key={item.to} 
+              {...item} 
+              isActive={isActive} 
+              onClose={onClose} 
+            />
+          );
+        })}
       </nav>
+
       <div className="mt-auto pt-6 border-t border-white/5 space-y-2">
         <SidebarItem 
           to="/admin/notificaciones" 
           icon={Bell} 
           label="Notificaciones" 
+          isActive={location.pathname.startsWith("/admin/notificaciones")}
           onClose={onClose} 
         />
         <button 

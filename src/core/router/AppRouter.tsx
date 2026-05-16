@@ -1,5 +1,4 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-
 import MainLayout from "@templates/MainLayout";
 import AdminLayout from "@templates/AdminLayout";
 import HomeScreen from "@features/public/screens/HomeScreen";
@@ -24,6 +23,7 @@ import TournamentsManagementPage from "@features/tournament/pages/TournamentsMan
 import TournamentCreatePage from "@features/tournament/pages/TournamentCreatePage";
 import TournamentDetailPage from "@features/tournament/pages/TournamentDetailPage";
 import TournamentUpdatePage from "@features/tournament/pages/TournamentUpdatePage";
+import MatchSchedulerPage from "@features/match/pages/MatchSchedulerPage";
 
 export const AppRouter = () => {
   return (
@@ -53,7 +53,7 @@ export const AppRouter = () => {
           <Route path="torneos/crear" element={<TournamentCreatePage />} />
           <Route path="torneos/:id" element={<TournamentDetailPage />} />
           <Route path="torneos/:id/editar" element={<TournamentUpdatePage />} />
-          {/* <Route path="partidos" element={<MatchSchedulerScreen />} /> */}
+          <Route path="partidos" element={<MatchSchedulerPage />} />
         </Route>
         <Route
           path="/admin/partido/:matchId/mesa"
