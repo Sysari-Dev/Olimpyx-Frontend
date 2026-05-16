@@ -175,7 +175,7 @@ const Sidebar = ({ onClose, onLogout }: SidebarProps) => {
             size={20}
             className="group-hover:scale-105 transition-transform"
           />
-          <span className="text-sm font-bold">Buzón de Soporte</span>
+          <span className="text-sm">Buzón de Soporte</span>
         </a>
         <button
           onClick={onLogout}
