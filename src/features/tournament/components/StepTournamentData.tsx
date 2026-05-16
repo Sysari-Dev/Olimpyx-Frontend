@@ -1,6 +1,7 @@
 import { Trophy, Activity, Disc, Target } from 'lucide-react';
 import { InputText } from '@atoms/InputText';
 import type { CreateTournamentRequestDTO } from '../models/tournament-api.model';
+import { SPORT_IDS } from '@constants/sport-ids.constant';
 
 interface StepProps {
   data: CreateTournamentRequestDTO;
@@ -9,9 +10,9 @@ interface StepProps {
 
 export const StepTournamentData = ({ data, onUpdate }: StepProps) => {
   const sports = [
-    { id: 'deporte-001-futbol', name: "Fútbol", icon: Activity },
-    { id: 'deporte-002-basket', name: "Baloncesto", icon: Disc },
-    { id: 'deporte-003-voley', name: "Vóley", icon: Target },
+    { id: SPORT_IDS.FUTBOL, name: "Fútbol", icon: Activity },
+    { id: SPORT_IDS.BASQUET, name: "Baloncesto", icon: Disc },
+    { id: SPORT_IDS.VOLEY, name: "Vóley", icon: Target },
   ];
 
   return (
