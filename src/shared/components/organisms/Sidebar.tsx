@@ -4,7 +4,6 @@ import {
   LayoutDashboard,
   Trophy,
   Users,
-  Bell,
   LogOut,
   Calendar,
   Sword,
@@ -17,6 +16,7 @@ import { SidebarItem } from "@atoms/SidebarItem";
 import { useAppSelector, useAppDispatch } from "@store/hooks";
 import { setActiveOrg } from "@store/slices/auth.slice";
 import { type Organization } from "@models/organization.model";
+import { SidebarNotificationPopover } from "@atoms/SidebarNotificationPopover";
 
 interface SidebarProps {
   onClose?: () => void;
@@ -155,15 +155,8 @@ const Sidebar = ({ onClose, onLogout }: SidebarProps) => {
           );
         })}
       </nav>
-
       <div className="mt-auto pt-6 border-t border-white/5 space-y-2">
-        <SidebarItem 
-          to="/admin/notificaciones" 
-          icon={Bell} 
-          label="Notificaciones" 
-          isActive={location.pathname.startsWith("/admin/notificaciones")}
-          onClose={onClose} 
-        />
+        <SidebarNotificationPopover onCloseSidebar={onClose} />
         <button 
           onClick={onLogout}
           className="flex items-center gap-3 px-4 py-3 w-full text-gray hover:text-red-400 hover:bg-red-400/5 rounded-xl transition-all cursor-pointer group font-sans"
@@ -171,7 +164,7 @@ const Sidebar = ({ onClose, onLogout }: SidebarProps) => {
           <LogOut size={20} className="group-hover:rotate-12 transition-transform" />
           <span className="text-sm font-bold">Cerrar sesión</span>
         </button>
-      </div>      
+      </div>   
     </div>
   );
 };
