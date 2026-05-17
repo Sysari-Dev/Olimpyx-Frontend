@@ -44,12 +44,10 @@ const MatchSchedulerPage = () => {
           </div>
           <h2 className="text-3xl font-bold text-light tracking-tighter">Gestión de Partidos</h2>
         </div>
-
         <Button icon={Plus} showShadow onClick={() => console.log("Nuevo partido workflow")}>
           Nuevo Partido
         </Button>
       </header>
-
       <FilterBar
         selectedTournamentId={selectedTournamentId}
         searchValue={searchTerm}
@@ -57,7 +55,6 @@ const MatchSchedulerPage = () => {
         onTournamentChange={setSelectedTournamentId}
         onClearFilters={resetAll}
       />
-
       <main>
         <MatchList matches={filteredMatches} />
       </main>
