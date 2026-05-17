@@ -24,6 +24,11 @@ import {
 } from "../models/tournament-api.model";
 import { TournamentParser } from "@utils/tournament.util";
 
+// 1. IMPORTAMOS LAS VISTAS DE LOS FORMATOS
+import { KnockoutBracket } from "../components/formats/KnockoutBracket";
+import { LeagueTable } from "../components/formats/LeagueTable";
+import { GroupStageView } from "../components/formats/GroupStageView";
+
 const TournamentDetailPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -42,9 +47,7 @@ const TournamentDetailPage = () => {
   const [tournament, setTournament] = useState<Tournament | null>(null);
   const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
   const [isTeamsModalOpen, setIsTeamsModalOpen] = useState(false);
-  const [teamToRemove, setTeamToRemove] = useState<TeamInTournamentDTO | null>(
-    null,
-  );
+  const [teamToRemove, setTeamToRemove] = useState<TeamInTournamentDTO | null>(null);
   const [selectedTeamIds, setSelectedTeamIds] = useState<string[]>([]);
 
   useEffect(() => {
@@ -88,21 +91,17 @@ const TournamentDetailPage = () => {
     }
   };
 
-  if (isLoading && !tournament)
-    return <LoadingState text="Cargando centro de mando" />;
-  if (!tournament)
-    return (
-      <div className="text-center p-20 text-gray">Torneo no encontrado</div>
-    );
+  if (isLoading && !tournament) return <LoadingState text="Cargando centro de mando" />;
+  if (!tournament) return <div className="text-center p-20 text-gray">Torneo no encontrado</div>;
 
   return (
     <div className="space-y-8 animate-in fade-in duration-700">
+      
+      {/* HEADER */}
       <header className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
         <div className="space-y-4">
           <button
-            onClick={() =>
-              navigate(`/admin/torneos?eventId=${tournament.eventId}`)
-            }
+            onClick={() => navigate(`/admin/torneos?eventId=${tournament.eventId}`)}
             className="flex items-center gap-2 text-gray/40 hover:text-primary transition-colors text-[10px] font-black uppercase tracking-widest cursor-pointer"
           >
             <ArrowLeft size={14} /> Volver al workspace
@@ -126,11 +125,7 @@ const TournamentDetailPage = () => {
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <Button
-            variant="outline"
-            icon={Pencil}
-            onClick={() => navigate("editar")}
-          >
+          <Button variant="outline" icon={Pencil} onClick={() => navigate("editar")}>
             Editar
           </Button>
           <Button icon={Power} onClick={() => setIsStatusModalOpen(true)}>
@@ -138,6 +133,8 @@ const TournamentDetailPage = () => {
           </Button>
         </div>
       </header>
+
+      {/* BLOQUE SUPERIOR (Equipos y Config) */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-6">
           <section className="bg-[#1A1A1A] border border-white/5 rounded-lg overflow-hidden shadow-2xl">
@@ -148,11 +145,7 @@ const TournamentDetailPage = () => {
                   Equipos Inscritos
                 </h3>
               </div>
-              <Button
-                variant="outline"
-                icon={Plus}
-                onClick={handleOpenEnrollment}
-              >
+              <Button variant="outline" icon={Plus} onClick={handleOpenEnrollment}>
                 Inscribir
               </Button>
             </div>
@@ -192,6 +185,7 @@ const TournamentDetailPage = () => {
             </div>
           </section>
         </div>
+        
         <div className="space-y-6">
           <div className="bg-[#1A1A1A] border border-white/5 p-6 rounded-lg space-y-6 shadow-2xl">
             <div className="flex items-center gap-3">
@@ -202,25 +196,17 @@ const TournamentDetailPage = () => {
             </div>
             <div className="space-y-4">
               <div className="flex justify-between text-xs">
-                <span className="text-gray/40 uppercase font-bold tracking-tighter">
-                  Deporte
-                </span>
-                <span className="text-light font-black">
-                  {tournament.sportName}
-                </span>
+                <span className="text-gray/40 uppercase font-bold tracking-tighter">Deporte</span>
+                <span className="text-light font-black">{tournament.sportName}</span>
               </div>
               <div className="flex justify-between text-xs">
-                <span className="text-gray/40 uppercase font-bold tracking-tighter">
-                  Formato
-                </span>
+                <span className="text-gray/40 uppercase font-bold tracking-tighter">Formato</span>
                 <span className="text-light font-black">
                   {TournamentParser.formatToLabel(tournament.format)}
                 </span>
               </div>
               <div className="flex justify-between text-xs">
-                <span className="text-gray/40 uppercase font-bold tracking-tighter">
-                  Victoria
-                </span>
+                <span className="text-gray/40 uppercase font-bold tracking-tighter">Victoria</span>
                 <span className="text-emerald-500 font-black">
                   {tournament.pointsPerWin} Puntos
                 </span>
@@ -243,6 +229,28 @@ const TournamentDetailPage = () => {
           </div>
         </div>
       </div>
+
+      {/* 2. ZONA MÁGICA DE RENDERIZADO CONDICIONAL PARA EL DESARROLLO DEL TORNEO */}
+      <section className="pt-8 mt-12 border-t border-white/5 space-y-6">
+        <h3 className="text-xl font-black uppercase text-light tracking-widest mb-6">
+          Desarrollo de la Competición
+        </h3>
+
+        {/* Le pasamos el ID a cada componente para que internamente hagan sus peticiones */}
+        {tournament.format === 'ELIMINATION' && (
+          <KnockoutBracket tournamentId={tournament.id} />
+        )}
+        
+        {tournament.format === 'ROUND_ROBIN' && (
+          <LeagueTable tournamentId={tournament.id} />
+        )}
+        
+        {tournament.format === 'GROUP_STAGE' && (
+          <GroupStageView tournamentId={tournament.id} />
+        )}
+      </section>
+
+      {/* MODALES (Intactos) */}
       <BaseModal
         isOpen={isStatusModalOpen}
         onClose={() => setIsStatusModalOpen(false)}
@@ -276,6 +284,7 @@ const TournamentDetailPage = () => {
           ))}
         </div>
       </BaseModal>
+      
       <BaseModal
         isOpen={isTeamsModalOpen}
         onClose={() => {
@@ -347,6 +356,7 @@ const TournamentDetailPage = () => {
           )}
         </div>
       </BaseModal>
+      
       <BaseModal
         isOpen={!!teamToRemove}
         onClose={() => setTeamToRemove(null)}
