@@ -23,7 +23,8 @@
       "@store/*": ["src/core/store/*"],
       "@models/*": ["src/shared/models/*"],
       "@mappers/*": ["src/shared/mappers/*"],
-      "@api/*": ["src/core/api/*"]
+      "@api/*": ["src/core/api/*"],
+      "@constants/*": ["src/core/constants/*"],
     },
 
     /* Bundler mode */

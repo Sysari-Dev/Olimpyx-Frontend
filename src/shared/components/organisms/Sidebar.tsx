@@ -1,10 +1,9 @@
 import { useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
   LayoutDashboard,
   Trophy,
   Users,
-  Bell,
   LogOut,
   Calendar,
   Sword,
@@ -12,11 +11,14 @@ import {
   ChevronDown,
   Loader2,
   Plus,
+  Mail,
 } from "lucide-react";
 import { SidebarItem } from "@atoms/SidebarItem";
 import { useAppSelector, useAppDispatch } from "@store/hooks";
 import { setActiveOrg } from "@store/slices/auth.slice";
 import { type Organization } from "@models/organization.model";
+import { SidebarNotificationPopover } from "@atoms/SidebarNotificationPopover";
+import { APP_CONFIG } from "@constants/app-config.constant";
 
 interface SidebarProps {
   onClose?: () => void;
@@ -25,10 +27,13 @@ interface SidebarProps {
 
 const Sidebar = ({ onClose, onLogout }: SidebarProps) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const dispatch = useAppDispatch();
   const orgMenuRef = useRef<HTMLDivElement>(null);
-  
-  const { user, organizations, activeOrg } = useAppSelector((state) => state.auth);
+
+  const { user, organizations, activeOrg } = useAppSelector(
+    (state) => state.auth,
+  );
   const [isOrgMenuOpen, setIsOrgMenuOpen] = useState(false);
 
   const isSuperAdmin = user?.role === "SUPER_ADMIN";
@@ -68,7 +73,6 @@ const Sidebar = ({ onClose, onLogout }: SidebarProps) => {
           Olimpyx
         </h1>
       </div>
-
       <div className="px-2 mb-8 relative">
         <p className="text-[10px] font-black text-gray/40 uppercase tracking-[0.2em] px-2 mb-3">
           Organización
@@ -111,18 +115,22 @@ const Sidebar = ({ onClose, onLogout }: SidebarProps) => {
                     className={`w-full flex items-center gap-3 p-2 rounded-xl transition-colors cursor-pointer text-left
                       ${activeOrg?.id === org.id ? "bg-primary/10" : "hover:bg-white/5"}`}
                   >
-                    <div className={`w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-black shrink-0
-                      ${activeOrg?.id === org.id ? "bg-primary text-white" : "bg-white/10 text-light"}`}>
+                    <div
+                      className={`w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-black shrink-0
+                      ${activeOrg?.id === org.id ? "bg-primary text-white" : "bg-white/10 text-light"}`}
+                    >
                       {org.name.charAt(0).toUpperCase()}
                     </div>
-                    <span className={`text-xs font-medium truncate ${activeOrg?.id === org.id ? "text-primary" : "text-gray hover:text-light"}`}>
+                    <span
+                      className={`text-xs font-medium truncate ${activeOrg?.id === org.id ? "text-primary" : "text-gray hover:text-light"}`}
+                    >
                       {org.name}
                     </span>
                   </button>
                 ))}
               </div>
               <div className="mt-2 pt-2 border-t border-white/5">
-                <button 
+                <button
                   onClick={handleCreateOrg}
                   className="w-full flex items-center gap-3 p-2 rounded-xl text-secondary hover:bg-secondary/10 transition-colors cursor-pointer"
                 >
@@ -140,25 +148,46 @@ const Sidebar = ({ onClose, onLogout }: SidebarProps) => {
         <p className="text-[10px] font-black text-gray/40 uppercase tracking-[0.2em] px-4 mb-4">
           Menú principal
         </p>
-        {menuItems.map((item) => (
-          <SidebarItem key={item.to} {...item} onClose={onClose} />
-        ))}
+        {menuItems.map((item) => {
+          const isActive =
+            item.to === "/admin"
+              ? location.pathname === "/admin"
+              : location.pathname.startsWith(item.to);
+
+          return (
+            <SidebarItem
+              key={item.to}
+              {...item}
+              isActive={isActive}
+              onClose={onClose}
+            />
+          );
+        })}
       </nav>
       <div className="mt-auto pt-6 border-t border-white/5 space-y-2">
-        <SidebarItem 
-          to="/admin/notificaciones" 
-          icon={Bell} 
-          label="Notificaciones" 
-          onClose={onClose} 
-        />
-        <button 
+        <SidebarNotificationPopover onCloseSidebar={onClose} />
+        <a
+          href={`mailto:${APP_CONFIG.SUPPORT_EMAIL}`}
+          onClick={onClose}
+          className="flex items-center gap-3 px-4 py-3 w-full text-gray hover:bg-white/5 hover:text-light rounded-xl transition-all cursor-pointer group font-sans"
+        >
+          <Mail
+            size={20}
+            className="group-hover:scale-105 transition-transform"
+          />
+          <span className="text-sm">Buzón de Soporte</span>
+        </a>
+        <button
           onClick={onLogout}
           className="flex items-center gap-3 px-4 py-3 w-full text-gray hover:text-red-400 hover:bg-red-400/5 rounded-xl transition-all cursor-pointer group font-sans"
         >
-          <LogOut size={20} className="group-hover:rotate-12 transition-transform" />
+          <LogOut
+            size={20}
+            className="group-hover:rotate-12 transition-transform"
+          />
           <span className="text-sm font-bold">Cerrar sesión</span>
         </button>
-      </div>      
+      </div>
     </div>
   );
 };
