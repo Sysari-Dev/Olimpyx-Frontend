@@ -12,8 +12,10 @@ import {
   Shield,
   Info,
   CheckCircle2,
+  Dices, // <-- Importamos el ícono para el sorteo
 } from "lucide-react";
 import { useTournament } from "../hooks/useTournament";
+import { useMatch } from "../../match/hooks/useMatch"; // <-- Importamos tu nuevo hook de partidos
 import { LoadingState } from "@atoms/LoadingState";
 import { Button } from "@atoms/Button";
 import BaseModal from "@atoms/BaseModal";
@@ -24,7 +26,7 @@ import {
 } from "../models/tournament-api.model";
 import { TournamentParser } from "@utils/tournament.util";
 
-// 1. IMPORTAMOS LAS VISTAS DE LOS FORMATOS
+// IMPORTAMOS LAS VISTAS DE LOS FORMATOS
 import { KnockoutBracket } from "../components/formats/KnockoutBracket";
 import { LeagueTable } from "../components/formats/LeagueTable";
 import { GroupStageView } from "../components/formats/GroupStageView";
@@ -41,8 +43,11 @@ const TournamentDetailPage = () => {
     removeTeam,
     registeredTeams,
     availableTeams,
-    isLoading,
+    isLoading: isLoadingTournament,
   } = useTournament();
+
+  // Instanciamos el hook de partidos para manejar el sorteo
+  const { generateDraw, getDashboard, matches, leaderboard, groups, isLoading: isDrawing } = useMatch();
 
   const [tournament, setTournament] = useState<Tournament | null>(null);
   const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
@@ -53,10 +58,13 @@ const TournamentDetailPage = () => {
   useEffect(() => {
     if (id) {
       const loadData = async () => {
-        const detail = await getTournamentDetail(id);
-        if (detail) setTournament(detail);
-        await fetchTournamentTeams(id);
-      };
+      const detail = await getTournamentDetail(id);
+      if (detail) {
+        setTournament(detail);
+        await getDashboard(id);
+                  }
+  await fetchTournamentTeams(id);
+};
       loadData();
     }
   }, [id]);
@@ -91,7 +99,14 @@ const TournamentDetailPage = () => {
     }
   };
 
-  if (isLoading && !tournament) return <LoadingState text="Cargando centro de mando" />;
+  // Función interactiva para disparar el endpoint del sorteo
+  const handleSorteo = async () => {
+    if (tournament) {
+      await generateDraw(tournament.id);
+    }
+  };
+
+  if (isLoadingTournament && !tournament) return <LoadingState text="Cargando centro de mando" />;
   if (!tournament) return <div className="text-center p-20 text-gray">Torneo no encontrado</div>;
 
   return (
@@ -230,27 +245,42 @@ const TournamentDetailPage = () => {
         </div>
       </div>
 
-      {/* 2. ZONA MÁGICA DE RENDERIZADO CONDICIONAL PARA EL DESARROLLO DEL TORNEO */}
+      {/* DESARROLLO DE LA COMPETICIÓN */}
       <section className="pt-8 mt-12 border-t border-white/5 space-y-6">
-        <h3 className="text-xl font-black uppercase text-light tracking-widest mb-6">
-          Desarrollo de la Competición
-        </h3>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+          <h3 className="text-xl font-black uppercase text-light tracking-widest">
+            Desarrollo de la Competición
+          </h3>
 
-        {/* Le pasamos el ID a cada componente para que internamente hagan sus peticiones */}
+          {/* BOTÓN INTERACTIVO PARA DISPARAR EL SORTEO EN EL BACKEND */}
+          {tournament.status === "PLANNING" && (
+            <Button
+              onClick={handleSorteo}
+              disabled={isDrawing || registeredTeams.length === 0}
+              icon={Dices}
+            >
+              {isDrawing ? "Generando Sorteo..." : "Realizar Sorteo"}
+            </Button>
+          )}
+        </div>
+
         {tournament.format === 'ELIMINATION' && (
-          <KnockoutBracket tournamentId={tournament.id} />
+          <KnockoutBracket tournamentId={tournament.id} 
+          matches={matches}/>
         )}
         
         {tournament.format === 'ROUND_ROBIN' && (
-          <LeagueTable tournamentId={tournament.id} />
+          <LeagueTable tournamentId={tournament.id}
+          leaderboard={leaderboard} />
         )}
         
         {tournament.format === 'GROUP_STAGE' && (
-          <GroupStageView tournamentId={tournament.id} />
+          <GroupStageView tournamentId={tournament.id} 
+          matches={matches} groups={groups}/>
         )}
       </section>
 
-      {/* MODALES (Intactos) */}
+      {/* MODALES */}
       <BaseModal
         isOpen={isStatusModalOpen}
         onClose={() => setIsStatusModalOpen(false)}
@@ -297,7 +327,7 @@ const TournamentDetailPage = () => {
         confirmText="Confirmar Inscripción"
       >
         <div className="max-h-60 overflow-y-auto custom-scrollbar space-y-2 pr-2 min-h-37.5">
-          {isLoading ? (
+          {isLoadingTournament ? (
             <div className="space-y-2 animate-pulse">
               {[1, 2, 3].map((i) => (
                 <div

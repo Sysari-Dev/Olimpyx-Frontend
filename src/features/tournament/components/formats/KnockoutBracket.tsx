@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useMemo, useState, useEffect } from "react";
+import { type Match } from "@models/match.model";
 
-interface Match {
+interface BracketMatch {
   id: string;
   team1: string | null;
   team2: string | null;
@@ -9,42 +10,58 @@ interface Match {
 }
 
 interface Round {
+  name: string;
+  matches: BracketMatch[];
+}
+
+interface KnockoutBracketProps {
+  tournamentId: string;
   matches: Match[];
 }
 
-export const KnockoutBracket = ({ tournamentId }: { tournamentId: string }) => {
+export const KnockoutBracket = ({ tournamentId, matches }: KnockoutBracketProps) => {
   console.log("Montando llaves para el torneo:", tournamentId);
 
-  const initialData: Round[] = [
-    {
-      matches: [
-        { id: "m1", team1: "Chankas", team2: "COD 22-1", score1: 0, score2: 0 },
-        { id: "m2", team1: "Ciclo 1 - Voler", team2: "COD 21-1" }, // Bye
-        { id: "m3", team1: "Ing. Sistemas", team2: "Medicina", score1: 0, score2: 0 },
-        { id: "m4", team1: "Derecho", team2: "Educación", score1: 0, score2: 0 },
-      ],
-    },
-    {
-      matches: [
-        { id: "m5", team1: null, team2: null }, 
-        { id: "m6", team1: null, team2: null }, 
-      ],
-    },
-    {
-      matches: [
-        { id: "m7", team1: null, team2: null }, 
-      ],
-    },
-  ];
+  // 1. Reemplazamos el useEffect por un useMemo puro y libre de re-renders infinitos
+  const computedBracketData = useMemo<Round[]>(() => {
+    if (matches.length === 0) return [];
 
-  const [bracketData, setBracketData] = useState<Round[]>(initialData);
+    const roundsMap: { [key: string]: BracketMatch[] } = {};
+
+    matches.forEach((m) => {
+      const roundKey = m.roundName || "Ronda Inicial";
+      if (!roundsMap[roundKey]) {
+        roundsMap[roundKey] = [];
+      }
+      roundsMap[roundKey].push({
+        id: m.id,
+        team1: m.team1?.name || null,
+        team2: m.team2?.name || null,
+        score1: m.scoreTeam1,
+        score2: m.scoreTeam2,
+      });
+    });
+
+    return Object.keys(roundsMap).map((key) => ({
+      name: key,
+      matches: roundsMap[key],
+    }));
+  }, [matches]);
+
+  // 2. Mantenemos un estado local EXCLUSIVO para manejar los movimientos visuales del Drag & Drop
+  const [bracketData, setBracketData] = useState<Round[]>([]);
+
+  // Sincronizamos el estado local de drag solo cuando cambian los partidos originales calculados
+  useEffect(() => {
+    setBracketData(computedBracketData);
+  }, [computedBracketData]);
+
+  // --- LÓGICA DE DRAG AND DROP (Se queda idéntica) ---
   const handleDragStart = (e: React.DragEvent, rIndex: number, mIndex: number, slot: "team1" | "team2") => {
-    e.dataTransfer.setData(
-      "application/json",
-      JSON.stringify({ rIndex, mIndex, slot })
-    );
+    e.dataTransfer.setData("application/json", JSON.stringify({ rIndex, mIndex, slot }));
     e.dataTransfer.effectAllowed = "move";
   };
+
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
     e.dataTransfer.dropEffect = "move";
@@ -53,6 +70,7 @@ export const KnockoutBracket = ({ tournamentId }: { tournamentId: string }) => {
   const handleDragEnter = (e: React.DragEvent) => {
     e.preventDefault();
   };
+
   const handleDrop = (e: React.DragEvent, targetRIndex: number, targetMIndex: number, targetSlot: "team1" | "team2") => {
     e.preventDefault();
     const origin = JSON.parse(e.dataTransfer.getData("application/json")) as {
@@ -60,22 +78,37 @@ export const KnockoutBracket = ({ tournamentId }: { tournamentId: string }) => {
       mIndex: number;
       slot: "team1" | "team2";
     };
+
     const newData = JSON.parse(JSON.stringify(bracketData)) as Round[];
+
     const originTeam = newData[origin.rIndex].matches[origin.mIndex][origin.slot];
     const targetTeam = newData[targetRIndex].matches[targetMIndex][targetSlot];
+
     newData[origin.rIndex].matches[origin.mIndex][origin.slot] = targetTeam;
     newData[targetRIndex].matches[targetMIndex][targetSlot] = originTeam;
+
     setBracketData(newData);
+
     console.log("🔄 INTERCAMBIO DE EQUIPOS DETECTADO:", {
       torneo: tournamentId,
       movimiento: {
         equipoArrastrado: originTeam,
         equipoReemplazado: targetTeam,
         origen: { ronda: origin.rIndex, partido: origin.mIndex, posicion: origin.slot },
-        destino: { ronda: targetRIndex, partido: targetMIndex, posicion: targetSlot }
-      }
+        destino: { ronda: targetRIndex, partido: targetMIndex, posicion: targetSlot },
+      },
     });
   };
+
+  if (matches.length === 0) {
+    return (
+      <div className="py-16 flex flex-col items-center justify-center border-2 border-dashed border-white/5 rounded-xl bg-white/1 text-center">
+        <p className="text-gray/40 text-sm font-medium max-w-sm leading-relaxed">
+          El fixture de eliminatorias aún no ha sido generado. Haz clic en <strong>Realizar Sorteo</strong> para armar las llaves de competición.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full overflow-x-auto custom-scrollbar pb-8">
