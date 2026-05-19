@@ -54,6 +54,7 @@ export const AppRouter = () => {
           <Route path="torneos/:id" element={<TournamentDetailPage />} />
           <Route path="torneos/:id/editar" element={<TournamentUpdatePage />} />
           <Route path="partidos" element={<MatchSchedulerPage />} />
+          <Route path="partidos/:id" element={<MatchScoringScreen />} />
         </Route>
         <Route
           path="/admin/partido/:matchId/mesa"
