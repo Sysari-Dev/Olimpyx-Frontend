@@ -16,7 +16,7 @@ const NavItem = ({ icon, label, to, badge, end }: NavItemProps) => {
       className={({ isActive }) => `
         flex items-center justify-between px-4 py-3 rounded-xl transition-all
         ${isActive 
-          ? 'bg-white text-primary shadow-lg' 
+          ? 'bg-white text-dark shadow-lg' 
           : 'text-white/80 hover:bg-white/10 hover:text-white'
         }
       `}
@@ -26,7 +26,7 @@ const NavItem = ({ icon, label, to, badge, end }: NavItemProps) => {
         <span className="text-sm font-medium">{label}</span>
       </div>
       {badge && (
-        <span className="bg-[#ff5b37] text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+        <span className="bg-tertiary text-black text-[10px] font-bold px-2 py-0.5 rounded-full">
           {badge}
         </span>
       )}

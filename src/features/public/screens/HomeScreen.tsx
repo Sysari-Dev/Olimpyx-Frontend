@@ -1,9 +1,11 @@
-import React from 'react'
+import HeroSection from "../components/HeroSection";
 
 function HomeScreen() {
   return (
-    <div>HomeScreen</div>
-  )
+    <div className="animate-fade-in">
+      <HeroSection />
+    </div>
+  );
 }
 
-export default HomeScreen
+export default HomeScreen;

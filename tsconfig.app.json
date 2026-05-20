@@ -7,7 +7,7 @@
     "module": "ESNext",
     "types": ["vite/client"],
     "skipLibCheck": true,
-    
+    "ignoreDeprecations": "6.0",
     "baseUrl": ".",
     "paths": {
       "@assets/*": ["src/assets/*"],
@@ -19,8 +19,12 @@
       "@hooks/*": ["src/shared/hooks/*"],
       "@utils/*": ["src/shared/utils/*"],
       "@routes/*": ["src/core/router/*"],
+      "@services/*": ["src/core/services/*"],
       "@store/*": ["src/core/store/*"],
-      "@api/*": ["src/core/api/*"]
+      "@models/*": ["src/shared/models/*"],
+      "@mappers/*": ["src/shared/mappers/*"],
+      "@api/*": ["src/core/api/*"],
+      "@constants/*": ["src/core/constants/*"],
     },
 
     /* Bundler mode */

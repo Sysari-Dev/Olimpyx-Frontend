@@ -1,7 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
 @import "tailwindcss";
+@import 'react-toastify/dist/ReactToastify.css';
 
 @theme {
-  --color-primary: #2F49D1;
-  --color-secondary: #001635;
-  --color-dark: #191D3A;
+  --color-primary: #3D5BF1;
+  --color-secondary: #43E5FE;
+  --color-tertiary: #3D02F7;
+  --color-accent: #0033FF;
+  --color-dark: #191919;
+  --color-gray: #cccccc;
+  --color-light: #FFFFFF;
+  --color-dark-black: #040813;
+  --color-background: #0D0D0D;
+  --font-sans: "Noto Sans", ui-sans-serif, system-ui, sans-serif;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(164, 164, 164, 0.1);
+  border-radius: 20px;
+  transition: all 0.3s ease;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary);
+}
+
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(164, 164, 164, 0.1) transparent;
+}
+
+@keyframes modal-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.9) translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-modal-pop {
+  animation: modal-pop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.2s ease-out forwards;
+}
+
+.drag-drop-polyfill-active {
+  touch-action: none;
 }

@@ -1,9 +1,11 @@
-import React from 'react'
+import LiveMatchesSection from "../components/LiveMatchesSection";
 
 function MatchLiveScreen() {
   return (
-    <div>MatchLiveScreen</div>
-  )
+    <div className="animate-fade-in">
+      <LiveMatchesSection />
+    </div>
+  );
 }
 
-export default MatchLiveScreen
+export default MatchLiveScreen;
