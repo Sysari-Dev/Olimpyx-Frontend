@@ -20,6 +20,8 @@ const MatchCard = ({ id, event, sport, team1, team2, score1, score2, currentPeri
   return (
     <Link 
       to={`/partido/${id}`}
+      draggable="false"
+      style={{ touchAction: 'pan-y' }}
       className="block bg-white border border-light rounded-2xl p-5 shadow-sm hover:shadow-md hover:border-accent/20 transition-all group relative overflow-hidden"
     >
       <div className="absolute top-0 left-0 w-full h-1 bg-accent/10 group-hover:bg-accent/30 transition-colors" />
