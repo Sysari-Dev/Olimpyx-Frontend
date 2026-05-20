@@ -24,6 +24,7 @@ import TournamentDetailPage from "@features/tournament/pages/TournamentDetailPag
 import TournamentUpdatePage from "@features/tournament/pages/TournamentUpdatePage";
 import MatchSchedulerPage from "@features/match/pages/MatchSchedulerPage";
 import DashboardPage from "@features/admin/pages/DashboardPage";
+import MatchScoringPage from "@features/match/pages/MatchScoringPage";
 
 export const AppRouter = () => {
   return (
@@ -54,7 +55,7 @@ export const AppRouter = () => {
           <Route path="torneos/:id" element={<TournamentDetailPage />} />
           <Route path="torneos/:id/editar" element={<TournamentUpdatePage />} />
           <Route path="partidos" element={<MatchSchedulerPage />} />
-          <Route path="partidos/:id" element={<MatchScoringScreen />} />
+          <Route path="partidos/:id" element={<MatchScoringPage />} />
         </Route>
         <Route
           path="/admin/partido/:matchId/mesa"

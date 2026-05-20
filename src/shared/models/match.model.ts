@@ -2,7 +2,7 @@ import type { GroupStage, Stage } from "./competition.model";
 import type { Team } from "./organization.model";
 import type { Tournament } from "./tournament.model";
 
-export type MatchStatus = 'PENDING' | 'LIVE' | 'FINISHED';
+export type MatchStatus = 'PENDING' | 'IN_PROGRESS' | 'SUSPENDED' | 'FINISHED';
 
 export interface Match {
   id: string;
@@ -22,7 +22,7 @@ export interface Match {
 }
 
 export interface MatchSet {
-  id:string;
+  id: string;
   match?: Match;
   setNumber: number;
   pointsTeam1: number;
