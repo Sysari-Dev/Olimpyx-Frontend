@@ -8,6 +8,11 @@ import MatchCard from "@molecules/MatchCard";
 export const TournamentDetailSection = () => {
   const { id } = useParams<{ id: string }>();
   const { data, isLoading } = useTournamentResults(id!);
+  const FORMAT_TRANSLATION: Record<string, string> = {
+  ROUND_ROBIN: "Todos contra Todos",
+  GROUP_STAGE: "Fase de Grupos",
+  ELIMINATION: "Eliminación Directa",
+};
 
   if (isLoading) return <LoadingState text="Cargando datos..." />;
   if (!data) return <div className="p-20 text-center">Torneo no encontrado</div>;
@@ -15,12 +20,13 @@ export const TournamentDetailSection = () => {
   return (
     <div className="max-w-7xl mx-auto px-6 pt-8 pb-20 animate-fade-in">
       <h1 className="text-4xl font-black text-dark mb-10 tracking-tighter">
-        Formato: <span className="text-accent">{data.format}</span>
+        Formato:{" "} 
+        <span className="text-accent">
+          {FORMAT_TRANSLATION[data.format] || data.format}
+        </span>
       </h1>
-
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
         
-        {/* COLUMNA DERECHA (Ahora Izquierda): TABLAS O LLAVES */}
         <div className="lg:col-span-1 space-y-6">
           <h3 className="text-2xl font-black text-dark mb-6 tracking-tight">Posiciones</h3>
           
@@ -68,14 +74,14 @@ export const TournamentDetailSection = () => {
                 key={m.id}
                 id={m.id}
                 event="Torneo"
-                sport="General"
+                sport=""
                 team1={m.team1?.name ?? "TBD"}
                 team2={m.team2?.name ?? "TBD"}
-                score1={0}
-                score2={0}
+                // AQUÍ ESTABA EL ERROR: Usabas 0, ahora usas los datos del JSON
+                score1={m.scoreTeam1 ?? 0}
+                score2={m.scoreTeam2 ?? 0}
                 currentPeriod={m.roundName}
-                // Si el MatchCard da error por 'status', eliminalo de aquí
-                // o asegúrate de que exista en 'src/shared/components/molecules/MatchCard.tsx'
+                sets={m.sets}
               />
             ))}
           </div>
