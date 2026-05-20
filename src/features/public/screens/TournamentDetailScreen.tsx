@@ -1,4 +1,5 @@
-import { TournamentDetailSection } from "../components/TournamentDetailSection";
+// src/features/public/screens/TournamentDetailScreen.tsx
+import { TournamentDetailSection } from '../components/TournamentDetailSection';
 
 function TournamentDetailScreen() {
   return (
@@ -7,5 +8,4 @@ function TournamentDetailScreen() {
     </div>
   );
 }
-
 export default TournamentDetailScreen;
