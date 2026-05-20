@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { Menu, X, Trophy, Activity, Building2, Rocket } from "lucide-react";
+import logo from "@assets/icons/olimpyx.png";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -28,7 +29,9 @@ const Navbar = () => {
             onClick={handleLogoClick}
             className="flex items-center gap-2 cursor-pointer group"
           >
-            <div className="w-10 h-10 bg-accent rounded-lg flex items-center justify-center transition-transform group-hover:scale-105"></div>
+            <div className="w-10 h-10 bg-accent overflow-hidden rounded-lg flex items-center justify-center transition-transform group-hover:scale-105">
+              <img src={logo} alt="Olimpyx Logo" className="w-full h-full object-contain" />
+            </div>
             <span className="text-dark font-bold text-xl tracking-tighter">
               OLIMPYX
             </span>
@@ -90,7 +93,7 @@ const Navbar = () => {
               className="w-full bg-accent text-white p-4 rounded-xl font-bold flex items-center justify-center gap-2"
             >
               <Rocket size={18} />
-              Crea tu Evento
+              Ingresar
             </NavLink>
           </div>
         </div>

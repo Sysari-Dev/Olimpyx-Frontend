@@ -42,7 +42,7 @@ export const OrganizationListPage = () => {
             Observa las organizaciones que están con nosotros
           </h1>
           <p className="text-sm md:text-lg text-white/80 font-medium max-w-2xl leading-relaxed">
-            Instituciones, ligas y clubes deportivos de primer nivel que confían en nuestra infraestructura tecnológica para gestionar sus torneos con total transparencia y competitividad.
+            Instituciones, ligas y clubes deportivos que confían en nuestra infraestructura tecnológica para gestionar sus torneos con total transparencia y competitividad.
           </p>
         </div>
       </section>

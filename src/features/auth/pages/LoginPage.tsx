@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { User } from "lucide-react";
 import { LoginForm } from "../components/LoginForm";
 import { useAuth } from "../hooks/useAuth";
+import logo from "@assets/icons/olimpyx.png";
 
 const LoginPage = () => {
   const { login, isLoading, error } = useAuth();
@@ -13,7 +14,9 @@ const LoginPage = () => {
         <div className="relative z-10 px-16 w-full max-w-xl flex flex-col items-center mt-42">
           <div className="flex flex-col gap-12">
             <div className="flex items-center justify-center gap-4">
-              <div className="w-10 h-10 rounded-lg bg-primary shadow-2xl shadow-primary" />
+              <div className="w-10 h-10 rounded-lg bg-primary shadow-2xl shadow-primary overflow-hidden" >
+                <img src={logo} alt="Olimpyx Logo" className="w-full h-full object-contain" />
+              </div>
               <h2 className="text-sm font-semibold uppercase tracking-[0.2em] text-white/90">Olimpyx</h2>
             </div>
             <div className="space-y-6 text-center">
@@ -21,7 +24,8 @@ const LoginPage = () => {
               <p className="text-xs font-medium text-gray leading-relaxed tracking-wide max-w-sm opacity-80 mx-auto">Ingresa a nuestra plataforma para gestionar tus eventos deportivos y que tus usuarios vean resultados en tiempo real.</p>
             </div>
             <div className="pt-4 text-center">
-              <p className="text-[10px] font-bold text-gray/50 uppercase tracking-widest">¿No tienes una cuenta? <Link to="/contact" className="text-secondary transition-colors underline underline-offset-4 decoration-secondary/30">Contacta con nosotros</Link></p>
+              <p className="text-[10px] font-bold text-gray/50 uppercase tracking-widest">¿No tienes una cuenta? <Link to="https://sysari.net" className="text-secondary transition-colors underline underline-offset-4 decoration-secondary/30">Contacta con nosotros</Link></p>
+              <p className="text-[10px] font-bold text-gray/50 uppercase tracking-widest">Volver al <Link to="/" className="text-secondary transition-colors underline underline-offset-4 decoration-secondary/30">inicio</Link></p>
             </div>
           </div>
         </div>
