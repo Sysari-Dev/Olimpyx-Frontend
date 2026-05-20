@@ -1,48 +1,56 @@
-import { Search, Trophy, RotateCcw } from "lucide-react";
+import { Search, Trophy, Calendar, RotateCcw } from "lucide-react";
 import { InputText } from "@atoms/InputText";
 import { SelectCustom } from "@atoms/SelectCustom";
 
 interface FilterBarProps {
   onSearchChange: (val: string) => void;
+  onEventChange: (id: string) => void;
   onTournamentChange: (id: string) => void;
   onClearFilters: () => void;
+  selectedEventId: string;
   selectedTournamentId: string;
   searchValue: string;
+  eventOptions: { id: string; name: string }[];
+  tournamentOptions: { id: string; name: string }[];
 }
 
 export const FilterBar = ({
   onSearchChange,
+  onEventChange,
   onTournamentChange,
   onClearFilters,
+  selectedEventId,
   selectedTournamentId,
-  searchValue
+  searchValue,
+  eventOptions,
+  tournamentOptions,
 }: FilterBarProps) => {
-  const tournamentOptions = [
-    { id: "1", name: "Copa Inter-Comunidades" },
-    { id: "2", name: "Torneo Femenino Vóley" },
-    { id: "3", name: "Liga Distrital Abancay" },
-  ];
-
   return (
-    <div className="bg-[#1A1A1A] p-4 rounded-lg border border-white/5 flex flex-col md:flex-row md:items-end gap-4">
+    <div className="bg-[#1A1A1A] p-4 rounded-lg border border-white/5 flex flex-col lg:flex-row lg:items-end gap-4">
       <div className="flex-1">
         <InputText
-          placeholder="Buscar equipos por nombre de club..."
+          placeholder="Buscar encuentros por club..."
           icon={Search}
           value={searchValue}
           onChange={(e) => onSearchChange(e.target.value)}
         />
       </div>
-
       <div className="flex flex-wrap sm:flex-nowrap items-center gap-4">
+        <SelectCustom
+          options={eventOptions}
+          selectedId={selectedEventId}
+          onSelect={onEventChange}
+          icon={Calendar}
+          placeholder="Seleccionar Evento"
+        />
         <SelectCustom
           options={tournamentOptions}
           selectedId={selectedTournamentId}
           onSelect={onTournamentChange}
           icon={Trophy}
-          placeholder="Filtrar por torneo"
+          placeholder="Seleccionar Torneo"
+          disabled={tournamentOptions.length === 0}
         />
-
         <button
           onClick={onClearFilters}
           type="button"

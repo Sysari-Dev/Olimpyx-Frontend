@@ -1,6 +1,6 @@
 import { useMemo, useState, useEffect } from "react";
 import { type Match } from "@models/match.model";
-import { type GroupDTO, type GroupLeaderboardEntryDTO } from "@features/match/models/match-api.model";
+import { type GroupDTO, type GroupLeaderboardEntryDTO } from "@features/match/models/competition-api.model";
 import { LeagueTable } from "./LeagueTable";
 
 interface GroupStageViewProps {
@@ -179,14 +179,13 @@ export const GroupStageView = ({ tournamentId, matches, groups, onGroupSwap }: G
               {group.teams.length} Clubes
             </span>
           </div>
-
           <div className="relative group-drag-container">
             <LeagueTable
               tournamentId={`${tournamentId}-${group.id}`}
               teams={group.teams}
               leaderboard={group.formattedLeaderboard} 
             />
-            <div className="absolute inset-y-0 left-14 w-44 pointer-events-none flex flex-col pt-[53px]">
+            <div className="absolute inset-y-0 left-14 w-44 pointer-events-none flex flex-col pt-13.25">
               {group.teams.map((team) => (
                 <div
                   key={team.id}
@@ -196,7 +195,7 @@ export const GroupStageView = ({ tournamentId, matches, groups, onGroupSwap }: G
                   onDragEnter={handleDragEnter}
                   onDrop={(e) => handleDropOnTeam(e, group.id, team.id, team.name)}
                   style={{ touchAction: "none" }}
-                  className="h-[53px] pointer-events-auto cursor-grab active:cursor-grabbing bg-transparent hover:bg-primary/5 rounded border border-transparent hover:border-primary/20 transition-all flex items-center"
+                  className="h-13.25 pointer-events-auto cursor-grab active:cursor-grabbing bg-transparent hover:bg-primary/5 rounded border border-transparent hover:border-primary/20 transition-all flex items-center"
                   title="Arrastra y suelta sobre otro equipo de otro grupo para intercambiarlos"
                 />
               ))}

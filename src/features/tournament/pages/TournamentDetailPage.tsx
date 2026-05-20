@@ -12,10 +12,10 @@ import {
   Shield,
   Info,
   CheckCircle2,
-  Dices, // <-- Importamos el ícono para el sorteo
+  Dices,
 } from "lucide-react";
 import { useTournament } from "../hooks/useTournament";
-import { useMatch } from "../../match/hooks/useMatch"; // <-- Importamos tu nuevo hook de partidos
+import { useCompetition } from "../../match/hooks/useCompetition";
 import { LoadingState } from "@atoms/LoadingState";
 import { Button } from "@atoms/Button";
 import BaseModal from "@atoms/BaseModal";
@@ -25,8 +25,6 @@ import {
   type TeamInTournamentDTO,
 } from "../models/tournament-api.model";
 import { TournamentParser } from "@utils/tournament.util";
-
-// IMPORTAMOS LAS VISTAS DE LOS FORMATOS
 import { KnockoutBracket } from "../components/formats/KnockoutBracket";
 import { LeagueTable } from "../components/formats/LeagueTable";
 import { GroupStageView } from "../components/formats/GroupStageView";
@@ -46,8 +44,7 @@ const TournamentDetailPage = () => {
     isLoading: isLoadingTournament,
   } = useTournament();
 
-  // Instanciamos el hook de partidos para manejar el sorteo
-  const { generateDraw, getDashboard, matches, leaderboard, groups, isLoading: isDrawing } = useMatch();
+  const { generateDraw, getDashboard, matches, leaderboard, groups, isLoading: isDrawing } = useCompetition();
 
   const [tournament, setTournament] = useState<Tournament | null>(null);
   const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
@@ -99,7 +96,6 @@ const TournamentDetailPage = () => {
     }
   };
 
-  // Función interactiva para disparar el endpoint del sorteo
   const handleSorteo = async () => {
     if (tournament) {
       await generateDraw(tournament.id);
@@ -111,8 +107,6 @@ const TournamentDetailPage = () => {
 
   return (
     <div className="space-y-8 animate-in fade-in duration-700">
-      
-      {/* HEADER */}
       <header className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
         <div className="space-y-4">
           <button
@@ -148,8 +142,6 @@ const TournamentDetailPage = () => {
           </Button>
         </div>
       </header>
-
-      {/* BLOQUE SUPERIOR (Equipos y Config) */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-6">
           <section className="bg-[#1A1A1A] border border-white/5 rounded-lg overflow-hidden shadow-2xl">
@@ -199,8 +191,7 @@ const TournamentDetailPage = () => {
               )}
             </div>
           </section>
-        </div>
-        
+        </div>        
         <div className="space-y-6">
           <div className="bg-[#1A1A1A] border border-white/5 p-6 rounded-lg space-y-6 shadow-2xl">
             <div className="flex items-center gap-3">
@@ -244,15 +235,11 @@ const TournamentDetailPage = () => {
           </div>
         </div>
       </div>
-
-      {/* DESARROLLO DE LA COMPETICIÓN */}
       <section className="pt-8 mt-12 border-t border-white/5 space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
           <h3 className="text-xl font-black uppercase text-light tracking-widest">
             Desarrollo de la Competición
           </h3>
-
-          {/* BOTÓN INTERACTIVO PARA DISPARAR EL SORTEO EN EL BACKEND */}
           {tournament.status === "PLANNING" && (
             <Button
               onClick={handleSorteo}
@@ -279,8 +266,6 @@ const TournamentDetailPage = () => {
           matches={matches} groups={groups}/>
         )}
       </section>
-
-      {/* MODALES */}
       <BaseModal
         isOpen={isStatusModalOpen}
         onClose={() => setIsStatusModalOpen(false)}
