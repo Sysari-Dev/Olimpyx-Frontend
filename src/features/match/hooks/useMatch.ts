@@ -1,76 +1,116 @@
-import { useState } from "react";
-import { CompetitionService } from "../services/Competition.service";
+import { useState, useCallback } from "react";
+import { type Match } from "@models/match.model";
+import { MatchService } from "../services/match.service";
 import { MatchMapper } from "@mappers/match.mapper";
 import { ToastService } from "@services/toast.service";
-import { type Match } from "@models/match.model";
-import type { GroupDTO, LeaderboardEntryDTO } from "../models/match-api.model";
+import { 
+  type UpdateMatchMetadataRequestDTO, 
+  type UpdateMatchScoreRequestDTO, 
+  type FinalizeMatchRequestDTO 
+} from "../models/match-api.model";
 
 export const useMatch = () => {
-  const [isLoading, setIsLoading] = useState(false);
   const [matches, setMatches] = useState<Match[]>([]);
-  const [leaderboard, setLeaderboard] = useState<LeaderboardEntryDTO[]>([]); // 👈 NUEVO
-  const [groups, setGroups] = useState<GroupDTO[]>([]);           // 👈 NUEVO
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const generateDraw = async (tournamentId: string) => {
+  const fetchMatches = useCallback(async (tournamentId: string): Promise<Match[] | null> => {
     setIsLoading(true);
     try {
-      const response = await CompetitionService.generateDraw(tournamentId);
+      const response = await MatchService.getByTournament(tournamentId);
+      if (response && response.success) {
+        const domainMatches = MatchMapper.toDomainList(response.data);
+        setMatches(domainMatches);
+        return domainMatches;
+      }
+      return null;
+    } catch (error) {
+      console.error(error);
+      ToastService.error("Error al cargar los partidos");
+      return null;
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  const getMatchDetail = useCallback(async (matchId: string): Promise<Match | null> => {
+    setIsLoading(true);
+    try {
+      const response = await MatchService.getById(matchId);
       if (response.success && response.data) {
-        const mappedMatches = MatchMapper.toDomainList(response.data);
-        setMatches(mappedMatches);
-        ToastService.success("¡El sorteo se ha realizado con éxito!");
-        // 👇 Refresca el dashboard inmediatamente después del sorteo
-        await getDashboard(tournamentId);
+        return MatchMapper.toDomain(response.data);
+      }
+      return null;
+    } catch (error) {
+      console.error(error);
+      ToastService.error("No se pudo obtener el detalle del partido");
+      return null;
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  const updateMatchMetadata = useCallback(async (matchId: string, payload: UpdateMatchMetadataRequestDTO): Promise<boolean> => {
+    setIsLoading(true);
+    try {
+      const response = await MatchService.updateMetadata(matchId, payload);
+      if (response.success && response.data) {
+        const updated = MatchMapper.toDomain(response.data);
+        setMatches((prev) => prev.map((m) => m.id === matchId ? updated : m));
+        ToastService.success("Datos actualizados correctamente");
         return true;
       }
-    } catch {
-      ToastService.error("Ocurrió un error al intentar generar el sorteo.");
+    } catch (error) {
+      console.error(error);
+      ToastService.error("Error al actualizar la configuración del partido");
     } finally {
       setIsLoading(false);
     }
     return false;
-  };
+  }, []);
 
-  // 👇 NUEVO
-  const getDashboard = async (tournamentId: string) => {
+  const updateMatchScore = useCallback(async (payload: UpdateMatchScoreRequestDTO): Promise<boolean> => {
     setIsLoading(true);
     try {
-      const response = await CompetitionService.getDashboard(tournamentId);
+      const response = await MatchService.updateScore(payload);
       if (response.success && response.data) {
-        const { format, matches, leaderboard, groups } = response.data;
-
-        if (format === "ELIMINATION" && matches) {
-          setMatches(MatchMapper.toDomainList(matches));
-        }
-        
-        if (format === "ROUND_ROBIN" && leaderboard) {
-          setLeaderboard(leaderboard);
-        }
-
-        // 👇 MEJORA AQUÍ: Si es GROUP_STAGE, extraemos también los partidos de los grupos
-        if (format === "GROUP_STAGE" && groups) {
-          setGroups(groups);
-          
-          // Extraemos todos los MatchResponseDTO de todos los grupos y los unificamos en un solo array plano
-          const allGroupMatches = groups.flatMap(g => g.matches || []);
-          if (allGroupMatches.length > 0) {
-            setMatches(MatchMapper.toDomainList(allGroupMatches));
-          }
-        }
+        const updated = MatchMapper.toDomain(response.data);
+        setMatches((prev) => prev.map((m) => m.id === payload.matchId ? updated : m));
+        return true;
       }
-    } catch {
-      ToastService.error("Error al cargar el dashboard del torneo.");
+    } catch (error) {
+      console.error(error);
+      ToastService.error("No se pudo actualizar el marcador");
     } finally {
       setIsLoading(false);
     }
-  };
+    return false;
+  }, []);
+
+  const finalizeMatch = useCallback(async (payload: FinalizeMatchRequestDTO) => {
+    setIsLoading(true);
+    try {
+      const response = await MatchService.finalize(payload);
+      if (response.success && response.data) {
+        setMatches((prev) => prev.map((m) => m.id === payload.matchId ? { ...m, status: "FINISHED" } : m));
+        ToastService.success("Partido finalizado y tablas actualizadas");
+        return response.data;
+      }
+    } catch (error) {
+      console.error(error);
+      ToastService.error("Error al procesar la finalización del encuentro");
+    } finally {
+      setIsLoading(false);
+    }
+    return null;
+  }, []);
 
   return {
     matches,
-    leaderboard, // 👈 NUEVO
-    groups,      // 👈 NUEVO
     isLoading,
-    generateDraw,
-    getDashboard  // 👈 NUEVO
+    fetchMatches,
+    getMatchDetail,
+    updateMatchMetadata,
+    updateMatchScore,
+    finalizeMatch,
   };
 };

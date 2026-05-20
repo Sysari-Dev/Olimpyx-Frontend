@@ -1,92 +1,123 @@
-import { type MatchStatus } from "@models/match.model";
-// 1. Agregamos esta importación arriba
-import { type ApiResponse } from "@api/interfaces/api-response.interface";
+export type MatchStatus = 'PENDING' | 'IN_PROGRESS' | 'SUSPENDED' | 'FINISHED';
+export type StageType = 'ROUND_ROBIN' | 'ELIMINATION' | 'GROUP_STAGE';
+export type ScoreOperation = 'INCREMENT' | 'DECREMENT';
 
-export interface MatchTeamDTO {
+export interface SportInMatchDTO {
+  id: string;
+  name: string;
+  description: string | null;
+}
+
+export interface TournamentInMatchDTO {
+  id: string;
+  eventId: string;
+  sportId: string;
+  name: string;
+  format: string | null;
+  pointsPerWin: number;
+  pointsPerDraw: number;
+  pointsPerLoss: number;
+  status: string;
+  sport?: SportInMatchDTO;
+}
+
+export interface TeamInMatchDTO {
   id: string;
   organizationId: string;
   name: string;
   status: string;
 }
 
-export interface MatchResponseDTO {
+export interface StageInMatchDTO {
   id: string;
   tournamentId: string;
-  stageId: string | null;
+  name: string;
+  stageType: StageType;
+  isHomeAndAway: boolean;
+}
+
+export interface GroupInMatchDTO {
+  id: string;
+  stageId: string;
+  name: string;
+  qualifiedCount: number;
+}
+
+export interface SetDTO {
+  id: string;
+  setNumber: number;
+  pointsTeam1: number;
+  pointsTeam2: number;
+}
+
+export interface MatchDTO {
+  id: string;
+  tournamentId: string;
+  stageId: string;
   groupId: string | null;
-  roundName: string;
-  
-  team1Id: string | null;
-  team2Id: string | null;
-  
-  team1: MatchTeamDTO | null;
-  team2: MatchTeamDTO | null;
-  
+  team1Id: string;
+  team2Id: string;
   scoreTeam1: number;
   scoreTeam2: number;
   winnerId: string | null;
-  
-  status: MatchStatus | string;
-  matchDate: string | null;
-  
   parentMatch1: string | null;
   parentMatch2: string | null;
+  roundName: string;
+  matchDate: string | null;
+  status: MatchStatus;
+  team1: TeamInMatchDTO | null;
+  team2: TeamInMatchDTO | null;
+  sets: SetDTO[]; 
+  stage: StageInMatchDTO;
+  group: GroupInMatchDTO | null;
+  tournament?: TournamentInMatchDTO;
 }
 
-// 2. AGREGAMOS ESTO AL FINAL:
-// Esto es lo que usa el Service para saber qué le responde el backend
-export type DrawApiResponse = ApiResponse<MatchResponseDTO[]>;
+export interface UpdateMatchMetadataRequestDTO {
+  matchDate: string | null;
+  status: MatchStatus;
+}
 
-export interface LeaderboardEntryDTO {
-  id: string;
+export interface UpdateMatchScoreRequestDTO {
+  tournamentId: string;
+  matchId: string;
   teamId: string;
-  teamName: string;
-  played: number;
-  wins: number;
-  draws: number;
-  losses: number;
-  goalsFor: number;
-  goalsAgainst: number;
   points: number;
-  goalDifference: number;
+  operation: ScoreOperation;
+  setNumber?: number;
 }
 
-export interface GroupLeaderboardEntryDTO {
-  id: string;
-  groupId: string;
-  teamId: string;
-  teamName: string;
-  played: number;
-  wins: number;
-  draws: number;
-  losses: number;
-  goalsFor: number;
-  goalsAgainst: number;
-  points: number;
-  goalDifference: number;
-  team?: {           // 👈 aquí está la diferencia — objeto anidado
-    id: string;
-    organizationId: string;
-    name: string;
-    status: string;
-  };
+export interface FinalizeMatchRequestDTO {
+  tournamentId: string;
+  matchId: string;
 }
 
-export interface GroupDTO {
-  id: string;
-  name: string;
-  qualifiedCount: number;
-  leaderboard: GroupLeaderboardEntryDTO[];
-  matches: MatchResponseDTO[];
-}
-
-
-export interface DashboardApiResponse {
+export interface MatchListApiResponse {
   success: boolean;
+  message: {
+    type: string;
+    content: string;
+  };
+  data: MatchDTO[];
+}
+
+export interface SingleMatchApiResponse {
+  success: boolean;
+  message: {
+    type: string;
+    content: string;
+  };
+  data: MatchDTO;
+}
+
+export interface FinalizeMatchApiResponse {
+  success: boolean;
+  message: {
+    type: string;
+    content: string;
+  };
   data: {
-    format: "ELIMINATION" | "ROUND_ROBIN" | "GROUP_STAGE";
-    matches?: MatchResponseDTO[];       // ELIMINATION y GROUP_STAGE
-    leaderboard?: LeaderboardEntryDTO[]; // ROUND_ROBIN
-    groups?: GroupDTO[];                 // GROUP_STAGE
+    message: string;
+    playoffsTournamentId: string | null;
   };
 }
