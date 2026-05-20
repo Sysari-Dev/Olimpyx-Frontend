@@ -55,7 +55,7 @@ const Navbar = () => {
               className="bg-accent text-white px-5 py-2 rounded-full text-sm font-bold flex items-center gap-2 hover:bg-primary transition-all shadow-lg shadow-accent/20"
             >
               <Rocket size={16} />
-              Crea tu evento
+              Ingresar
             </NavLink>
           </div>
           <div className="md:hidden flex items-center">
