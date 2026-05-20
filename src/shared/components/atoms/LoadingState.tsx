@@ -2,7 +2,7 @@ import { Loader2 } from "lucide-react";
 
 interface LoadingStateProps {
   text?: string;
-  variant?: "primary" | "secondary";
+  variant?: "primary" | "secondary" | "tertiary";
   minHeight?: string;
 }
 
@@ -11,7 +11,18 @@ export const LoadingState = ({
   variant = "primary",
   minHeight = "60vh" 
 }: LoadingStateProps) => {
-  const colorClass = variant === "primary" ? "text-primary" : "text-secondary";
+
+  const spinnerColors = {
+    primary: "text-primary",
+    secondary: "text-secondary",
+    tertiary: "text-tertiary"
+  };
+
+  const textColors = {
+    primary: "text-gray/40",
+    secondary: "text-gray/40",
+    tertiary: "text-dark/90"
+  };
 
   return (
     <div 
@@ -19,9 +30,9 @@ export const LoadingState = ({
       style={{ minHeight }}
     >
       <div className="relative flex items-center justify-center">
-        <Loader2 className={`w-12 h-12 animate-spin ${colorClass}`} />
+        <Loader2 className={`w-12 h-12 animate-spin ${spinnerColors[variant]}`} />
       </div>
-      <p className="text-[10px] font-semibold text-gray/40 uppercase tracking-widest">
+      <p className={`text-[10px] font-black uppercase tracking-widest ${textColors[variant]}`}>
         {text}
       </p>
     </div>

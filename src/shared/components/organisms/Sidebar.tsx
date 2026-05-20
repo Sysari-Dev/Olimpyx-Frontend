@@ -19,7 +19,7 @@ import { setActiveOrg } from "@store/slices/auth.slice";
 import { type Organization } from "@models/organization.model";
 import { SidebarNotificationPopover } from "@atoms/SidebarNotificationPopover";
 import { APP_CONFIG } from "@constants/app-config.constant";
-
+import logo from "@assets/icons/olimpyx.png";
 interface SidebarProps {
   onClose?: () => void;
   onLogout: () => void;
@@ -68,7 +68,9 @@ const Sidebar = ({ onClose, onLogout }: SidebarProps) => {
   return (
     <div className="flex flex-col h-full bg-background p-4 relative">
       <div className="py-4 px-4 mb-6 flex flex-row items-center gap-3">
-        <div className="bg-primary h-10 w-10 rounded-xl shadow-lg shadow-primary/20 flex items-center justify-center" />
+        <div className="bg-primary overflow-hidden h-10 w-10 rounded-xl shadow-lg shadow-primary/20 flex items-center justify-center">
+          <img src={logo} alt="Olimpyx Logo" className="w-full h-full object-contain" />
+        </div>
         <h1 className="text-lg font-black tracking-tighter text-light">
           Olimpyx
         </h1>

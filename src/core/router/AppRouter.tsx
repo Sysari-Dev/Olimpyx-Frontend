@@ -8,7 +8,6 @@ import MatchDetailScreen from "@features/public/screens/MatchDetailScreen";
 import LoginPage from "@features/auth/pages/LoginPage";
 import EventsScreen from "@features/public/screens/EventsScreen";
 import TournamentDetailScreen from "@features/public/screens/TournamentDetailScreen";
-import { MatchScoringScreen } from "@features/admin/screens/MatchScoringScreen";
 import OrganizationManagementPage from "@features/organizations/pages/OrganizationManagementPage";
 import OrganizationUpdatePage from "@features/organizations/pages/OrganizationUpdatePage";
 import OrganizationCreatePage from "@features/organizations/pages/OrganizationCreatePage";
@@ -25,12 +24,17 @@ import TournamentUpdatePage from "@features/tournament/pages/TournamentUpdatePag
 import MatchSchedulerPage from "@features/match/pages/MatchSchedulerPage";
 import DashboardPage from "@features/admin/pages/DashboardPage";
 import MatchScoringPage from "@features/match/pages/MatchScoringPage";
+import OrganizationListPage from "@features/public/pages/OrganizationListPage";
+import { PublicRoute } from "src/shared/guards/PublicRoute";
+import { ProtectedRoute } from "src/shared/guards/ProtectedRoute";
 
 export const AppRouter = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/login" element={<LoginPage />} />
+        <Route element={<PublicRoute />}>
+          <Route path="/login" element={<LoginPage />} />
+        </Route>
         <Route path="/" element={<MainLayout />}>
           <Route index element={<HomeScreen />} />
           <Route path="evento/:id" element={<EventDetailScreen />} />
@@ -38,29 +42,30 @@ export const AppRouter = () => {
           <Route path="en-vivo" element={<MatchLiveScreen />} />
           <Route path="explorar" element={<EventsScreen />} />
           <Route path="partido/:id" element={<MatchDetailScreen />} />
+          <Route path="organizaciones" element={<OrganizationListPage />} />
         </Route>
-        <Route path="/admin" element={<AdminLayout />}>
-          <Route index element={<DashboardPage />} />
-          <Route path="organizacion" element={<OrganizationManagementPage />} />
-          <Route path="organizacion/editar" element={<OrganizationUpdatePage />} />
-          <Route path="organizacion/crear" element={<OrganizationCreatePage />} />
-          <Route path="equipos" element={<TeamsManagementPage />} />
-          <Route path="equipos/crear" element={<TeamCreatePage />} />
-          <Route path="eventos" element={<EventsManagementPage />} />
-          <Route path="eventos/crear" element={<EventCreatePage />} />
-          <Route path="eventos/:id" element={<EventDetailPage />} /> 
-          <Route path="eventos/:id/editar" element={<EventUpdatePage />} /> 
-          <Route path="torneos" element={<TournamentsManagementPage />} />
-          <Route path="torneos/crear" element={<TournamentCreatePage />} />
-          <Route path="torneos/:id" element={<TournamentDetailPage />} />
-          <Route path="torneos/:id/editar" element={<TournamentUpdatePage />} />
-          <Route path="partidos" element={<MatchSchedulerPage />} />
-          <Route path="partidos/:id" element={<MatchScoringPage />} />
+        <Route path="/admin" element={<ProtectedRoute allowedRoles={["ADMIN", "SUPER_ADMIN"]} />}>
+          <Route element={<AdminLayout />}>
+            <Route index element={<DashboardPage />} />
+            <Route path="organizacion" element={<OrganizationManagementPage />} />
+            <Route path="organizacion/editar" element={<OrganizationUpdatePage />} />
+            <Route element={<ProtectedRoute allowedRoles={["SUPER_ADMIN"]} />}>
+              <Route path="organizacion/crear" element={<OrganizationCreatePage />} />
+            </Route>
+            <Route path="equipos" element={<TeamsManagementPage />} />
+            <Route path="equipos/crear" element={<TeamCreatePage />} />
+            <Route path="eventos" element={<EventsManagementPage />} />
+            <Route path="eventos/crear" element={<EventCreatePage />} />
+            <Route path="eventos/:id" element={<EventDetailPage />} />
+            <Route path="eventos/:id/editar" element={<EventUpdatePage />} />
+            <Route path="torneos" element={<TournamentsManagementPage />} />
+            <Route path="torneos/crear" element={<TournamentCreatePage />} />
+            <Route path="torneos/:id" element={<TournamentDetailPage />} />
+            <Route path="torneos/:id/editar" element={<TournamentUpdatePage />} />
+            <Route path="partidos" element={<MatchSchedulerPage />} />
+            <Route path="partidos/:id" element={<MatchScoringPage />} />
+          </Route>
         </Route>
-        <Route
-          path="/admin/partido/:matchId/mesa"
-          element={<MatchScoringScreen />}
-        />
       </Routes>
     </BrowserRouter>
   );
