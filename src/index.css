@@ -63,6 +63,23 @@
   animation: fade-in 0.2s ease-out forwards;
 }
 
-.drag-drop-polyfill-active {
+/*.drag-drop-polyfill-active {
   touch-action: none;
+}*/
+/* 1. Elimina cualquier mención a drag-drop-polyfill-active */
+
+/* 2. Aplica esto para permitir scroll fluido en todo el sitio */
+* {
+  touch-action: pan-y !important;
+}
+
+/* 3. Específicamente para tus contenedores de scroll, permíteles pan-x también */
+.w-full {
+  touch-action: pan-x pan-y !important;
+}
+
+/* 4. Asegúrate de que NADA tenga user-drag activado */
+[draggable="true"] {
+  -webkit-user-drag: none;
+  user-drag: none;
 }
