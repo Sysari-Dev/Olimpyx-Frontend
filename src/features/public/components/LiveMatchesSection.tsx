@@ -27,6 +27,7 @@ export const LiveMatchesSection = () => {
             score1={m.scoreTeam1}
             score2={m.scoreTeam2}
             currentPeriod={m.roundName}
+            sets={m.sets}
           />
         ))}
       </div>
