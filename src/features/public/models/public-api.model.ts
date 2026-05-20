@@ -22,4 +22,22 @@ export interface PublicEvent {
   tournaments: PublicTournamentBasic[];
 }
 
+export interface PublicOrganizationDTO {
+  id: string;
+  name: string;
+  description: string;
+  createdAt: string;
+  totalTeams: number;
+  totalEvents: number;
+}
+
+export interface PublicOrganizationsResponse {
+  success: boolean;
+  message: {
+    type: string;
+    content: string;
+  };
+  data: PublicOrganizationDTO[];
+}
+
 export type PublicEventsResponse = ApiResponse<PublicEvent[]>;

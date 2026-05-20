@@ -25,6 +25,7 @@ import TournamentUpdatePage from "@features/tournament/pages/TournamentUpdatePag
 import MatchSchedulerPage from "@features/match/pages/MatchSchedulerPage";
 import DashboardPage from "@features/admin/pages/DashboardPage";
 import MatchScoringPage from "@features/match/pages/MatchScoringPage";
+import OrganizationListPage from "@features/public/pages/OrganizationListPage";
 
 export const AppRouter = () => {
   return (
@@ -38,6 +39,7 @@ export const AppRouter = () => {
           <Route path="en-vivo" element={<MatchLiveScreen />} />
           <Route path="explorar" element={<EventsScreen />} />
           <Route path="partido/:id" element={<MatchDetailScreen />} />
+          <Route path="organizaciones" element={<OrganizationListPage />} />
         </Route>
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<DashboardPage />} />
