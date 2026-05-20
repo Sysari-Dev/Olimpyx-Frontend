@@ -24,7 +24,7 @@ export const OrganizationListPage = () => {
   }, [searchTerm, organizations]);
 
   if (isLoading && organizations.length === 0) {
-    return <LoadingState text="Buscando organizaciones federadas..." />;
+    return <LoadingState variant="tertiary" text="Buscando organizaciones..." />;
   }
 
   return (
