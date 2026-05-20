@@ -25,9 +25,12 @@ export interface GroupData {
 export interface MatchData {
   id: string;
   roundName: string;
-  status: string;
-  team1: { name: string };
-  team2: { name: string };
+  status: 'PENDING' | 'FINISHED' | 'LIVE' | 'IN_PROGRESS';
+  team1: { name: string } | null;
+  team2: { name: string } | null;
+  scoreTeam1: number; // Agregado
+  scoreTeam2: number; // Agregado
+  sets: { pointsTeam1: number; pointsTeam2: number }[];
 }
 
 export interface TournamentResultsData {
@@ -45,6 +48,7 @@ export interface LiveMatch {
   team1: { name: string };
   team2: { name: string };
   tournament: { name: string; sport: { name: string } };
+  sets: { pointsTeam1: number; pointsTeam2: number }[];
 }
 export const PublicService = {
   // ... getEvents igual ...
