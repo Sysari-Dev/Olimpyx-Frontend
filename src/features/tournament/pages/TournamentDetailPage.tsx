@@ -235,7 +235,7 @@ const TournamentDetailPage = () => {
           </div>
         </div>
       </div>
-      <section className="pt-8 mt-12 border-t border-white/5 space-y-6">
+      <section className="pt-8 mt-5 border-t border-white/5 space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
           <h3 className="text-xl font-black uppercase text-light tracking-widest">
             Desarrollo de la Competición
@@ -250,7 +250,6 @@ const TournamentDetailPage = () => {
             </Button>
           )}
         </div>
-
         {tournament.format === 'ELIMINATION' && (
           <KnockoutBracket tournamentId={tournament.id} 
           matches={matches}/>
@@ -260,7 +259,6 @@ const TournamentDetailPage = () => {
           <LeagueTable tournamentId={tournament.id}
           leaderboard={leaderboard} />
         )}
-        
         {tournament.format === 'GROUP_STAGE' && (
           <GroupStageView tournamentId={tournament.id} 
           matches={matches} groups={groups}/>
@@ -299,7 +297,6 @@ const TournamentDetailPage = () => {
           ))}
         </div>
       </BaseModal>
-      
       <BaseModal
         isOpen={isTeamsModalOpen}
         onClose={() => {
@@ -371,7 +368,6 @@ const TournamentDetailPage = () => {
           )}
         </div>
       </BaseModal>
-      
       <BaseModal
         isOpen={!!teamToRemove}
         onClose={() => setTeamToRemove(null)}

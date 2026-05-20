@@ -2,6 +2,7 @@ import { useMemo, useState, useEffect } from "react";
 import { type Match } from "@models/match.model";
 import { type GroupDTO, type GroupLeaderboardEntryDTO } from "@features/match/models/competition-api.model";
 import { LeagueTable } from "./LeagueTable";
+import { MoveHorizontal } from "lucide-react";
 
 interface GroupStageViewProps {
   tournamentId: string;
@@ -33,19 +34,16 @@ export const GroupStageView = ({ tournamentId, matches, groups, onGroupSwap }: G
   const computedGroups = useMemo<GroupData[]>(() => {
     if (groups && groups.length > 0) {
       return groups.map((g) => {
-        // 👇 FIX DEFINITIVO: Leemos 'teamName' primero, si no está, buscamos en 'team.name'
         const getTeamName = (entry: GroupLeaderboardEntryDTO) => 
           entry.teamName || entry.team?.name || "Equipo Desconocido";
 
         return {
           id: g.id,
           name: g.name,
-          
           teams: g.leaderboard.map((entry: GroupLeaderboardEntryDTO) => ({
             id: entry.teamId,
             name: getTeamName(entry), 
           })),
-
           formattedLeaderboard: g.leaderboard.map((entry: GroupLeaderboardEntryDTO) => ({
             teamName: getTeamName(entry),
             played: entry.played,
@@ -96,7 +94,6 @@ export const GroupStageView = ({ tournamentId, matches, groups, onGroupSwap }: G
     setBracketGroups(computedGroups);
   }, [computedGroups]);
 
-  // --- LÓGICA DRAG & DROP ---
   const handleDragStart = (e: React.DragEvent, sourceGroupId: string, teamId: string, teamName: string) => {
     e.dataTransfer.setData("application/json", JSON.stringify({ sourceGroupId, teamId, teamName }));
     e.dataTransfer.effectAllowed = "move";
@@ -155,7 +152,7 @@ export const GroupStageView = ({ tournamentId, matches, groups, onGroupSwap }: G
 
   if (groups?.length === 0 && matches.length === 0) {
     return (
-      <div className="py-16 flex flex-col items-center justify-center border-2 border-dashed border-white/5 rounded-xl bg-white/1 text-center">
+      <div className="py-16 px-4 flex flex-col items-center justify-center border-2 border-dashed border-white/5 rounded-xl bg-white/1 text-center">
         <p className="text-gray/40 text-sm font-medium max-w-sm leading-relaxed">
           Los grupos de la competición aún no han sido generados. Haz clic en{" "}
           <strong>Realizar Sorteo</strong> para distribuir los clubes y armar el fixture.
@@ -165,40 +162,52 @@ export const GroupStageView = ({ tournamentId, matches, groups, onGroupSwap }: G
   }
 
   return (
-    <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 animate-in fade-in duration-500">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 xl:gap-8 animate-in fade-in duration-500">
       {bracketGroups.map((group) => (
-        <div key={group.id} className="space-y-4 p-5 rounded-2xl bg-[#141414] border border-white/5 shadow-xl">
-          <div className="flex items-center justify-between select-none">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary font-black text-xs uppercase">
+        <div key={group.id} className="space-y-4 p-4 sm:p-5 rounded-2xl bg-[#141414] border border-white/5 shadow-xl flex flex-col min-w-0">
+          <div className="flex items-center justify-between select-none gap-4">
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary font-black text-xs uppercase shrink-0">
                 {group.name.replace("Grupo", "").trim() || "G"}
               </div>
-              <h4 className="text-lg font-black text-light tracking-tight">{group.name}</h4>
+              <h4 className="text-base sm:text-lg font-black text-light tracking-tight truncate">{group.name}</h4>
             </div>
-            <span className="text-[10px] font-black text-gray/30 uppercase tracking-widest bg-white/2 px-2 py-1 rounded">
-              {group.teams.length} Clubes
-            </span>
+            
+            <div className="flex items-center gap-3 shrink-0">
+              <div className="flex items-center gap-1 text-gray/30 text-[10px] font-bold uppercase tracking-wider bg-white/5 px-2 py-1 rounded md:hidden">
+                <MoveHorizontal size={12} />
+                <span>Deslizar puntos</span>
+              </div>
+              <span className="text-[10px] font-black text-gray/30 uppercase tracking-widest bg-white/2 px-2 py-1 rounded">
+                {group.teams.length} Clubes
+              </span>
+            </div>
           </div>
-          <div className="relative group-drag-container">
-            <LeagueTable
-              tournamentId={`${tournamentId}-${group.id}`}
-              teams={group.teams}
-              leaderboard={group.formattedLeaderboard} 
-            />
-            <div className="absolute inset-y-0 left-14 w-44 pointer-events-none flex flex-col pt-13.25">
-              {group.teams.map((team) => (
-                <div
-                  key={team.id}
-                  draggable
-                  onDragStart={(e) => handleDragStart(e, group.id, team.id, team.name)}
-                  onDragOver={handleDragOver}
-                  onDragEnter={handleDragEnter}
-                  onDrop={(e) => handleDropOnTeam(e, group.id, team.id, team.name)}
-                  style={{ touchAction: "none" }}
-                  className="h-13.25 pointer-events-auto cursor-grab active:cursor-grabbing bg-transparent hover:bg-primary/5 rounded border border-transparent hover:border-primary/20 transition-all flex items-center"
-                  title="Arrastra y suelta sobre otro equipo de otro grupo para intercambiarlos"
-                />
-              ))}
+
+          <div className="w-full overflow-x-auto custom-scrollbar rounded-xl border border-white/[0.02] touch-pan-x">
+            <div className="relative min-w-[700px] w-full">
+              <LeagueTable
+                tournamentId={`${tournamentId}-${group.id}`}
+                teams={group.teams}
+                leaderboard={group.formattedLeaderboard} 
+              />
+              
+              {/* Capa de control reducida a la izquierda (Zona de nombres) para liberar el scroll en los números */}
+              <div className="absolute inset-y-0 left-0 w-60 pointer-events-none flex flex-col pt-13.25">
+                {group.teams.map((team) => (
+                  <div
+                    key={team.id}
+                    draggable
+                    onDragStart={(e) => handleDragStart(e, group.id, team.id, team.name)}
+                    onDragOver={handleDragOver}
+                    onDragEnter={handleDragEnter}
+                    onDrop={(e) => handleDropOnTeam(e, group.id, team.id, team.name)}
+                    style={{ touchAction: "none" }}
+                    className="h-13.25 pointer-events-auto cursor-grab active:cursor-grabbing bg-transparent hover:bg-primary/5 rounded border border-transparent hover:border-primary/20 transition-all flex items-center"
+                    title="Arrastra desde aquí para intercambiar este equipo de grupo"
+                  />
+                ))}
+              </div>
             </div>
           </div>
         </div>
