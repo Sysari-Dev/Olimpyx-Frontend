@@ -1,63 +1,25 @@
-import React from 'react';
-import { EventDetailSection } from '../components/EventDetailSection';
-import type { SportEvent } from 'src/shared/models/event.model';
-import type { Tournament } from 'src/shared/models/tournament.model';
 import { useParams } from 'react-router-dom';
+import { EventDetailSection } from '../components/EventDetailSection';
+import { usePublic } from '../hooks/usePublic';
+import { LoadingState } from '@atoms/LoadingState'; 
 
-const EVENTS_MOCK: SportEvent[] = [
-  { id: "evt-1", name: "Intercarreras UNAMBA", description: "Olimpiadas generales de la Universidad. Todas las facultades compiten por la copa general.", startDate: "15 Mar", endDate: "30 Mar", status: "ACTIVE" },
-  { id: "evt-2", name: "Intercódigos Ing Sistemas 26-1", description: "Campeonato interno de confraternidad.", startDate: "10 Abr", endDate: "15 Abr", status: "PLANNED" }
-];
-
-const TOURNAMENTS_MOCK: Tournament[] = [
-  { 
-    id: "t1", 
-    event: EVENTS_MOCK[0],
-    sport: { id: "s1", name: "Vóley" },
-    name: "Vóley Femenino", 
-    format: "Fase de Grupos", 
-    teamsCount: 8, 
-    pointsPerWin: 3, pointsPerDraw: 1, pointsPerLoss: 0, createdAt: "2026-03-01" 
-  },
-  { 
-    id: "t2", 
-    event: EVENTS_MOCK[0], 
-    sport: { id: "s2", name: "Futsal" }, 
-    name: "Futsal Varones", 
-    format: "Eliminación Directa", 
-    teamsCount: 16, 
-    pointsPerWin: 3, pointsPerDraw: 1, pointsPerLoss: 0, createdAt: "2026-03-01" 
-  },
-  { 
-    id: "t3", 
-    event: EVENTS_MOCK[0], 
-    sport: { id: "s3", name: "Básquet" }, 
-    name: "Básquet Mixto", 
-    format: "Todos contra Todos", 
-    teamsCount: 6, 
-    pointsPerWin: 3, pointsPerDraw: 1, pointsPerLoss: 0, createdAt: "2026-03-01" 
-  },
-  { 
-    id: "t4", 
-    event: EVENTS_MOCK[1], 
-    sport: { id: "s2", name: "Futsal" }, 
-    name: "Futsal Libre", 
-    format: "Fase de Grupos", 
-    teamsCount: 12, 
-    pointsPerWin: 3, pointsPerDraw: 1, pointsPerLoss: 0, createdAt: "2026-03-01" 
-  },
-];
 function EventDetailScreen() {
-  const { id } = useParams();
-  const currentEvent = EVENTS_MOCK.find(e => e.id === id);
-  const currentTournaments = TOURNAMENTS_MOCK.filter(t => t.event?.id === id);
+  const { id } = useParams<{ id: string }>();
+  const { events, isLoading } = usePublic();
+  if (isLoading) return <LoadingState text="Cargando información del evento..." />;
+  const currentEvent = events.find(e => e.id === id);
+  if (!currentEvent && !isLoading) {
+    return <div className="text-center p-20 text-gray/50 font-bold uppercase tracking-widest">Evento no encontrado</div>;
+  }
+
   return (
-    <div className="animate-fade-in">
+    <div className="animate-in fade-in duration-700">
       <EventDetailSection
-      event={currentEvent} 
-      tournaments={currentTournaments}/>
+        event={currentEvent} 
+        tournaments={currentEvent?.tournaments || []}
+      />
     </div>
-  )
+  );
 }
 
-export default EventDetailScreen
+export default EventDetailScreen;
