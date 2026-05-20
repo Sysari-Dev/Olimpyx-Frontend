@@ -15,7 +15,11 @@ const TournamentCard = ({ tournament, onClick }: TournamentCardProps) => {
     FINISHED: "bg-dark/5 text-dark/40",
     PLANNING: "bg-blue-500/10 text-blue-600"
   };
-
+  const FORMAT_TRANSLATION: Record<string, string> = {
+  ROUND_ROBIN: "Todos contra Todos",
+  GROUP_STAGE: "Fase de Grupos",
+  ELIMINATION: "Eliminación Directa",
+  };
   return (
     <div
       onClick={() => onClick && onClick(tournament.id)}
@@ -35,7 +39,7 @@ const TournamentCard = ({ tournament, onClick }: TournamentCardProps) => {
           {name}
         </h3>
         <p className="text-xs font-bold text-dark/40 uppercase tracking-tighter">
-          Formato: {format}
+          Formato: {FORMAT_TRANSLATION[format] || format}
         </p>
       </div>
 
