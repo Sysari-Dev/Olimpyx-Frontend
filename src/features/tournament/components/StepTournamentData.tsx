@@ -13,6 +13,7 @@ export const StepTournamentData = ({ data, onUpdate }: StepProps) => {
     { id: SPORT_IDS.FUTBOL, name: "Fútbol", icon: Activity },
     { id: SPORT_IDS.BASQUET, name: "Baloncesto", icon: Disc },
     { id: SPORT_IDS.VOLEY, name: "Vóley", icon: Target },
+    { id: SPORT_IDS.FUTSAL, name: "Futsal", icon: Activity },
   ];
 
   return (
