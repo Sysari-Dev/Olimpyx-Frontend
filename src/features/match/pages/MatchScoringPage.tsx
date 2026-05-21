@@ -20,6 +20,7 @@ export const MatchScoringPage = () => {
   const [setsTeam2, setSetsTeam2] = useState(0);
   const [period, setPeriod] = useState(1);
   const [isFinalizeModalOpen, setIsFinalizeModalOpen] = useState(false);
+  const [isScoringRequestActive, setIsScoringRequestActive] = useState(false);
 
   useEffect(() => {
     if (id) {
@@ -34,7 +35,6 @@ export const MatchScoringPage = () => {
   }, [id, getMatchDetail]);
 
   const sportId = match?.tournament.sportId || "";
-  //const isFutbol = sportId === SPORT_IDS.FUTBOL || sportId === SPORT_IDS.FUTSAL;
   const isVoley = sportId === SPORT_IDS.VOLEY;
   const isBasquet = sportId === SPORT_IDS.BASQUET;
 
@@ -46,13 +46,18 @@ export const MatchScoringPage = () => {
     return "Deporte";
   }, [sportId]);
 
+  const isSetWinDisabled = useMemo(() => {
+    return scoreTeam1 === scoreTeam2;
+  }, [scoreTeam1, scoreTeam2]);
+
   const handleScoreExecution = async (
     targetTeam: "team1" | "team2",
     points: number,
     operation: "INCREMENT" | "DECREMENT"
   ) => {
-    if (!match) return;
+    if (!match || isScoringRequestActive) return;
 
+    setIsScoringRequestActive(true);
     const multiplier = operation === "INCREMENT" ? 1 : -1;
     const delta = points * multiplier;
     const isTeam1 = targetTeam === "team1";
@@ -63,7 +68,7 @@ export const MatchScoringPage = () => {
       setScoreTeam2((prev) => Math.max(0, prev + delta));
     }
 
-    await updateMatchScore({
+    const success = await updateMatchScore({
       tournamentId: match.tournament.id,
       matchId: match.id,
       teamId: isTeam1 ? match.team1.id : match.team2.id,
@@ -71,11 +76,22 @@ export const MatchScoringPage = () => {
       operation,
       ...((isVoley || isBasquet) && { setNumber: period }),
     });
+
+    if (!success) {
+      if (isTeam1) {
+        setScoreTeam1((prev) => Math.max(0, prev - delta));
+      } else {
+        setScoreTeam2((prev) => Math.max(0, prev - delta));
+      }
+    }
+
+    setIsScoringRequestActive(false);
   };
 
-  const handlePeriodTransition = (targetTeam: "team1" | "team2") => {
-    if (!match) return;
+  const handlePeriodTransition = async (targetTeam: "team1" | "team2") => {
+    if (!match || isScoringRequestActive) return;
 
+    setIsScoringRequestActive(true);
     if (targetTeam === "team1") {
       setSetsTeam1((prev) => prev + 1);
     } else {
@@ -85,6 +101,7 @@ export const MatchScoringPage = () => {
     setScoreTeam1(0);
     setScoreTeam2(0);
     setPeriod((prev) => prev + 1);
+    setIsScoringRequestActive(false);
   };
 
   const handleMetadataPatch = async (payload: { matchDate: string | null; status: MatchStatus }) => {
@@ -105,6 +122,8 @@ export const MatchScoringPage = () => {
   };
 
   if (!match) return <LoadingState text="Estableciendo conexión con mesa de control..." />;
+
+  const isControlDisabled = match.status === "PENDING" || isScoringRequestActive;
 
   return (
     <div className="text-white flex flex-col font-sans select-none overflow-x-hidden">
@@ -134,10 +153,10 @@ export const MatchScoringPage = () => {
               btnColor="bg-blue-600"
               isVoley={isVoley}
               isBasquet={isBasquet}
-              disabled={match.status === 'PENDING'}
+              disabled={isControlDisabled}
+              isSetWinDisabled={isSetWinDisabled}
               onScoreChange={(points, op) => handleScoreExecution("team1", points, op)}
               onSetWin={() => handlePeriodTransition("team1")}
-              
             />
             <div className="hidden md:block w-px h-48 bg-white/5 shrink-0" />
             <TeamScorePanel
@@ -148,7 +167,8 @@ export const MatchScoringPage = () => {
               btnColor="bg-rose-600"
               isVoley={isVoley}
               isBasquet={isBasquet}
-              disabled={match.status === 'PENDING'}
+              disabled={isControlDisabled}
+              isSetWinDisabled={isSetWinDisabled}
               onScoreChange={(points, op) => handleScoreExecution("team2", points, op)}
               onSetWin={() => handlePeriodTransition("team2")}
             />

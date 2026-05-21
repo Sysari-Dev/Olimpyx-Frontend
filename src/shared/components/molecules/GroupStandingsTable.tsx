@@ -30,7 +30,7 @@ export const GroupStandingsTable = ({ groupName, teams, qualifiedCount = 2 }: Gr
         {/* Header */}
         <div className="bg-dark px-4 py-3 flex items-center justify-between rounded-t-2xl">
           <h4 className="text-white font-black uppercase tracking-widest text-sm flex items-center gap-2">
-            <Trophy size={14} className="text-tertiary" /> {groupName}
+            <Trophy size={14} className="text-secondary" /> {groupName}
           </h4>
         </div>
 
