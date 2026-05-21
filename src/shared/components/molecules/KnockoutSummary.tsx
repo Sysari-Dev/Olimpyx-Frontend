@@ -42,7 +42,7 @@ const MatchupCard = ({ match }: { match: Matchup }) => {
       >
         <span className="truncate pr-1">{match.team1 || "TBD"}</span>
         <span className={`ml-auto shrink-0 ${team1Wins ? "text-primary" : "text-white/40"}`}>
-          {match.status === "FINISHED" ? match.score1 : "-"}
+          {match.status === "FINISHED" }
         </span>
       </div>
       {/* Team 2 */}
@@ -53,7 +53,7 @@ const MatchupCard = ({ match }: { match: Matchup }) => {
       >
         <span className="truncate pr-1">{match.team2 || "TBD"}</span>
         <span className={`ml-auto shrink-0 ${team2Wins ? "text-primary" : "text-white/40"}`}>
-          {match.status === "FINISHED" ? match.score2 : "-"}
+          {match.status === "FINISHED" }
         </span>
       </div>
     </div>

@@ -105,6 +105,7 @@ export const TournamentDetailSection = () => {
               currentPeriod={m.roundName}
               sets={m.sets}
               status={m.status as "FINISHED" | "PENDING" | "IN_PROGRESS"}
+              isVoley={true}
             />
           ))}
         </div>

@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import LiveBadge from "@atoms/LiveBadge";
+import { useVoleyScore } from "@hooks/useVoleyScore";
 
 interface MatchCardProps {
   id: string;
@@ -11,24 +12,34 @@ interface MatchCardProps {
   score2: number;
   currentPeriod: string;
   sets?: { pointsTeam1: number; pointsTeam2: number }[];
-  status: 'FINISHED' | 'PENDING' | 'IN_PROGRESS';
+  status: 'FINISHED' | 'PENDING' | 'IN_PROGRESS' | string; // Ampliado para evitar el error de TypeScript
+  isVoley?: boolean; // <-- NUEVA PROPIEDAD
 }
 
 const STATUS_LABELS: Record<string, string> = {
   FINISHED: "Finalizado",
   PENDING: "Por Jugar",
   LIVE: "En Vivo",
+  IN_PROGRESS: "En Vivo",
 };
 
 const STATUS_COLORS: Record<string, string> = {
   FINISHED: "bg-gray-200 text-gray-600",
   PENDING: "bg-yellow-100 text-yellow-700",
   LIVE: "bg-red-500 text-white animate-pulse",
+  IN_PROGRESS: "bg-red-500 text-white animate-pulse",
 };
 
-const MatchCard = ({ id, event, sport, team1, team2, score1, score2, currentPeriod, sets, status }: MatchCardProps) => {
+const MatchCard = ({ id, event, sport, team1, team2, score1, score2, currentPeriod, sets, status, isVoley }: MatchCardProps) => {
   const statusLabel = STATUS_LABELS[status] || status;
   const statusColor = STATUS_COLORS[status] || "bg-gray-100 text-gray-500";
+
+  // 1. Calculamos los sets ganados usando tu nuevo hook
+  const { setsTeam1, setsTeam2 } = useVoleyScore(sets);
+
+  // 2. Decidimos qué puntuación mostrar: Sets (si es voley) o Puntos (si no lo es)
+  const displayScore1 = isVoley ? setsTeam1 : score1;
+  const displayScore2 = isVoley ? setsTeam2 : score2;
 
   return (
     <Link 
@@ -54,7 +65,7 @@ const MatchCard = ({ id, event, sport, team1, team2, score1, score2, currentPeri
         </div>
         
         {/* Lógica de Badge Dinámico */}
-        {status === 'IN_PROGRESS' ? (
+        {status === 'IN_PROGRESS' || status === 'LIVE' ? (
           <LiveBadge />
         ) : (
           <span className={`text-[9px] font-black px-2 py-0.5 rounded uppercase tracking-tighter ${statusColor}`}>
@@ -72,10 +83,11 @@ const MatchCard = ({ id, event, sport, team1, team2, score1, score2, currentPeri
         </div>
 
         <div className="flex flex-col items-center px-2">
+          {/* AQUÍ USAMOS displayScore1 y displayScore2 */}
           <div className="text-3xl font-black text-dark flex gap-3 italic tracking-tighter">
-            <span className={score1 > score2 ? "text-dark" : "text-dark/40"}>{score1}</span>
+            <span className={displayScore1 > displayScore2 ? "text-dark" : "text-dark/40"}>{displayScore1}</span>
             <span className="text-dark/10">-</span>
-            <span className={score2 > score1 ? "text-dark" : "text-dark/40"}>{score2}</span>
+            <span className={displayScore2 > displayScore1 ? "text-dark" : "text-dark/40"}>{displayScore2}</span>
           </div>
           
           <div className="mt-2">
