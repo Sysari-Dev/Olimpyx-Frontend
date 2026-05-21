@@ -1,16 +1,13 @@
 import { useState, useEffect } from "react";
-import { PublicService, type TournamentResultsData } from "../services/public.service";
+import { PublicService } from "../services/public.service";
+import type { TournamentResultsData } from "../models/public-api.model";
 export const useTournamentResults = (tournamentId: string) => {
   const [data, setData] = useState<TournamentResultsData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (!tournamentId) return;
-
-    // Creamos una variable local para controlar el "montaje" de esta llamada
     let isSubscribed = true;
-
-    // Función asíncrona dentro del efecto
     const fetchData = async () => {
       setIsLoading(true);
       try {

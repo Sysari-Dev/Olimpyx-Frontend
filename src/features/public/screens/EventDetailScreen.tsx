@@ -1,5 +1,4 @@
 import { useParams } from 'react-router-dom';
-import { EventDetailSection } from '../components/EventDetailSection';
 import { usePublic } from '../hooks/usePublic';
 import { LoadingState } from '@atoms/LoadingState'; 
 
@@ -14,10 +13,7 @@ function EventDetailScreen() {
 
   return (
     <div className="animate-in fade-in duration-700">
-      <EventDetailSection
-        event={currentEvent} 
-        tournaments={currentEvent?.tournaments || []}
-      />
+      
     </div>
   );
 }

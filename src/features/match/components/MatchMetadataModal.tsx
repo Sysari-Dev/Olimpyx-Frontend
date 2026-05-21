@@ -46,7 +46,7 @@ export const MatchMetadataModal = ({
       isOpen={isOpen}
       onClose={onClose}
       onConfirm={handleConfirm}
-      title="Editar Metadatos"
+      title="Editar"
       description="Modifica la programación temporal o el estado de control operativo del encuentro."
       confirmText={isSaving ? "Guardando..." : "Actualizar"}
     >
