@@ -35,10 +35,16 @@ const EventDetailPage = () => {
   useEffect(() => {
     if (id) {
       const loadData = async () => {
-        const detail = await getEventDetail(id);
-        if (detail) setEvent(detail);
-        await fetchEventStats(id);
-      };
+      const detail = await getEventDetail(id);
+      const stats = await fetchEventStats(id);
+      
+      if (detail) {
+        setEvent({
+          ...detail,
+          stats: stats ?? undefined
+        });
+      }
+    };
       loadData();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
