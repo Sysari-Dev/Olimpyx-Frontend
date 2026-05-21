@@ -134,8 +134,10 @@ export const MatchScoringPage = () => {
               btnColor="bg-blue-600"
               isVoley={isVoley}
               isBasquet={isBasquet}
+              disabled={match.status === 'PENDING'}
               onScoreChange={(points, op) => handleScoreExecution("team1", points, op)}
               onSetWin={() => handlePeriodTransition("team1")}
+              
             />
             <div className="hidden md:block w-px h-48 bg-white/5 shrink-0" />
             <TeamScorePanel
@@ -146,6 +148,7 @@ export const MatchScoringPage = () => {
               btnColor="bg-rose-600"
               isVoley={isVoley}
               isBasquet={isBasquet}
+              disabled={match.status === 'PENDING'}
               onScoreChange={(points, op) => handleScoreExecution("team2", points, op)}
               onSetWin={() => handlePeriodTransition("team2")}
             />
