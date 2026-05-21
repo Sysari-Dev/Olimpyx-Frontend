@@ -1,8 +1,5 @@
 import { Link } from "react-router-dom";
-import { ChevronRight } from "lucide-react";
 import LiveBadge from "@atoms/LiveBadge";
-
-
 
 interface MatchCardProps {
   id: string;
@@ -14,9 +11,25 @@ interface MatchCardProps {
   score2: number;
   currentPeriod: string;
   sets?: { pointsTeam1: number; pointsTeam2: number }[];
+  status: 'FINISHED' | 'PENDING' | 'IN_PROGRESS';
 }
 
-const MatchCard = ({ id, event, sport, team1, team2, score1, score2, currentPeriod, sets }: MatchCardProps) => {
+const STATUS_LABELS: Record<string, string> = {
+  FINISHED: "Finalizado",
+  PENDING: "Por Jugar",
+  LIVE: "En Vivo",
+};
+
+const STATUS_COLORS: Record<string, string> = {
+  FINISHED: "bg-gray-200 text-gray-600",
+  PENDING: "bg-yellow-100 text-yellow-700",
+  LIVE: "bg-red-500 text-white animate-pulse",
+};
+
+const MatchCard = ({ id, event, sport, team1, team2, score1, score2, currentPeriod, sets, status }: MatchCardProps) => {
+  const statusLabel = STATUS_LABELS[status] || status;
+  const statusColor = STATUS_COLORS[status] || "bg-gray-100 text-gray-500";
+
   return (
     <Link 
       to={`/partido/${id}`}
@@ -39,7 +52,15 @@ const MatchCard = ({ id, event, sport, team1, team2, score1, score2, currentPeri
             {sport}
           </span>
         </div>
-        <LiveBadge />
+        
+        {/* Lógica de Badge Dinámico */}
+        {status === 'IN_PROGRESS' ? (
+          <LiveBadge />
+        ) : (
+          <span className={`text-[9px] font-black px-2 py-0.5 rounded uppercase tracking-tighter ${statusColor}`}>
+            {statusLabel}
+          </span>
+        )}
       </div>
 
       <div className="flex items-center justify-between gap-2">
@@ -72,7 +93,6 @@ const MatchCard = ({ id, event, sport, team1, team2, score1, score2, currentPeri
         </div>
       </div>
 
-      {/* Renderizado condicional de Sets (solo para Vóley) */}
       {sets && sets.length > 0 && (
         <div className="mt-4 pt-4 border-t border-light/60">
           <div className="flex justify-center gap-2">
@@ -88,10 +108,6 @@ const MatchCard = ({ id, event, sport, team1, team2, score1, score2, currentPeri
 
       <div className="mt-5 pt-4 border-t border-light/60 flex justify-between items-center">
         <span className="text-[10px] font-bold text-dark/30 uppercase italic">Olimpix Live Report</span>
-        <div className="flex items-center gap-1 text-accent font-black text-[10px] uppercase group-hover:gap-2 transition-all">
-          Detalles
-          <ChevronRight size={12} strokeWidth={3} />
-        </div>
       </div>
     </Link>
   );
