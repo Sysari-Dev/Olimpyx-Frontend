@@ -1,5 +1,6 @@
 import { APP_CONFIG } from "@constants/app-config.constant";
 import { Facebook, Instagram, Linkedin, Twitter } from "lucide-react";
+import logo from "@assets/icons/olimpyx.png";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -10,7 +11,9 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
           <div className="space-y-6">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center font-bold"></div>
+              <div className="w-8 h-8 bg-primary overflow-hidden rounded-lg flex items-center justify-center font-bold">
+                <img src={logo} alt="Olimpyx Logo" className="w-full h-full object-contain" />
+              </div>
               <span className="text-xl font-bold tracking-tight">OLIMPYX</span>
             </div>
             <p className="text-light/60 text-sm leading-relaxed max-w-xs">

@@ -5,7 +5,7 @@ import { LoadingState } from "@atoms/LoadingState";
 export const LiveMatchesSection = () => {
   const { matches, isLoading } = useLiveMatches();
 
-  if (isLoading) return <LoadingState text="Buscando partidos en vivo..." />;
+  if (isLoading) return <LoadingState variant="tertiary" text="Buscando partidos en vivo..." />;
 
   return (
     <section className="max-w-7xl mx-auto px-6 py-12 animate-fade-in">
