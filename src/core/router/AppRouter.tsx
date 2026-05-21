@@ -1,7 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MainLayout from "@templates/MainLayout";
 import AdminLayout from "@templates/AdminLayout";
-import HomeScreen from "@features/public/screens/HomeScreen";
 import LoginPage from "@features/auth/pages/LoginPage";
 import TournamentDetailScreen from "@features/public/screens/TournamentDetailScreen";
 import OrganizationManagementPage from "@features/organizations/pages/OrganizationManagementPage";
@@ -28,6 +27,7 @@ import MatchDetailPage from "@features/public/pages/MatchDetailPage";
 import MatchLivePage from "@features/public/pages/MatchLivePage";
 import { ScrollToTop } from "./components/ScrollToTop";
 import EventsPage from "@features/public/pages/EventsPage";
+import HomePage from "@features/public/pages/HomePage";
 
 export const AppRouter = () => {
   return (
@@ -38,7 +38,7 @@ export const AppRouter = () => {
           <Route path="/login" element={<LoginPage />} />
         </Route>
         <Route path="/" element={<MainLayout />}>
-          <Route index element={<HomeScreen />} />
+          <Route index element={<HomePage />} />
           <Route path="evento/:id" element={<EventPublicDetailPage />} />
           <Route path="torneo/:id" element={<TournamentDetailScreen />} />
           <Route path="en-vivo" element={<MatchLivePage />} />
