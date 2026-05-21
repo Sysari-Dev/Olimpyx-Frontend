@@ -1,7 +1,8 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, Calendar, MapPin, Shield, Clock, Award } from "lucide-react";
+import { ArrowLeft, Calendar, MapPin, Shield, Clock, Award, Dribbble, Trophy } from "lucide-react";
 import { usePublicMatchDetail } from "../hooks/usePublicMatchDetail";
 import { LoadingState } from "@atoms/LoadingState";
+import { SPORT_IDS } from "@constants/sport-ids.constant";
 
 export const MatchDetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -35,6 +36,30 @@ export const MatchDetailPage = () => {
   const team1Name = match.team1?.name || "Por definir";
   const team2Name = match.team2?.name || "Por definir";
 
+  const sportId = match.tournament?.sportId || match.tournament?.sport?.id || "";
+  const isVoley = sportId === SPORT_IDS.VOLEY;
+  const isBasquet = sportId === SPORT_IDS.BASQUET;
+  const isFutbol = sportId === SPORT_IDS.FUTBOL;
+  const isFutsal = sportId === SPORT_IDS.FUTSAL;
+
+  const voleySetsTeam1 = isVoley
+    ? match.sets?.filter((s) => (s.pointsTeam1 ?? 0) > (s.pointsTeam2 ?? 0)).length || 0
+    : 0;
+  const voleySetsTeam2 = isVoley
+    ? match.sets?.filter((s) => (s.pointsTeam2 ?? 0) > (s.pointsTeam1 ?? 0)).length || 0
+    : 0;
+
+  const displayScore1 = isVoley ? voleySetsTeam1 : match.scoreTeam1;
+  const displayScore2 = isVoley ? voleySetsTeam2 : match.scoreTeam2;
+
+  const getSportIcon = () => {
+    if (isBasquet) return <Dribbble size={14} className="text-orange-400 fill-orange-400/20" />;
+    if (isVoley) return <Dribbble size={14} className="text-sky-300 fill-sky-300/20 -rotate-45" />;
+    if (isFutbol) return <Dribbble size={14} className="text-green-400 fill-green-400/20 rotate-12" />;
+    if (isFutsal) return <Dribbble size={14} className="text-teal-300 fill-teal-300/20 rotate-45" />;
+    return <Trophy size={14} className="text-white/60" />;
+  };
+
   const statusConfig = {
     PENDING: { label: "Programado", styles: "bg-white/20 text-white border-white/30" },
     IN_PROGRESS: { label: "En vivo", styles: "bg-secondary text-dark-black border-transparent font-black animate-pulse" },
@@ -57,17 +82,21 @@ export const MatchDetailPage = () => {
             <span>Volver</span>
           </button>
         </header>
+
         <section className="bg-linear-to-br from-primary via-accent to-tertiary text-white rounded-[2.5rem] p-6 sm:p-10 shadow-xl shadow-primary/20 flex flex-col justify-center items-center gap-6 relative overflow-hidden">
           <div className="absolute -right-10 -top-10 w-40 h-40 bg-secondary/20 rounded-full blur-2xl pointer-events-none" />
           <div className="absolute -left-10 -bottom-10 w-40 h-40 bg-white/10 rounded-full blur-2xl pointer-events-none" />
           
-          <div className="flex flex-col items-center text-center space-y-2 relative z-10">
+          <div className="flex flex-col items-center text-center space-y-1.5 relative z-10">
             <span className="text-secondary text-[10px] font-black uppercase tracking-[0.25em]">
               {match.tournament?.event.name || "Evento Corporativo"}
             </span>
-            <h2 className="text-white/70 text-xs font-black uppercase tracking-wider">
-              {match.tournament?.sport.name || "Competencia"}
-            </h2>
+            <div className="flex items-center gap-2 justify-center">
+              {getSportIcon()}
+              <h2 className="text-white/70 text-xs font-black uppercase tracking-wider">
+                {match.tournament?.sport.name || "Competencia"}
+              </h2>
+            </div>
             <div className={`px-3 py-0.5 border rounded-full text-[9px] font-black uppercase tracking-widest mt-2 ${currentStatus.styles}`}>
               {currentStatus.label}
             </div>
@@ -85,13 +114,13 @@ export const MatchDetailPage = () => {
 
             <div className="flex items-center gap-4 sm:gap-8 shrink-0 select-none">
               <span className="text-5xl sm:text-7xl font-black tracking-tighter tabular-nums drop-shadow-md">
-                {match.scoreTeam1}
+                {displayScore1}
               </span>
               <span className="text-white/20 font-black text-xl sm:text-3xl italic tracking-widest">
                 VS
               </span>
               <span className="text-5xl sm:text-7xl font-black tracking-tighter tabular-nums drop-shadow-md">
-                {match.scoreTeam2}
+                {displayScore2}
               </span>
             </div>
 
@@ -105,6 +134,21 @@ export const MatchDetailPage = () => {
             </div>
           </div>
 
+          {match.sets && match.sets.length > 0 && (isVoley || isBasquet) && (
+            <div className="flex justify-center gap-1.5 flex-wrap relative z-10 bg-black/10 p-2 rounded-2xl border border-white/5">
+              {match.sets.map((set, i) => (
+                <div key={set.id || i} className="flex flex-col items-center bg-white/5 border border-white/10 px-2.5 py-1 rounded-xl min-w-[45px]">
+                  <span className="text-[8px] font-black text-white/40 uppercase tracking-wider">
+                    {isVoley ? `S${i + 1}` : `C${i + 1}`}
+                  </span>
+                  <span className="text-xs font-black text-white tabular-nums">
+                    {set.pointsTeam1 ?? 0}-{set.pointsTeam2 ?? 0}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+
           {match.roundName && (
             <div className="bg-white/10 border border-white/10 px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest text-white/70 backdrop-blur-xs relative z-10">
               {match.roundName}
@@ -112,7 +156,7 @@ export const MatchDetailPage = () => {
           )}
         </section>
 
-        <div className="bg-linear-to-br from-white to-dark/1 border border-primary rounded-3xl p-6 sm:p-8 space-y-6 shadow-xs relative">
+        <div className="bg-gradient-to-br from-white to-dark/1 border border-dark/10 rounded-3xl p-6 sm:p-8 space-y-6 shadow-xs relative">
           <div className="absolute right-6 top-6 w-24 h-24 bg-tertiary/5 rounded-full blur-xl pointer-events-none" />
           
           <h4 className="font-black text-xs uppercase tracking-wider text-dark/60 border-b border-dark/5 pb-3">

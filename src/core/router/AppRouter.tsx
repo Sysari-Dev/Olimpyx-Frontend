@@ -3,7 +3,6 @@ import MainLayout from "@templates/MainLayout";
 import AdminLayout from "@templates/AdminLayout";
 import HomeScreen from "@features/public/screens/HomeScreen";
 import EventDetailScreen from "@features/public/screens/EventDetailScreen";
-import MatchLiveScreen from "@features/public/screens/MatchLiveScreen";
 import LoginPage from "@features/auth/pages/LoginPage";
 import EventsScreen from "@features/public/screens/EventsScreen";
 import TournamentDetailScreen from "@features/public/screens/TournamentDetailScreen";
@@ -27,10 +26,13 @@ import OrganizationListPage from "@features/public/pages/OrganizationListPage";
 import { PublicRoute } from "src/shared/guards/PublicRoute";
 import { ProtectedRoute } from "src/shared/guards/ProtectedRoute";
 import MatchDetailPage from "@features/public/pages/MatchDetailPage";
+import MatchLivePage from "@features/public/pages/MatchLivePage";
+import { ScrollToTop } from "./components/ScrollToTop";
 
 export const AppRouter = () => {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Routes>
         <Route element={<PublicRoute />}>
           <Route path="/login" element={<LoginPage />} />
@@ -39,18 +41,30 @@ export const AppRouter = () => {
           <Route index element={<HomeScreen />} />
           <Route path="evento/:id" element={<EventDetailScreen />} />
           <Route path="torneo/:id" element={<TournamentDetailScreen />} />
-          <Route path="en-vivo" element={<MatchLiveScreen />} />
+          <Route path="en-vivo" element={<MatchLivePage />} />
           <Route path="explorar" element={<EventsScreen />} />
           <Route path="partido/:id" element={<MatchDetailPage />} />
           <Route path="organizaciones" element={<OrganizationListPage />} />
         </Route>
-        <Route path="/admin" element={<ProtectedRoute allowedRoles={["ADMIN", "SUPER_ADMIN"]} />}>
+        <Route
+          path="/admin"
+          element={<ProtectedRoute allowedRoles={["ADMIN", "SUPER_ADMIN"]} />}
+        >
           <Route element={<AdminLayout />}>
             <Route index element={<DashboardPage />} />
-            <Route path="organizacion" element={<OrganizationManagementPage />} />
-            <Route path="organizacion/editar" element={<OrganizationUpdatePage />} />
+            <Route
+              path="organizacion"
+              element={<OrganizationManagementPage />}
+            />
+            <Route
+              path="organizacion/editar"
+              element={<OrganizationUpdatePage />}
+            />
             <Route element={<ProtectedRoute allowedRoles={["SUPER_ADMIN"]} />}>
-              <Route path="organizacion/crear" element={<OrganizationCreatePage />} />
+              <Route
+                path="organizacion/crear"
+                element={<OrganizationCreatePage />}
+              />
             </Route>
             <Route path="equipos" element={<TeamsManagementPage />} />
             <Route path="equipos/crear" element={<TeamCreatePage />} />
@@ -61,7 +75,10 @@ export const AppRouter = () => {
             <Route path="torneos" element={<TournamentsManagementPage />} />
             <Route path="torneos/crear" element={<TournamentCreatePage />} />
             <Route path="torneos/:id" element={<TournamentDetailPage />} />
-            <Route path="torneos/:id/editar" element={<TournamentUpdatePage />} />
+            <Route
+              path="torneos/:id/editar"
+              element={<TournamentUpdatePage />}
+            />
             <Route path="partidos" element={<MatchSchedulerPage />} />
             <Route path="partidos/:id" element={<MatchScoringPage />} />
           </Route>

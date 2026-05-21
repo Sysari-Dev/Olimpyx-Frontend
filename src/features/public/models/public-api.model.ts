@@ -40,6 +40,34 @@ export interface PublicOrganizationsResponse {
   data: PublicOrganizationDTO[];
 }
 
+export interface LiveMatch {
+  id: string;
+  roundName: string | null;
+  scoreTeam1: number;
+  scoreTeam2: number;
+  status: string;
+  team1: { 
+    id: string; 
+    name: string 
+  } | null;
+  team2: { 
+    id: string; 
+    name: string 
+  } | null;
+  tournament: {
+    id: string;
+    name: string;
+    sport: {
+      id: string;
+      name: string;
+    };
+  };
+  sets: Array<{
+    pointsTeam1: number | null;
+    pointsTeam2: number | null;
+  }>;
+}
+
 export interface PublicMatchDetailResponse {
   id: string;
   tournamentId: string | null;
@@ -99,3 +127,38 @@ export interface PublicMatchDetailApiResponse {
 }
 
 export type PublicEventsResponse = ApiResponse<PublicEvent[]>;
+
+export interface PublicLeaderboardRow {
+  teamId: string;
+  teamName: string;
+  played: number;
+  wins: number;
+  draws: number;
+  losses: number;
+  goalsFor: number;
+  goalsAgainst: number;
+  points: number;
+  goalDifference: number;
+}
+
+export interface PublicGroupData {
+  id: string;
+  name: string | null;
+  leaderboard: PublicLeaderboardRow[];
+}
+
+export interface TournamentResultsData {
+  format: 'ROUND_ROBIN' | 'ELIMINATION' | 'GROUP_STAGE';
+  matches: PublicMatchDetailResponse[];
+  leaderboard?: PublicLeaderboardRow[];
+  groups?: PublicGroupData[];
+}
+
+export interface PublicTournamentResultsApiResponse {
+  success: boolean;
+  message: {
+    type: string;
+    content: string;
+  };
+  data: TournamentResultsData;
+}

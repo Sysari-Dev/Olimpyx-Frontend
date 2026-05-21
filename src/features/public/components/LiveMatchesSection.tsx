@@ -1,39 +1,30 @@
-import MatchCard from "@molecules/MatchCard";
-import { useLiveMatches } from "../hooks/useLiveMatches";
-import { LoadingState } from "@atoms/LoadingState";
+import { MatchCard } from "@molecules/MatchCard";
+import { type LiveMatch } from "../models/public-api.model";
 
-export const LiveMatchesSection = () => {
-  const { matches, isLoading } = useLiveMatches();
+interface LiveMatchesSectionProps {
+  matches: LiveMatch[];
+}
 
-  if (isLoading) return <LoadingState variant="tertiary" text="Buscando partidos en vivo..." />;
-
+export const LiveMatchesSection = ({ matches }: LiveMatchesSectionProps) => {
   return (
-    <section className="max-w-7xl mx-auto px-6 py-12 animate-fade-in">
-      <header className="mb-10 text-center md:text-left">
-        <h1 className="text-4xl font-black text-dark tracking-tighter">
-          Partidos <span className="text-accent">en Vivo</span>
-        </h1>
-      </header>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {matches?.map((m) => (
-          <MatchCard 
-            key={m.id}
-            id={m.id}
-            event={m.tournament.name}
-            sport={m.tournament.sport.name}
-            team1={m.team1.name}
-            team2={m.team2.name}
-            score1={m.scoreTeam1}
-            score2={m.scoreTeam2}
-            currentPeriod={m.roundName}
-            sets={m.sets}
-            status="IN_PROGRESS"
-            isVoley={true}
-          />
-        ))}
-      </div>
-    </section>
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {matches.map((m) => (
+        <MatchCard 
+          key={m.id}
+          id={m.id}
+          event={m.tournament.name}
+          sport={m.tournament.sport.name}
+          sportId={m.tournament.sport.id}
+          team1={m.team1?.name || "Por definir"}
+          team2={m.team2?.name || "Por definir"}
+          score1={m.scoreTeam1}
+          score2={m.scoreTeam2}
+          currentPeriod={m.roundName || ""}
+          sets={m.sets}
+          status={m.status}
+        />
+      ))}
+    </div>
   );
 };
 
