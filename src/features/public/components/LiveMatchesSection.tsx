@@ -29,6 +29,7 @@ export const LiveMatchesSection = () => {
             currentPeriod={m.roundName}
             sets={m.sets}
             status="IN_PROGRESS"
+            isVoley={true}
           />
         ))}
       </div>
