@@ -79,7 +79,7 @@ export const OrganizationListPage = () => {
                 <ShieldAlert size={22} />
               </div>
               <h3 className="text-sm font-black uppercase tracking-wider text-dark mb-1">
-                Sin resultados coincidentes
+                Sin resultados
               </h3>
               <p className="text-xs text-dark/40 font-medium leading-relaxed">
                 No se encontraron organizaciones públicas que coincidan con los términos de búsqueda ingresados.

@@ -2,9 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MainLayout from "@templates/MainLayout";
 import AdminLayout from "@templates/AdminLayout";
 import HomeScreen from "@features/public/screens/HomeScreen";
-import EventDetailScreen from "@features/public/screens/EventDetailScreen";
 import LoginPage from "@features/auth/pages/LoginPage";
-import EventsScreen from "@features/public/screens/EventsScreen";
 import TournamentDetailScreen from "@features/public/screens/TournamentDetailScreen";
 import OrganizationManagementPage from "@features/organizations/pages/OrganizationManagementPage";
 import OrganizationUpdatePage from "@features/organizations/pages/OrganizationUpdatePage";
@@ -14,6 +12,7 @@ import TeamCreatePage from "@features/teams/pages/TeamCreatePage";
 import EventsManagementPage from "@features/events/pages/EventsManagementPage";
 import EventCreatePage from "@features/events/pages/EventCreatePage";
 import EventDetailPage from "@features/events/pages/EventDetailPage";
+import EventPublicDetailPage from "@features/public/pages/EventDetailPage";
 import EventUpdatePage from "@features/events/pages/EventUpdatePage";
 import TournamentsManagementPage from "@features/tournament/pages/TournamentsManagementPage";
 import TournamentCreatePage from "@features/tournament/pages/TournamentCreatePage";
@@ -28,6 +27,7 @@ import { ProtectedRoute } from "src/shared/guards/ProtectedRoute";
 import MatchDetailPage from "@features/public/pages/MatchDetailPage";
 import MatchLivePage from "@features/public/pages/MatchLivePage";
 import { ScrollToTop } from "./components/ScrollToTop";
+import EventsPage from "@features/public/pages/EventsPage";
 
 export const AppRouter = () => {
   return (
@@ -39,10 +39,10 @@ export const AppRouter = () => {
         </Route>
         <Route path="/" element={<MainLayout />}>
           <Route index element={<HomeScreen />} />
-          <Route path="evento/:id" element={<EventDetailScreen />} />
+          <Route path="evento/:id" element={<EventPublicDetailPage />} />
           <Route path="torneo/:id" element={<TournamentDetailScreen />} />
           <Route path="en-vivo" element={<MatchLivePage />} />
-          <Route path="explorar" element={<EventsScreen />} />
+          <Route path="explorar" element={<EventsPage />} />
           <Route path="partido/:id" element={<MatchDetailPage />} />
           <Route path="organizaciones" element={<OrganizationListPage />} />
         </Route>

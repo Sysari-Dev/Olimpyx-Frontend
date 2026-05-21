@@ -122,7 +122,7 @@ export const MatchCard = ({
           <p className="text-xs font-bold text-dark truncate w-full px-1">{team1}</p>
         </div>
 
-        <div className="flex flex-col items-center shrink-0 px-2 min-w-[100px]">
+        <div className="flex flex-col items-center shrink-0 px-2 min-w-25]">
           <div className="text-3xl font-black text-dark flex gap-2.5 italic tracking-tighter tabular-nums">
             <span className={displayScore1 >= displayScore2 ? "text-dark" : "text-dark/30"}>
               {displayScore1}
@@ -154,7 +154,7 @@ export const MatchCard = ({
         <div className="mt-4 pt-4 border-t border-dark/5">
           <div className="flex justify-center gap-1.5 flex-wrap">
             {sets.map((set, i) => (
-              <div key={i} className="flex flex-col items-center bg-dark/2 border border-dark/5 px-2 py-1 rounded-lg min-w-[42px] max-w-[50px]">
+              <div key={i} className="flex flex-col items-center bg-dark/2 border border-dark/5 px-2 py-1 rounded-lg min-w-10.5 max-w-12.5">
                 <span className="text-[8px] font-black text-dark/30 uppercase tracking-wider">
                   {isVoley ? `S${i + 1}` : `C${i + 1}`}
                 </span>

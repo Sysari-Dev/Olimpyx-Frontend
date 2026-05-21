@@ -137,7 +137,7 @@ export const MatchDetailPage = () => {
           {match.sets && match.sets.length > 0 && (isVoley || isBasquet) && (
             <div className="flex justify-center gap-1.5 flex-wrap relative z-10 bg-black/10 p-2 rounded-2xl border border-white/5">
               {match.sets.map((set, i) => (
-                <div key={set.id || i} className="flex flex-col items-center bg-white/5 border border-white/10 px-2.5 py-1 rounded-xl min-w-[45px]">
+                <div key={set.id || i} className="flex flex-col items-center bg-white/5 border border-white/10 px-2.5 py-1 rounded-xl min-w-11.25">
                   <span className="text-[8px] font-black text-white/40 uppercase tracking-wider">
                     {isVoley ? `S${i + 1}` : `C${i + 1}`}
                   </span>
@@ -156,7 +156,7 @@ export const MatchDetailPage = () => {
           )}
         </section>
 
-        <div className="bg-gradient-to-br from-white to-dark/1 border border-dark/10 rounded-3xl p-6 sm:p-8 space-y-6 shadow-xs relative">
+        <div className="bg-linear-to-br from-white to-dark/1 border border-dark/10 rounded-3xl p-6 sm:p-8 space-y-6 shadow-xs relative">
           <div className="absolute right-6 top-6 w-24 h-24 bg-tertiary/5 rounded-full blur-xl pointer-events-none" />
           
           <h4 className="font-black text-xs uppercase tracking-wider text-dark/60 border-b border-dark/5 pb-3">

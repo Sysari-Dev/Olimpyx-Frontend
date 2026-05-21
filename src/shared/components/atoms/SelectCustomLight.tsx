@@ -87,7 +87,7 @@ export const SelectCustomLight = ({
                   type="button"
                   onClick={() => handleSelect(opt.id)}
                   className={`w-full flex items-center gap-3 p-2.5 rounded-lg transition-colors cursor-pointer text-left
-                    ${selectedId === opt.id ? "bg-primary/5" : "hover:bg-dark/[0.02]"}`}
+                    ${selectedId === opt.id ? "bg-primary/5" : "hover:bg-dark/2"}`}
                 >
                   <div className={`w-1.5 h-1.5 rounded-full shrink-0 ${selectedId === opt.id ? "bg-primary" : "bg-dark/10"}`} />
                   <span className={`text-xs font-bold truncate ${selectedId === opt.id ? "text-primary" : "text-dark/70"}`}>
