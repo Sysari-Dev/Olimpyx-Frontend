@@ -4,7 +4,6 @@ import AdminLayout from "@templates/AdminLayout";
 import HomeScreen from "@features/public/screens/HomeScreen";
 import EventDetailScreen from "@features/public/screens/EventDetailScreen";
 import MatchLiveScreen from "@features/public/screens/MatchLiveScreen";
-import MatchDetailScreen from "@features/public/screens/MatchDetailScreen";
 import LoginPage from "@features/auth/pages/LoginPage";
 import EventsScreen from "@features/public/screens/EventsScreen";
 import TournamentDetailScreen from "@features/public/screens/TournamentDetailScreen";
@@ -27,6 +26,7 @@ import MatchScoringPage from "@features/match/pages/MatchScoringPage";
 import OrganizationListPage from "@features/public/pages/OrganizationListPage";
 import { PublicRoute } from "src/shared/guards/PublicRoute";
 import { ProtectedRoute } from "src/shared/guards/ProtectedRoute";
+import MatchDetailPage from "@features/public/pages/MatchDetailPage";
 
 export const AppRouter = () => {
   return (
@@ -41,7 +41,7 @@ export const AppRouter = () => {
           <Route path="torneo/:id" element={<TournamentDetailScreen />} />
           <Route path="en-vivo" element={<MatchLiveScreen />} />
           <Route path="explorar" element={<EventsScreen />} />
-          <Route path="partido/:id" element={<MatchDetailScreen />} />
+          <Route path="partido/:id" element={<MatchDetailPage />} />
           <Route path="organizaciones" element={<OrganizationListPage />} />
         </Route>
         <Route path="/admin" element={<ProtectedRoute allowedRoles={["ADMIN", "SUPER_ADMIN"]} />}>

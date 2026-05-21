@@ -1,6 +1,6 @@
 import { api } from "@api/HttpInterceptor";
 import { type ApiResponse } from "@api/interfaces/api-response.interface";
-import { type PublicEventsResponse, type PublicOrganizationsResponse } from "../models/public-api.model";
+import { type PublicEventsResponse, type PublicMatchDetailApiResponse, type PublicOrganizationsResponse } from "../models/public-api.model";
 
 // Estas interfaces reflejan exactamente tu JSON de resultados
 export interface TeamResult {
@@ -72,6 +72,11 @@ export const PublicService = {
 
   getOrganizations: async (): Promise<PublicOrganizationsResponse> => {
     const { data } = await api.get<PublicOrganizationsResponse>('/public/organizations');
+    return data;
+  },
+
+  getMatchDetail: async (matchId: string): Promise<PublicMatchDetailApiResponse> => {
+    const { data } = await api.get<PublicMatchDetailApiResponse>(`/public/match/${matchId}`);
     return data;
   }
 };
